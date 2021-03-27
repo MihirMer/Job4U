@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "891830013531",
+    "firebase_url": "https://blogggger-b4b93.firebaseio.com",
+    "project_id": "blogggger-b4b93",
+    "storage_bucket": "blogggger-b4b93.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891830013531:android:e7f4d30fda1648ce68397e",
+        "android_client_info": {
+          "package_name": "com.almightymm.blogggger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891830013531-08l8osl7rc6vsd43srbcip4m6b2d5lfe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnFlmk2ZraXfmXJ23nMi4mgbIwFX0IvU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891830013531-08l8osl7rc6vsd43srbcip4m6b2d5lfe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891830013531:android:e46a6ce8585d500968397e",
+        "android_client_info": {
+          "package_name": "com.almightymm.job4u"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891830013531-08l8osl7rc6vsd43srbcip4m6b2d5lfe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnFlmk2ZraXfmXJ23nMi4mgbIwFX0IvU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891830013531-08l8osl7rc6vsd43srbcip4m6b2d5lfe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

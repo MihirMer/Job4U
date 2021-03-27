@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--    <color name="colorPrimary">#6200EE</color>-->
+    <color name="colorPrimary">#7bed8d</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <!--  Color for buttons both -->
+    <color name="green">#7bed8d</color>
+<!--    <color name="green">#52A6FF</color>-->
+
+
+    <!--  Color for background light  -->
+<!--    <color name="background">#ffffff</color>-->
+
+    <!--  Color for textfields light  -->
+<!--    <color name="inputfield">#f0f4f8</color>-->
+
+    <!--  Color for normal text both  -->
+    <color name="medium_grey_normal">#a6bcd0</color>
+
+    <!--  Color for heavy text both  -->
+    <color name="medium_grey_heavy">#748a9d</color>
+0
+    <!--  Color for background dark  -->
+    <color name="background">#404e5a</color>
+
+    <!--  Color for textfields dark  -->
+    <color name="inputfield">#4e5d6a</color>
+
+</resources>
