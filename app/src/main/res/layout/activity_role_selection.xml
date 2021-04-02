@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RoleSelectionActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="-20dp"
+        android:background="@drawable/temp">
+
+        <RelativeLayout
+            android:id="@+id/rel_lay1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="40dp">
+
+            <Button
+                android:id="@+id/btn_jobseeker"
+                android:layout_width="315dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="330dp"
+                android:background="@drawable/button"
+                android:drawablePadding="10dp"
+                android:text="Get a Job"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF" />
+            <TextView
+                android:id="@+id/label1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:layout_below="@+id/btn_jobseeker"
+                android:layout_marginHorizontal="5dp"
+                android:fontFamily="@font/re"
+                android:text="Need a Job ?"
+                android:textAlignment="center"
+                android:textSize="22sp" />
+
+
+            <Button
+                android:id="@+id/btn_hr"
+                android:layout_width="315dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/label1"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginHorizontal="20dp"
+                android:background="@drawable/button"
+                android:drawablePadding="10dp"
+                android:text="Hire Candidate"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF" />
+            <TextView
+                android:id="@+id/label2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:layout_below="@+id/btn_hr"
+                android:layout_marginHorizontal="5dp"
+                android:fontFamily="@font/re"
+                android:text="Looking for cndidate ?"
+                android:textAlignment="center"
+                android:textSize="22sp" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+</RelativeLayout>
