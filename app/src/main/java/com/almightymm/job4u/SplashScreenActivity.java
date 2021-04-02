@@ -29,7 +29,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 Intent intent=new Intent(SplashScreenActivity.this, SignInActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-//                finish();
+                finishAfterTransition();
             }
         }, timeOut);
         Animation animation = AnimationUtils.loadAnimation(SplashScreenActivity.this, R.anim.push_down_in);
