@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,63 +21,55 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class RoleSelectionActivity extends AppCompatActivity {
 
-//    firebase
+    //    firebase
     private FirebaseAuth mAuth;
     private FirebaseUser firebaseUser;
     String userId;
 
-    private DatabaseReference mDatabase;
     private static final String TAG = "RoleSelectionActivity";
 
     private Button jobseekerButton, hrButton;
+    SharedPreferences preferences;
+    SharedPreferences.Editor preferenceEditor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_selection);
+        initPreferences();
         jobseekerButton = findViewById(R.id.btn_jobseeker);
         hrButton = findViewById(R.id.btn_hr);
-        
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(firebaseUser !=null){
+        boolean roleAssigned = preferences.getBoolean("roleAssigned", false);
+
+        if (!roleAssigned) {
+            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             userId = firebaseUser.getUid();
-            mDatabase = FirebaseDatabase.getInstance().getReference();
-            mDatabase.child("Users").child(userId).child("roleAssigned").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            hrButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    if (!task.isSuccessful()) {
-                        Log.e("firebase", "Error getting data", task.getException());
-                    }
-                    else {
-                        boolean roleAssigned= (boolean) task.getResult().getValue();
-                        if(roleAssigned){
-                            Intent intent = new Intent(RoleSelectionActivity.this,HomeActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            hrButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(RoleSelectionActivity.this, "Hr Clicked", Toast.LENGTH_SHORT).show();
-                                    mDatabase.child("Users").child(userId).child("roleAssigned").setValue(true);
-                                    mDatabase.child("Users").child(userId).child("role").setValue("HR");
-                                    Intent intent = new Intent(RoleSelectionActivity.this,HomeActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            });
-                            jobseekerButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(RoleSelectionActivity.this, "job seeker clicked", Toast.LENGTH_SHORT).show();
-                                    mDatabase.child("Users").child(userId).child("roleAssigned").setValue(true);
-                                    mDatabase.child("Users").child(userId).child("role").setValue("Job Seeker");
-                                    Intent intent = new Intent(RoleSelectionActivity.this,HomeActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            });
-                        }
-                    }
+                public void onClick(View v) {
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("roleAssigned").setValue(true);
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("role").setValue("HR");
+                    preferenceEditor = preferences.edit();
+                    preferenceEditor.putBoolean("roleAssigned", true);
+                    preferenceEditor.putString("role", "HR");
+                    preferenceEditor.apply();
+                    Intent intent = new Intent(RoleSelectionActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+            jobseekerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("roleAssigned").setValue(true);
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("role").setValue("Job Seeker");
+                    preferenceEditor = preferences.edit();
+                    preferenceEditor.putBoolean("roleAssigned", true);
+                    preferenceEditor.putString("role", "Job Seeker");
+                    preferenceEditor.apply();
+                    Intent intent = new Intent(RoleSelectionActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
             });
         } else {
@@ -84,7 +77,11 @@ public class RoleSelectionActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-        
-        
+
+
+    }
+
+    private void initPreferences() {
+        preferences = getSharedPreferences("User_Details", MODE_PRIVATE);
     }
 }

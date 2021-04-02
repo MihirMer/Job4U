@@ -2,17 +2,17 @@ package com.almightymm.job4u.model;
 
 public class User {
     private String firstName, lastName, emailAddress, role;
-    private boolean isRoleAssigned;
+    private boolean roleAssigned;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String emailAddress, boolean isRoleAssigned, String role) {
+    public User(String firstName, String lastName, String emailAddress, boolean roleAssigned, String role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
+        this.roleAssigned = roleAssigned;
         this.role = role;
-        this.isRoleAssigned = isRoleAssigned;
     }
 
     public String getFirstName() {
@@ -48,10 +48,10 @@ public class User {
     }
 
     public boolean isRoleAssigned() {
-        return isRoleAssigned;
+        return roleAssigned;
     }
 
     public void setRoleAssigned(boolean roleAssigned) {
-        isRoleAssigned = roleAssigned;
+        this.roleAssigned = roleAssigned;
     }
 }

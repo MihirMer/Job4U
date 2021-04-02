@@ -1,6 +1,7 @@
 package com.almightymm.job4u;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.almightymm.job4u.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -20,6 +22,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
@@ -27,17 +30,26 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.shobhitpuri.custombuttons.GoogleSignInButton;
 
 public class SignInActivity extends AppCompatActivity {
+    //    views
     private TextView create_account, forgot_password;
     private Button signInButton;
-
     private TextInputEditText signInEmailId, signInPassword;
 
+    //    shared prefs
+    SharedPreferences preferences;
+    SharedPreferences.Editor preferenceEditor;
 
     //    firebase auth
     private FirebaseAuth mAuth;
+    private FirebaseUser firebaseUser;
+    private String userId;
 
     //    google sign in
     private static final String TAG = "SignInActivity";
@@ -50,13 +62,14 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         initViews();
+        initPreferences();
         addListeners();
     }
+
 
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
     }
 
     private void initViews() {
@@ -67,6 +80,11 @@ public class SignInActivity extends AppCompatActivity {
         signInEmailId = findViewById(R.id.sign_in_email_id);
         signInPassword = findViewById(R.id.sign_in_password);
         forgot_password = findViewById(R.id.forgot_pass);
+    }
+
+    private void initPreferences() {
+        preferences = getSharedPreferences("User_Details", MODE_PRIVATE);
+        preferenceEditor = preferences.edit();
     }
 
     private void addListeners() {
@@ -107,7 +125,7 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(SignInActivity.this,ForgotPassword.class);
+                Intent i = new Intent(SignInActivity.this, ForgotPassword.class);
                 startActivity(i);
 
             }
@@ -138,12 +156,12 @@ public class SignInActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        if (user.isEmailVerified()) {
-                            Intent i = new Intent(SignInActivity.this, RoleSelectionActivity.class);
-                            startActivity(i);
+                        firebaseUser = mAuth.getCurrentUser();
+                        userId = firebaseUser.getUid();
+                        if (firebaseUser.isEmailVerified()) {
+                            initUserInDatabase("EmailPassword");
                         } else {
-                            user.sendEmailVerification();
+                            firebaseUser.sendEmailVerification();
                             Toast.makeText(SignInActivity.this, "Please check your email & verify to login", Toast.LENGTH_LONG).show();
                         }
                     } else {
@@ -157,33 +175,88 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
+                // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-                AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-                mAuth.signInWithCredential(credential)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d(TAG, "signInWithCredential:success");
-                                    Intent intent = new Intent(SignInActivity.this, RoleSelectionActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w(TAG, "signInWithCredential:failure", task.getException());
-                                }
-                            }
-                        });
+                firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
-                // ...
             }
         }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            firebaseUser = mAuth.getCurrentUser();
+                            userId = firebaseUser.getUid();
+                            initUserInDatabase("Google");
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void initUserInDatabase(final String method) {
+        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+
+                if (task.getResult().getValue(User.class) == null) {
+                    if (method.equals("Google")) {
+                        String fullName = firebaseUser.getDisplayName();
+                        String firstName = fullName.substring(0, fullName.lastIndexOf(" "));
+                        String lastName = fullName.substring(fullName.lastIndexOf(" ") + 1);
+                        String email = firebaseUser.getEmail();
+
+                        final User user = new User(firstName, lastName, email, false, "");
+
+                        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                setPreferences(userId, user);
+                                Intent intent;
+                                intent = new Intent(SignInActivity.this, RoleSelectionActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                } else {
+                    User user = task.getResult().getValue(User.class);
+                    setPreferences(userId, user);
+                    Intent intent;
+                    if (!user.isRoleAssigned()) {
+                        intent = new Intent(SignInActivity.this, RoleSelectionActivity.class);
+                    } else {
+                        intent = new Intent(SignInActivity.this, HomeActivity.class);
+                    }
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+
+    private void setPreferences(String userId, User user) {
+        preferenceEditor.putString("userId", userId);
+        preferenceEditor.putBoolean("roleAssigned", user.isRoleAssigned());
+        preferenceEditor.putString("role", user.getRole());
+        preferenceEditor.apply();
     }
 
 }

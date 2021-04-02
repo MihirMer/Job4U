@@ -1,73 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#DBDCFB"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="20dp"
     tools:context=".RoleSelectionActivity">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="-20dp"
-        android:background="@drawable/temp">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Looking for Job/Candidates ?"
+        android:textAlignment="center"
+        android:textColor="#C39E82"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/main1"
+        android:layout_width="match_parent"
+        android:layout_height="275dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/backg_main"
+        android:elevation="10dp">
 
         <RelativeLayout
-            android:id="@+id/rel_lay1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="40dp">
+            android:layout_height="200dp"
+            android:background="@drawable/backg_sub"></RelativeLayout>
 
-            <Button
-                android:id="@+id/btn_jobseeker"
-                android:layout_width="315dp"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="330dp"
-                android:background="@drawable/button"
-                android:drawablePadding="10dp"
-                android:text="Get a Job"
-                android:textAlignment="center"
-                android:textColor="#FFFFFF" />
-            <TextView
-                android:id="@+id/label1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:layout_below="@+id/btn_jobseeker"
-                android:layout_marginHorizontal="5dp"
-                android:fontFamily="@font/re"
-                android:text="Need a Job ?"
-                android:textAlignment="center"
-                android:textSize="22sp" />
+        <Button
+            android:id="@+id/btn_jobseeker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="35dp"
+            android:layout_marginTop="175dp"
+            android:background="@drawable/button"
+            android:letterSpacing="0.06"
+            android:text="Get a Job"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:textSize="19sp" />
 
-
-            <Button
-                android:id="@+id/btn_hr"
-                android:layout_width="315dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/label1"
-                android:layout_marginTop="10dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginHorizontal="20dp"
-                android:background="@drawable/button"
-                android:drawablePadding="10dp"
-                android:text="Hire Candidate"
-                android:textAlignment="center"
-                android:textColor="#FFFFFF" />
-            <TextView
-                android:id="@+id/label2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:layout_below="@+id/btn_hr"
-                android:layout_marginHorizontal="5dp"
-                android:fontFamily="@font/re"
-                android:text="Looking for cndidate ?"
-                android:textAlignment="center"
-                android:textSize="22sp" />
-        </RelativeLayout>
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_jobseeker"
+            android:layout_marginTop="15dp"
+            android:text="Need a Job?"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </RelativeLayout>
-</RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/main2"
+        android:layout_width="match_parent"
+        android:layout_height="275dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/backg_main"
+        android:elevation="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/backg_sub"></RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_hr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="35dp"
+            android:layout_marginTop="175dp"
+            android:background="@drawable/button"
+            android:letterSpacing="0.06"
+            android:text="Hire Candidates   "
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:textSize="19sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_hr"
+            android:layout_marginTop="15dp"
+            android:text="Looking for Candidate?"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+
+</LinearLayout>
