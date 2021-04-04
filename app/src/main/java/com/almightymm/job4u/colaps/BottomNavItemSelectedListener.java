@@ -10,30 +10,39 @@ import com.almightymm.job4u.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class BottomNavItemSelectedListener
-    implements BottomNavigationView.OnNavigationItemSelectedListener {
+        implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-  private final Toolbar toolbar;
-  private final ViewPager viewPager;
+    private final Toolbar toolbar;
+    private final ViewPager viewPager;
 
-  public BottomNavItemSelectedListener(ViewPager viewPager, Toolbar toolbar) {
-    this.toolbar = toolbar;
-    this.viewPager = viewPager;
-  }
-
-  @Override
-  public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-    toolbar.setTitle(item.getTitle());
-    int itemId = item.getItemId();
-    if (itemId == R.id.navigation_home) {
-      viewPager.setCurrentItem(0);
-      return true;
-    } else if (itemId == R.id.navigation_dashboard) {
-      viewPager.setCurrentItem(1);
-      return true;
-    } else if (itemId == R.id.navigation_notifications) {
-      viewPager.setCurrentItem(2);
-      return true;
+    public BottomNavItemSelectedListener(ViewPager viewPager, Toolbar toolbar) {
+        this.toolbar = toolbar;
+        this.viewPager = viewPager;
     }
-    return false;
-  }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        toolbar.setTitle(item.getTitle());
+        int itemId = item.getItemId();
+
+        switch (itemId) {
+            case R.id.item_home:
+                viewPager.setCurrentItem(0);
+                return true;
+            case R.id.item_search:
+                viewPager.setCurrentItem(1);
+                return true;
+            case R.id.item_saved_job:
+                viewPager.setCurrentItem(2);
+                return true;
+            case R.id.item_notification:
+                viewPager.setCurrentItem(3);
+                return true;
+            case R.id.item_account:
+                viewPager.setCurrentItem(4);
+                return true;
+            default:
+                return false;
+        }
+    }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeActivity extends AppCompatActivity {
+    private static final String TAG = "HomeActivity";
     private BottomNavigationView navigation;
     private Toolbar toolbar;
 
@@ -30,7 +32,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         initPreferences();
-        Toast.makeText(this, String.valueOf(preferences.getBoolean("roleAssigned", false)), Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "onCreate: "+ String.valueOf(preferences.getBoolean("roleAssigned", false)));
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ViewPager viewPager = findViewById(R.id.view_pager);
