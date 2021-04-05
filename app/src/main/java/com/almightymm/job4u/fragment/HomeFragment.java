@@ -1,4 +1,4 @@
-package com.almightymm.job4u.colaps;
+package com.almightymm.job4u.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -110,7 +110,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        int id = requireArguments().getInt(ARG_ID);
+//        int id = requireArguments().getInt(ARG_ID);
     }
 
     @Override

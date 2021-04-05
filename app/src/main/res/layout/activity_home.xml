@@ -8,17 +8,29 @@
     android:fitsSystemWindows="true">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator_lay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:context="MainActivity">
 
-        <com.almightymm.job4u.colaps.CustomViewPager
-            android:id="@+id/view_pager"
+        <!--        <com.almightymm.job4u.colaps.CustomViewPager-->
+        <!--            android:id="@+id/view_pager"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:layout_marginTop="-60dp"-->
+        <!--            app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+
+
+        <fragment
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/mobile_navigation"
             android:layout_marginTop="-60dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
@@ -49,7 +61,7 @@
             android:background="@drawable/bottom_nav"
             android:paddingTop="20dp"
             app:layout_behavior="com.almightymm.job4u.colaps.BottomNavigationBehavior"
-            app:menu="@menu/navigation" />
+            app:menu="@menu/bottom_nav_menu" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

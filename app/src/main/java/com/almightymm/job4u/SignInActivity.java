@@ -246,6 +246,7 @@ public class SignInActivity extends AppCompatActivity {
                         intent = new Intent(SignInActivity.this, HomeActivity.class);
                     }
                     startActivity(intent);
+                    finishAfterTransition();
                 }
             }
         });

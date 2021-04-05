@@ -1,4 +1,4 @@
-package com.almightymm.job4u.colaps;
+package com.almightymm.job4u.fragment;
 
 import android.os.Bundle;
 
@@ -12,10 +12,10 @@ import com.almightymm.job4u.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SavedJobFragment#newInstance} factory method to
+ * Use the {@link NotificationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SavedJobFragment extends Fragment {
+public class NotificationFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class SavedJobFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public SavedJobFragment() {
+    public NotificationFragment() {
         // Required empty public constructor
     }
 
@@ -36,11 +36,11 @@ public class SavedJobFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SavedJobFragment.
+     * @return A new instance of fragment NotificationFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SavedJobFragment newInstance(String param1, String param2) {
-        SavedJobFragment fragment = new SavedJobFragment();
+    public static NotificationFragment newInstance(String param1, String param2) {
+        NotificationFragment fragment = new NotificationFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -55,12 +55,13 @@ public class SavedJobFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_saved_job, container, false);
+        return inflater.inflate(R.layout.fragment_notification, container, false);
     }
 }
