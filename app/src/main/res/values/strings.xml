@@ -14,5 +14,33 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="invalid_phone">Enter Valid Mobile no.</string>
+    <string name="invalid_name">Enter Valid Company Name</string>
+    <string name="invalid_website">Enter Valid URL</string>
+    <string name="invalid_about">Enter Detail</string>
+    <string name="invalid_location">Please Enter location</string>
+    <string name="invalid_fname">Enter First Name</string>
+    <string name="invalid_lname">Please Enter Last Name</string>
+    <string name="invalid_email">Please Enter Valid Email</string>
+    <string name="invalid_address">Please Enter Address</string>
+    <string name="invalid_job_title">Please Enter Job Title</string>
+    <string name="invalid_desigation">Please Enter Desigation</string>
+    <string name="invalid_description">Please Enter escription</string>
+    <string name="invalid_salary">Please Enter Salary</string>
+    <string name="invalid_company_name">Please Enter Company Name</string>
+    <string name="invalid_city">Please Enter City</string>
+    <string name="invalid_skill">Please Add Your Skills</string>
+    <string name="invalid_degree">Please Enter Degree</string>
+    <string name="invalid_college">Please Enter College</string>
+    <string name="invalid_streem">Please Enter Streem</string>
+    <string name="invalid_year">Please Enter Graduation Year</string>
+    <string name="invalid_dob">Please Select Date of Birth</string>
+    <string name="invalid_rg">Please Select Gender</string>
+    <string name="invalid_projectName">Please Enter Project Name</string>
+    <string name="invalid_desc">Please Enter Projet Description</string>
+    <string name="invalid_language">Please Enter Project Langugae</string>
+    <string name="invalid_syear">Please Enter Starting Year Of Project</string>
+    <string name="invalid_eyear">Please Enter ending Year of Project</string>
+    <string name="invalid_cgpa">Please Enter Valid CGPA</string>
 
 </resources>

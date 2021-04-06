@@ -254,6 +254,7 @@ public class SignInActivity extends AppCompatActivity {
 
 
     private void setPreferences(String userId, User user) {
+        Log.d(TAG, "setPreferences: "+userId);
         preferenceEditor.putString("userId", userId);
         preferenceEditor.putBoolean("roleAssigned", user.isRoleAssigned());
         preferenceEditor.putString("role", user.getRole());
