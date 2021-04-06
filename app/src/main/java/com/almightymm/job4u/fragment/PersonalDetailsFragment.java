@@ -1,28 +1,29 @@
 package com.almightymm.job4u.fragment;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.almightymm.job4u.R;
 import com.almightymm.job4u.model.PersonalDetails;
-import com.basgeekball.awesomevalidation.AwesomeValidation;
-import com.basgeekball.awesomevalidation.ValidationStyle;
-import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -31,21 +32,29 @@ import java.util.Calendar;
 import static android.content.Context.MODE_PRIVATE;
 
 public class PersonalDetailsFragment extends Fragment {
+    private static final String TAG = "PersonalDetailsFragment";
     EditText firstname, lastname, email, phone, dob, address;
     DatePickerDialog datePickerDialog;
-    RadioButton radioButton;
+    Spinner gendertxt;
     Button save;
-    RadioGroup rg;
-    RadioButton male, female;
     DatabaseReference db_add_personal_detail;
-    AwesomeValidation awesomeValidation;
     SharedPreferences preferences;
+    SharedPreferences.Editor preferenceEditor;
 
-    private static final String TAG = "PersonalDetailsFragment";
     public PersonalDetailsFragment() {
         // Required empty public constructor
     }
 
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,76 +62,66 @@ public class PersonalDetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_personal_details, container, false);
         initPreferences();
+
         firstname = view.findViewById(R.id.txt_firstname);
         lastname = view.findViewById(R.id.txt_lastname);
         email = view.findViewById(R.id.txt_email);
         phone = view.findViewById(R.id.txt_phone);
         dob = view.findViewById(R.id.txt_dob);
+        gendertxt = view.findViewById(R.id.gender_layout);
+
+        String userId = preferences.getString("userId", "");
+        Log.d(TAG, "onCreateView: " + userId);
+        db_add_personal_detail = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+
+        getValues();
+
+        String[] genderArray = {"Gender", "Male", "Female"};
+
+        ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(getContext(), R.layout.gender_spinner_row, R.id.gender, genderArray);
+        gendertxt.setAdapter(genderAdapter);
+        gendertxt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String gender = String.valueOf(gendertxt.getSelectedItem());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         dob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance();
-                final int year = calendar.get(Calendar.YEAR);
-                final int month = calendar.get(Calendar.MONTH);
-                final int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-                datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int i, int i1, int i2) {
-                        dob.setText(day + "/" + (month + 1) + "/" + year);
-                    }
-                }, year, month, day);
-
+                hideKeyboard(getActivity());
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                datePickerDialog = new DatePickerDialog(getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                dob.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            }
+                        }, year, month, day);
                 datePickerDialog.show();
+
             }
         });
         address = view.findViewById(R.id.txt_address);
-        female = view.findViewById(R.id.rb_female);
-        male = view.findViewById(R.id.rb_male);
 
-        rg = view.findViewById(R.id.gender_layout);
+
         save = view.findViewById(R.id.btn_save);
-
-        String userId = preferences.getString("userId", "");
-        Log.d(TAG, "onCreateView: "+userId);
-        db_add_personal_detail = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS");
-
-
-        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
-
-        //FOR first name
-        awesomeValidation.addValidation(getActivity(), R.id.txt_firstname, RegexTemplate.NOT_EMPTY,
-                R.string.invalid_fname);
-        //FOR last name
-        awesomeValidation.addValidation(getActivity(), R.id.txt_lastname, RegexTemplate.NOT_EMPTY,
-                R.string.invalid_lname);
-        //FOR date of birth
-        awesomeValidation.addValidation(getActivity(), R.id.txt_dob, RegexTemplate.NOT_EMPTY,
-                R.string.invalid_dob);
-        //FOR email
-        awesomeValidation.addValidation(getActivity(), R.id.txt_email, Patterns.EMAIL_ADDRESS,
-                R.string.invalid_email);
-        //FOR phone
-        awesomeValidation.addValidation(getActivity(), R.id.txt_phone, "[5-9]{1}[0-9]{9}$",
-                R.string.invalid_phone);
-        //FOR address
-        awesomeValidation.addValidation(getActivity(), R.id.txt_firstname, RegexTemplate.NOT_EMPTY,
-                R.string.invalid_address);
-        //FOR gender
-        awesomeValidation.addValidation(getActivity(), R.id.gender_layout, RegexTemplate.NOT_EMPTY,
-                R.string.invalid_rg);
 
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (awesomeValidation.validate()) {
-                    adddetails();
-                    clear();
-                } else {
-                    Toast.makeText(getContext(), "Please Enter Valid Details", Toast.LENGTH_LONG).show();
-                }
+                adddetails();
             }
         });
         return view;
@@ -135,42 +134,102 @@ public class PersonalDetailsFragment extends Fragment {
         String phoneno = phone.getText().toString().trim();
         String dateofbirth = dob.getText().toString().trim();
         String adre = address.getText().toString().trim();
+        String gender = gendertxt.getSelectedItem().toString().trim();
 
-        String gender = "";
-        if (female.isChecked()) {
-            gender = "Female";
 
-        }
-        if (male.isChecked()) {
-            gender = "male";
-        }
-
-        if (!TextUtils.isEmpty(fn)) {
-            String id = db_add_personal_detail.push().getKey();
-
-            PersonalDetails personalDetails = new PersonalDetails(id, fn, ln, mail, phoneno,
-                    dateofbirth, adre, gender);
-            db_add_personal_detail.setValue(personalDetails);
-
-            Toast.makeText(getContext(), "Details Saved", Toast.LENGTH_LONG).show();
-
+        if (fn.isEmpty()) {
+//            firstName.setError("First Name is Required");
+            firstname.requestFocus();
+            Toast.makeText(getContext(), "First name is required !", Toast.LENGTH_SHORT).show();
+        } else if (ln.isEmpty()) {
+//            lastname.setError("Last Name is Required");
+            lastname.requestFocus();
+            Toast.makeText(getContext(), "Last name is required !", Toast.LENGTH_SHORT).show();
+        } else if (mail.isEmpty()) {
+//            email.setError("Email is Required");
+            email.requestFocus();
+            Toast.makeText(getContext(), "Email id is required !", Toast.LENGTH_SHORT).show();
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
+//            email.setError("Please Provide Valid Email");
+            email.requestFocus();
+            Toast.makeText(getContext(), "Please provide valid Email id !", Toast.LENGTH_SHORT).show();
+        } else if (phoneno.isEmpty()) {
+            phone.requestFocus();
+            Toast.makeText(getContext(), "Phone number is required !", Toast.LENGTH_SHORT).show();
+        } else if (!Patterns.PHONE.matcher(phoneno).matches()) {
+            phone.requestFocus();
+            Toast.makeText(getContext(), "Please provide valid Phone number !", Toast.LENGTH_SHORT).show();
+        } else if (dateofbirth.isEmpty()) {
+            dob.requestFocus();
+            Toast.makeText(getContext(), "Date of Birth is required !", Toast.LENGTH_SHORT).show();
+        } else if (gender.equals("Gender")) {
+            gendertxt.requestFocus();
+            Toast.makeText(getContext(), "Gender is required !", Toast.LENGTH_SHORT).show();
+        } else if (adre.isEmpty()) {
+            address.requestFocus();
+            Toast.makeText(getContext(), "Address is required !", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getContext(), "Enter Data", Toast.LENGTH_LONG).show();
+//            PersonalDetails personalDetails = new PersonalDetails(fn, ln, mail, phoneno, dateofbirth, adre, gender);
+            PersonalDetails personalDetails = new PersonalDetails(
+                    fn,
+                    ln,
+                    mail,
+                    phoneno,
+                    dateofbirth,
+                    adre,
+                    gender,
+                    preferences.getString("role", ""),
+                    preferences.getBoolean("roleAssigned", false)
+            );
+            db_add_personal_detail.setValue(personalDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Toast.makeText(getContext(), "Details Saved", Toast.LENGTH_LONG).show();
+                }
+            });
         }
-
-
     }
 
-    private void clear() {
-        firstname.setText("");
-        lastname.setText("");
-        email.setText("");
-        phone.setText("");
-        dob.setText("");
-        address.setText("");
+    private void getValues() {
+//        firstname = view.findViewById(R.id.txt_firstname);
+//        lastname = view.findViewById(R.id.txt_lastname);
+//        email = view.findViewById(R.id.txt_email);
+//        phone = view.findViewById(R.id.txt_phone);
+//        dob = view.findViewById(R.id.txt_dob);
+//        gendertxt = view.findViewById(R.id.gender_layout);
+
+        final String fname = preferences.getString("firstName", "");
+        final String lname = preferences.getString("lastName", "");
+        final String emailid = preferences.getString("emailAddress", "");
+
+
+        db_add_personal_detail.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                PersonalDetails personalDetails = dataSnapshot.getValue(PersonalDetails.class);
+                if (personalDetails != null) {
+
+                    firstname.setText(fname);
+                    lastname.setText(lname);
+                    email.setText(emailid);
+                    phone.setText(personalDetails.getPhone());
+                    dob.setText(personalDetails.getDOB());
+                    if (personalDetails.getGender() != null) {
+                        if (personalDetails.getGender().equals("Male")) {
+                            gendertxt.setSelection(1);
+                        } else {
+                            gendertxt.setSelection(2);
+                        }
+                    }
+                    address.setText(personalDetails.getAddress());
+                }
+
+            }
+        });
     }
 
     private void initPreferences() {
         preferences = getActivity().getSharedPreferences("User_Details", MODE_PRIVATE);
+        preferenceEditor = preferences.edit();
     }
 }

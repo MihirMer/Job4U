@@ -43,4 +43,12 @@
     <string name="invalid_eyear">Please Enter ending Year of Project</string>
     <string name="invalid_cgpa">Please Enter Valid CGPA</string>
 
+    <string-array name="gender_name">
+        <item>Select Gender</item>
+        <item>Female</item>
+        <item>Male</item>
+    </string-array>
+
+    <string name="invalid_gender">Please Enter Gender</string>
+    <string name="err_tech_stacks">Please Enter Gender</string>
 </resources>

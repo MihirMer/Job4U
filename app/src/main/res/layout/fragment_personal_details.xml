@@ -13,16 +13,6 @@
         android:background="@color/background"
         android:orientation="vertical">
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/add_label"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_centerHorizontal="true"-->
-        <!--            android:fontFamily="@font/re"-->
-        <!--            android:text="Personal Details"-->
-        <!--            android:textColor="@color/green"-->
-        <!--            android:textSize="24sp" />-->
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/firstname_layout"
             android:layout_width="match_parent"
@@ -37,6 +27,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="First Name"
+                android:inputType="textCapSentences"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -55,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="Last Name"
-                android:inputType="text"
+                android:inputType="textCapSentences"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,41 +108,16 @@
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/gender_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="15dp"
-            android:text="Gender"
-            android:textSize="15dp" />
-
-        <RadioGroup
+        <Spinner
             android:id="@+id/gender_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:layout_marginHorizontal="20dp"
-            android:background="@drawable/rdinput"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rb_female"
-                android:layout_width="118dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="Female"
-                android:textColor="#7a7a7a"
-                android:textSize="14dp" />
-
-            <RadioButton
-                android:id="@+id/rb_male"
-                android:layout_width="185dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="Male"
-                android:textColor="#7a7a7a"
-                android:textSize="14dp" />
-        </RadioGroup>
+            android:layout_marginTop="15dp"
+            android:background="@drawable/input"
+            android:entries="@array/gender_name"
+            android:paddingLeft="0dp"
+            />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/address_layout"
@@ -178,14 +144,14 @@
             android:id="@+id/btn_save"
             android:layout_width="315dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginBottom="30dp"
             android:background="@drawable/button"
             android:drawablePadding="10dp"
             android:gravity="center"
             android:text="SAVE"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
             android:textColor="#FFFFFF" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

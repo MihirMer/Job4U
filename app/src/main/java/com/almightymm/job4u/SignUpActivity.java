@@ -2,7 +2,6 @@ package com.almightymm.job4u;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.almightymm.job4u.model.User;
+import com.almightymm.job4u.model.PersonalDetails;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -91,33 +90,34 @@ public class SignUpActivity extends AppCompatActivity {
 
         if (firstName.isEmpty()) {
 //            firstName.setError("First Name is Required");
-//            firstName.requestFocus();
+            signUpFirstName.requestFocus();
             Toast.makeText(this, "First name is required !", Toast.LENGTH_SHORT).show();
         } else if (lastName.isEmpty()) {
 //            lastname.setError("Last Name is Required");
-//            lastname.requestFocus();
+            signUpLastName.requestFocus();
             Toast.makeText(this, "Last name is required !", Toast.LENGTH_SHORT).show();
         } else if (emailId.isEmpty()) {
 //            email.setError("Email is Required");
-//            email.requestFocus();
+            signUpEmailId.requestFocus();
             Toast.makeText(this, "Email id is required !", Toast.LENGTH_SHORT).show();
         } else if (!Patterns.EMAIL_ADDRESS.matcher(emailId).matches()) {
 //            email.setError("Please Provide Valid Email");
-//            email.requestFocus();
+            signUpEmailId.requestFocus();
             Toast.makeText(this, "Please provide valid Email id !", Toast.LENGTH_SHORT).show();
         } else if (password.isEmpty()) {
 //            pass.setError("Password is Required");
-//            pass.requestFocus();
+            signUpPassword.requestFocus();
             Toast.makeText(this, "Password is required !", Toast.LENGTH_SHORT).show();
         } else if (password.length() < 6) {
 //            pass.setError("Password must be atleast 6 characters");
-//            pass.requestFocus();
+            signUpPassword.requestFocus();
             Toast.makeText(this, "Password must be of at least of 6 characters !", Toast.LENGTH_SHORT).show();
         } else if (confirmPassword.isEmpty()) {
 //            confpass.setError("Please Re-enter Password ");
-//            confpass.requestFocus();
+            signUpConfirmPassword.requestFocus();
             Toast.makeText(this, "Confirmation password is required !", Toast.LENGTH_SHORT).show();
         } else if (!password.matches(confirmPassword)) {
+            signUpConfirmPassword.requestFocus();
             Toast.makeText(this, "Password doesn't match !", Toast.LENGTH_SHORT).show();
 
         } else {
@@ -128,7 +128,18 @@ public class SignUpActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                User user = new User(firstName, lastName, emailId, false, "");
+//                                User user = new User(firstName, lastName, emailId, false, "");
+                                final PersonalDetails user = new PersonalDetails(
+                                        firstName,
+                                        lastName,
+                                        emailId,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        false
+                                );
                                 FirebaseUser firebaseUser = mAuth.getCurrentUser();
                                 FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override

@@ -2,35 +2,29 @@ package com.almightymm.job4u.model;
 
 public class PersonalDetails {
 
-    String id;
     String firstName;
     String lastName;
-    String email;
+    String emailAddress;
     String phone;
     String DOB;
     String address;
     String gender;
+    private String role;
+    private boolean roleAssigned;
 
     public PersonalDetails() {
     }
 
-    public PersonalDetails(String id, String firstName, String lastName, String email, String phone, String DOB, String address, String gender) {
-        this.id = id;
+    public PersonalDetails(String firstName, String lastName, String emailAddress, String phone, String DOB, String address, String gender, String role, boolean roleAssigned) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
+        this.emailAddress = emailAddress;
         this.phone = phone;
         this.DOB = DOB;
         this.address = address;
         this.gender = gender;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        this.role = role;
+        this.roleAssigned = roleAssigned;
     }
 
     public String getFirstName() {
@@ -49,12 +43,12 @@ public class PersonalDetails {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public String getPhone() {
@@ -87,5 +81,21 @@ public class PersonalDetails {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public boolean isRoleAssigned() {
+        return roleAssigned;
+    }
+
+    public void setRoleAssigned(boolean roleAssigned) {
+        this.roleAssigned = roleAssigned;
     }
 }

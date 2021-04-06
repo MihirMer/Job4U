@@ -7,22 +7,19 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.almightymm.job4u.model.User;
+import com.almightymm.job4u.model.PersonalDetails;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
@@ -31,9 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.shobhitpuri.custombuttons.GoogleSignInButton;
 
 public class SignInActivity extends AppCompatActivity {
@@ -217,14 +212,25 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
 
-                if (task.getResult().getValue(User.class) == null) {
+                if (task.getResult().getValue(PersonalDetails.class) == null) {
                     if (method.equals("Google")) {
                         String fullName = firebaseUser.getDisplayName();
                         String firstName = fullName.substring(0, fullName.lastIndexOf(" "));
                         String lastName = fullName.substring(fullName.lastIndexOf(" ") + 1);
                         String email = firebaseUser.getEmail();
 
-                        final User user = new User(firstName, lastName, email, false, "");
+//                        final User user = new User(firstName, lastName, email, false, "");
+                        final PersonalDetails user = new PersonalDetails(
+                                firstName,
+                                lastName,
+                                email,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                false
+                        );
 
                         FirebaseDatabase.getInstance().getReference().child("Users").child(userId).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -237,7 +243,7 @@ public class SignInActivity extends AppCompatActivity {
                         });
                     }
                 } else {
-                    User user = task.getResult().getValue(User.class);
+                    PersonalDetails user = task.getResult().getValue(PersonalDetails.class);
                     setPreferences(userId, user);
                     Intent intent;
                     if (!user.isRoleAssigned()) {
@@ -253,8 +259,12 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 
-    private void setPreferences(String userId, User user) {
-        Log.d(TAG, "setPreferences: "+userId);
+    private void setPreferences(String userId, PersonalDetails user) {
+        Log.d(TAG, "setPreferences: " + userId);
+        preferenceEditor.putString("userId", userId);
+        preferenceEditor.putString("firstName", user.getFirstName());
+        preferenceEditor.putString("lastName", user.getLastName());
+        preferenceEditor.putString("emailAddress", user.getEmailAddress());
         preferenceEditor.putString("userId", userId);
         preferenceEditor.putBoolean("roleAssigned", user.isRoleAssigned());
         preferenceEditor.putString("role", user.getRole());
