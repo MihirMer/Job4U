@@ -14,8 +14,7 @@ import android.widget.Button;
 import com.almightymm.job4u.R;
 public class ProfileFragment extends Fragment {
 
-    private Button button;
-
+    private Button button, educationButton, addSkillButton, workExp,projectWork;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -25,16 +24,52 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
-
-
+        initViews(view);
+        setListeners(view);
+        return view;
+    }
+    private void initViews(View view) {
         button = view.findViewById(R.id.btn);
+        educationButton = view.findViewById(R.id.educational_details);
+        addSkillButton = view.findViewById(R.id.addskill);
+        workExp = view.findViewById(R.id.worl_experience);
+        projectWork = view.findViewById(R.id.project_work);
+    }
+
+    private void setListeners(final View view) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_personalDetailsFragment);
             }
         });
-        return view;
+        educationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_educationDetailsFragment);
+
+            }
+        });
+        addSkillButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_addSkillFragment);
+
+            }
+        });
+        workExp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_workExperienceFragment);
+
+            }
+        });
+        projectWork.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_projectWorkFragment);
+
+            }
+        });
     }
 }

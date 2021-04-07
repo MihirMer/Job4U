@@ -95,6 +95,7 @@ public class PersonalDetailsFragment extends Fragment {
         dob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 hideKeyboard(getActivity());
                 final Calendar cldr = Calendar.getInstance();
                 int day = cldr.get(Calendar.DAY_OF_MONTH);
@@ -109,7 +110,6 @@ public class PersonalDetailsFragment extends Fragment {
                             }
                         }, year, month, day);
                 datePickerDialog.show();
-
             }
         });
         address = view.findViewById(R.id.txt_address);

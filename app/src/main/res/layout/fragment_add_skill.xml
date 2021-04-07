@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical">
+
+        <co.lujun.androidtagview.TagContainerLayout
+            android:id="@+id/skill"
+            android:layout_width="315dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="30dp"
+            app:container_enable_drag="false"
+            app:horizontal_interval="10dp"
+            app:tag_clickable="true"
+            app:tag_enable_cross="true"
+            app:tag_theme="pure_teal"
+            app:vertical_interval="10dp"
+            android:layout_gravity="center"
+            android:background="@color/background" />
+
+        <RelativeLayout
+            android:layout_width="315dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/addskill_layout"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerVertical="true"
+                app:hintEnabled="false">
+
+                <AutoCompleteTextView
+                    android:id="@+id/txt_addskill"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/input"
+                    android:hint="Add Skills"
+                    android:inputType="text"
+                    android:textSize="14sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btn_add"
+                android:layout_width="55dp"
+                android:layout_height="60dp"
+                android:layout_gravity="right"
+                android:text="+"
+                android:textStyle="bold"
+                android:layout_alignParentRight="true"
+                android:textSize="30sp"/>
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_addskill"
+            android:layout_width="315dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/button"
+            android:drawableLeft="@drawable/icon_arrow_small"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="100dp"
+            android:text="CONTINUE"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
