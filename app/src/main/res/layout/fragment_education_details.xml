@@ -10,11 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="50dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/degree_layout"
-            android:layout_width="match_parent"
+            android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="15dp"
@@ -33,7 +34,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/college_layout"
-            android:layout_width="match_parent"
+            android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="15dp"
@@ -52,7 +53,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/streem_layout"
-            android:layout_width="match_parent"
+            android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="15dp"
@@ -71,7 +72,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/graducation_layout"
-            android:layout_width="match_parent"
+            android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="15dp"
@@ -90,7 +91,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/cgpa_layout"
-            android:layout_width="match_parent"
+            android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="15dp"
@@ -112,7 +113,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/achivement_layout"
-            android:layout_width="match_parent"
+            android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="15dp"
@@ -131,7 +132,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/otherskill_layout"
-            android:layout_width="match_parent"
+            android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="15dp"

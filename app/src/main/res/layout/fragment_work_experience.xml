@@ -10,12 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/designation_layout"
-            android:layout_width="match_parent"
+            android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             app:hintEnabled="false"
@@ -34,7 +35,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/year_of_exp_layout"
-            android:layout_width="match_parent"
+            android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/designation_layout"
             android:layout_marginHorizontal="20dp"
@@ -56,7 +57,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/start_year_layout"
-            android:layout_width="match_parent"
+            android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/year_of_exp_layout"
             android:layout_marginHorizontal="20dp"
@@ -76,7 +77,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/end_year_layout"
-            android:layout_width="match_parent"
+            android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/start_year_layout"
             android:layout_marginHorizontal="20dp"
@@ -96,7 +97,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/company_layout"
-            android:layout_width="match_parent"
+            android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/end_year_layout"
             android:layout_marginHorizontal="20dp"
@@ -116,7 +117,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/city_layout"
-            android:layout_width="match_parent"
+            android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/company_layout"
             android:layout_marginHorizontal="20dp"

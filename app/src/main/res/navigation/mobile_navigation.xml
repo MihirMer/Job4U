@@ -74,6 +74,6 @@
     <fragment
         android:id="@+id/projectWorkFragment"
         android:name="com.almightymm.job4u.fragment.ProjectWorkFragment"
-        android:label="fragment_project_work"
+        android:label="Project Work"
         tools:layout="@layout/fragment_project_work" />
 </navigation>

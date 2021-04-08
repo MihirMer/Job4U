@@ -11,7 +11,99 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/project_name_layout"
+            android:layout_width="315dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            app:hintEnabled="false"
+            app:startIconDrawable="@drawable/ic_designation">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txt_project"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input"
+                android:hint="Project Name"
+                android:inputType="text"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/description_layout"
+            android:layout_width="315dp"
+            android:layout_height="wrap_content"
+            app:startIconDrawable="@drawable/ic_job_descri"
+            app:hintEnabled="false"
+            android:layout_marginTop="15dp"
+            android:layout_marginHorizontal="20dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txt_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input"
+                android:hint="Description"
+                android:inputType="textMultiLine"
+                android:lines="4"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/start_year_layout"
+            android:layout_width="315dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="15dp"
+            app:hintEnabled="false"
+            app:startIconDrawable="@drawable/ic_date">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txt_start_year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input"
+                android:hint="Start Year"
+                android:inputType="date"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/end_year_layout"
+            android:layout_width="315dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="15dp"
+            app:hintEnabled="false"
+            app:startIconDrawable="@drawable/ic_date">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txt_end_year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input"
+                android:hint="End Year"
+                android:inputType="date"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_add_projectWork"
+        android:layout_width="315dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/button"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="140dp"
+        android:text="SAVE"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="15dp"/>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
