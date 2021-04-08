@@ -14,7 +14,7 @@ import android.widget.Button;
 import com.almightymm.job4u.R;
 public class ProfileFragment extends Fragment {
 
-    private Button button, educationButton, addSkillButton, workExp,projectWork;
+    private Button button, educationButton, addSkillButton, workExp,projectWork, companyDetails;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -34,6 +34,7 @@ public class ProfileFragment extends Fragment {
         addSkillButton = view.findViewById(R.id.addskill);
         workExp = view.findViewById(R.id.worl_experience);
         projectWork = view.findViewById(R.id.project_work);
+        companyDetails = view.findViewById(R.id.company_details);
     }
 
     private void setListeners(final View view) {
@@ -68,6 +69,13 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_projectWorkFragment);
+
+            }
+        });
+        companyDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_companyDetailsFragment);
 
             }
         });

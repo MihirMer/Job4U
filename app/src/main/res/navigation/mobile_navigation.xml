@@ -39,6 +39,9 @@
         <action
             android:id="@+id/action_profileFragment_to_projectWorkFragment"
             app:destination="@id/projectWorkFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_companyDetailsFragment"
+            app:destination="@id/companyDetailsFragment" />
 
     </fragment>
     <fragment
@@ -76,4 +79,9 @@
         android:name="com.almightymm.job4u.fragment.ProjectWorkFragment"
         android:label="Project Work"
         tools:layout="@layout/fragment_project_work" />
+    <fragment
+        android:id="@+id/companyDetailsFragment"
+        android:name="com.almightymm.job4u.fragment.CompanyDetailsFragment"
+        android:label="Company Details"
+        tools:layout="@layout/fragment_company_details" />
 </navigation>
