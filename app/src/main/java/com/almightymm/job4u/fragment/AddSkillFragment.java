@@ -13,9 +13,13 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.almightymm.job4u.R;
-import com.almightymm.job4u.model.Skill;
+import com.almightymm.job4u.model.Skills;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 import co.lujun.androidtagview.TagContainerLayout;
 import co.lujun.androidtagview.TagView;
@@ -23,7 +27,7 @@ import co.lujun.androidtagview.TagView;
 import static android.content.Context.MODE_PRIVATE;
 
 public class AddSkillFragment extends Fragment {
-
+    private static final String TAG = "AddSkillFragment";
     TagContainerLayout tagContainerLayout;
     String[] skill = {"PHP", "Python", ".NET", "PL/SQL", "C#", "HTML", "CSS",
             "JavaScript", "SQL", "Android", "C", "JAVA", "WordPress", "Jquery", "Coraldraw", "PhotoShop"};
@@ -42,17 +46,29 @@ public class AddSkillFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_skill, container, false);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, skill);
-        addskills = view.findViewById(R.id.txt_addskill);
-        addskills.setThreshold(1);
-        addskills.setAdapter(adapter);
-        add = view.findViewById(R.id.btn_add);
-        addall = view.findViewById(R.id.btn_addskill);
-
-        tagContainerLayout = view.findViewById(R.id.skill);
+        initViews(view);
+        initPreferences();
         String userId = preferences.getString("userId", "");
         db_add_skill = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("ADDSKILLS");
+        setValues(view);
+        setListeners(view);
 
+        return view;
+    }
+
+    private void setValues(View view) {
+        db_add_skill.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                Skills skills = dataSnapshot.getValue(Skills.class);
+                if (skills != null) {
+                    tagContainerLayout.setTags(skills.getSkills());
+                }
+            }
+        });
+    }
+
+    private void setListeners(View view) {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,10 +104,18 @@ public class AddSkillFragment extends Fragment {
             public void onClick(View v) {
 
                 addskills();
-                clearAll();
             }
         });
-        return view;
+    }
+
+    private void initViews(View view) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, skill);
+        addskills = view.findViewById(R.id.txt_addskill);
+        addskills.setThreshold(1);
+        addskills.setAdapter(adapter);
+        add = view.findViewById(R.id.btn_add);
+        addall = view.findViewById(R.id.btn_addskill);
+        tagContainerLayout = view.findViewById(R.id.skill);
     }
 
     public void addskill() {
@@ -102,19 +126,12 @@ public class AddSkillFragment extends Fragment {
         addskills.setText("");
     }
 
-    public void clearAll() {
-        tagContainerLayout.removeAllTags();
-    }
-
     public void addskills() {
-        String id = db_add_skill.push().getKey();
-
-
-        Skill add_skill = new Skill(id, tagContainerLayout.getTags());
+        Skills add_skill = new Skills((ArrayList<String>) tagContainerLayout.getTags());
         db_add_skill.setValue(add_skill);
-
         Toast.makeText(getContext(), "Skills added", Toast.LENGTH_LONG).show();
     }
+
     private void initPreferences() {
         preferences = getActivity().getSharedPreferences("User_Details", MODE_PRIVATE);
         preferenceEditor = preferences.edit();

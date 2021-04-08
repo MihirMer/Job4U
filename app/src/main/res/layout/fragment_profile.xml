@@ -12,6 +12,103 @@
         android:layout_height="match_parent"
         android:layout_marginTop="50dp"
         android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/personal_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@color/background">
+
+            <ImageView
+                android:id="@+id/edit_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="30dp"
+                android:clickable="true"
+
+                android:src="@android:drawable/ic_menu_edit" />
+
+            <TextView
+                android:id="@+id/label1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:fontFamily="@font/re"
+                android:text="Personal Details"
+                android:textColor="#000000"
+                android:layout_alignParentLeft="true"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/txt_my_mail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/label1"
+                android:layout_marginHorizontal="23dp"
+                android:layout_marginTop="8dp"
+                android:drawableLeft="@drawable/ic_my_mail"
+                android:drawablePadding="10dp"
+                android:text="payal15ramani@gmail.com"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/txt_my_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_my_mail"
+                android:layout_marginHorizontal="23dp"
+                android:layout_marginTop="5dp"
+                android:drawableStart="@drawable/ic_my_phone"
+                android:drawablePadding="10dp"
+                android:text="9979780698"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/txt_my_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_my_phone"
+                android:layout_marginHorizontal="23dp"
+                android:layout_marginTop="5dp"
+                android:drawableStart="@drawable/ic_my_location"
+                android:drawablePadding="10dp"
+                android:text="Rajkot ,Gujrat"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/txt_my_dob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_my_city"
+                android:layout_marginHorizontal="23dp"
+                android:layout_marginTop="5dp"
+                android:drawableStart="@drawable/ic_my_date"
+                android:drawablePadding="10dp"
+                android:text="15/09/2000"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/txt_my_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_my_dob"
+                android:layout_marginHorizontal="23dp"
+                android:layout_marginTop="5dp"
+                android:drawableStart="@drawable/ic_my_gender"
+                android:drawablePadding="10dp"
+                android:text="Female"
+                android:textSize="15dp" />
+
+
+        </RelativeLayout>
+
         <Button
             android:id="@+id/btn"
             android:layout_width="match_parent"

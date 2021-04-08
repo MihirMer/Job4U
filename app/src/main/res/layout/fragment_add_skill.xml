@@ -25,7 +25,8 @@
             app:tag_theme="pure_teal"
             app:vertical_interval="10dp"
             android:layout_gravity="center"
-            android:background="@color/background" />
+            android:background="@color/inputfield"
+            />
 
         <RelativeLayout
             android:layout_width="315dp"
@@ -60,6 +61,7 @@
                 android:text="+"
                 android:textStyle="bold"
                 android:layout_alignParentRight="true"
+                android:background="@color/inputfield"
                 android:textSize="30sp"/>
         </RelativeLayout>
 
