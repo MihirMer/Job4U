@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txt_my_project_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_2"
+        android:layout_marginHorizontal="23dp"
+        android:layout_marginTop="5dp"
+        android:text="project name"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/txt_my_project_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_my_project_name"
+        android:layout_marginHorizontal="23dp"
+        android:text="Project desc"
+        android:textSize="15dp"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/lyl1_22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_my_project_description"
+        android:layout_marginHorizontal="23dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txt_my_project_start_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_my_college"
+            android:text="2020"
+            android:textSize="15dp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/txt_my_project_end_year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2022"
+            android:textSize="15dp"
+            android:visibility="visible" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             app:hintEnabled="false"
             app:startIconDrawable="@drawable/ic_company">
 
@@ -49,7 +49,7 @@
                 android:background="@drawable/input"
                 android:hint="About Company"
                 android:inputType="textMultiLine"
-                android:lines="5"
+                android:lines="3"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -120,14 +120,14 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="50dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/button"
         android:drawableLeft="@drawable/icon_arrow_small"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
         android:paddingLeft="100dp"
         android:text="CONTINUE"
-        android:textColor="#FFFFFF"
-        android:layout_marginTop="15dp"/>
+        android:textColor="#FFFFFF"/>
 
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+</LinearLayout>

@@ -56,16 +56,33 @@ public class CompanyDetailsFragment extends Fragment {
         String clocation = location.getText().toString().trim();
         String cphone = phone_no.getText().toString().trim();
         String cwebsite = website.getText().toString().trim();
-        String id = db_addcompany_details.push().getKey();
-        CompanyDetails addcompanyDetails = new CompanyDetails(cname, cabout, clocation, cphone, cwebsite);
-       
-        db_addcompany_details.child(id).setValue(addcompanyDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(getContext(), "done", Toast.LENGTH_SHORT).show();     
-            }
-        });
 
+        if (cname.isEmpty()) {
+            company_name.requestFocus();
+            Toast.makeText(getContext(), "Company name is required !", Toast.LENGTH_SHORT).show();
+        } else if (cabout.isEmpty()) {
+            about_company.requestFocus();
+            Toast.makeText(getContext(), "Company description is required !", Toast.LENGTH_SHORT).show();
+        } else if (clocation.isEmpty()) {
+            location.requestFocus();
+            Toast.makeText(getContext(), "Company location is required !", Toast.LENGTH_SHORT).show();
+        } else if (cphone.isEmpty()) {
+            phone_no.requestFocus();
+            Toast.makeText(getContext(), "Phone no is required !", Toast.LENGTH_SHORT).show();
+        } else if (cwebsite.isEmpty()) {
+            website.requestFocus();
+            Toast.makeText(getContext(), "Website is required !", Toast.LENGTH_SHORT).show();
+        } else {
+            String id = db_addcompany_details.push().getKey();
+            CompanyDetails addcompanyDetails = new CompanyDetails(cname, cabout, clocation, cphone, cwebsite);
+
+            db_addcompany_details.child(id).setValue(addcompanyDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Toast.makeText(getContext(), "done", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     public void clear() {

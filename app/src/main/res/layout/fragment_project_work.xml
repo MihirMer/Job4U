@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="50dp"
         android:orientation="vertical"
         android:gravity="center_horizontal">
@@ -19,6 +19,7 @@
             android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="15dp"
             app:hintEnabled="false"
             app:startIconDrawable="@drawable/ic_designation">
 
@@ -28,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="Project Name"
-                android:inputType="text"
+                android:inputType="textCapWords"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -49,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="Description"
-                android:inputType="textMultiLine"
+                android:inputType="textMultiLine|textCapSentences"
                 android:lines="4"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -104,6 +105,6 @@
         android:paddingLeft="140dp"
         android:text="SAVE"
         android:textColor="#FFFFFF"
-        android:layout_marginTop="15dp"/>
+        android:layout_marginTop="30dp"/>
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+</LinearLayout>

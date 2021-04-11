@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="50dp"
         android:orientation="vertical"
         android:gravity="center_horizontal">
@@ -19,6 +19,7 @@
             android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="15dp"
             app:hintEnabled="false"
             app:startIconDrawable="@drawable/ic_designation">
 
@@ -142,7 +143,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"
             android:background="@drawable/button"
             android:drawablePadding="10dp"
