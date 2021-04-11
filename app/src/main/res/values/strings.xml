@@ -51,4 +51,45 @@
 
     <string name="invalid_gender">Please Enter Gender</string>
     <string name="err_tech_stacks">Please Enter Gender</string>
+
+
+
+<!--    latex-->
+    <string name="font_size">Font Size</string>
+    <string-array name="available_font_sizes">
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+    </string-array>
+
+    <string-array name="available_tab_sizes">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="available_executables">
+        <item>pdflatex</item>
+        <item>xelatex</item>
+        <item>latexmk</item>
+    </string-array>
+    <string name="default_executable">pdflatex</string>
+    <string name="default_server_address">http://192.168.43.15:1234/</string>
+    <string name="executable">Executable</string>
+    <string name="default_font_size">12</string>
+    <string name="tab_size">Tab Size</string>
+    <string name="default_tab_size">2</string>
+
 </resources>
