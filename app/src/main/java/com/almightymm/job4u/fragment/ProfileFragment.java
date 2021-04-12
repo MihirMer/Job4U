@@ -245,10 +245,11 @@ public class ProfileFragment extends Fragment {
     private Button button, educationButton, addSkillButton, workExp, projectWork, companyDetails;
     private Permissions currentPermission;
     private Document document;
-    /**
-     * List of the open documents
-     */
     private LinkedList<Document> documents = new LinkedList<>();
+
+//    addjob
+    Button addJobButton;
+
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -336,8 +337,10 @@ public class ProfileFragment extends Fragment {
 
 //        generate resume
         generateResume = view.findViewById(R.id.gen_resume);
-
         latexCompiler = new LatexCompiler(getContext());
+
+//        add job
+        addJobButton = view.findViewById(R.id.add_job_button);
 
     }
 
@@ -387,6 +390,14 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 generateResume(view);
+            }
+        });
+
+        addJobButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_addJobFragment);
+
             }
         });
     }

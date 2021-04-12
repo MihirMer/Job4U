@@ -53,8 +53,7 @@
     <string name="err_tech_stacks">Please Enter Gender</string>
 
 
-
-<!--    latex-->
+    <!--    latex-->
     <string name="font_size">Font Size</string>
     <string-array name="available_font_sizes">
         <item>10</item>
@@ -91,5 +90,26 @@
     <string name="default_font_size">12</string>
     <string name="tab_size">Tab Size</string>
     <string name="default_tab_size">2</string>
+    <string-array name="job_qualification">
+        <item>Select Qualification</item>
+        <item>B.E.</item>
+        <item>M.E.</item>
+        <item>Diploma in IT</item>
+        <item>12th</item>
+        <item>Graduate</item>
+        <item>Post Graduate</item>
+        <item>B.tech</item>
+        <item>M.Sc</item>
+    </string-array>
 
+    <string-array name="job_title">
+        <item>Select Job Title</item>
+        <item>Web Developer</item>
+        <item>Web Designer</item>
+        <item>Android Developer</item>
+        <item>UI/UX Designer</item>
+        <item>Graphics Designer</item>
+        <item>Backend Developer</item>
+        <item>Frontend Developer</item>
+    </string-array>
 </resources>

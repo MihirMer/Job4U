@@ -92,17 +92,17 @@ public class HomeFragment extends Fragment {
         jobLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         jobRecyclerView.setLayoutManager(jobLinearLayoutManager);
 
-        jobArrayList = new ArrayList<>();
-        jobArrayList.add(new Job("Front-end Developer"));
-        jobArrayList.add(new Job("Backend Developer"));
-        jobArrayList.add(new Job("Full-stack Developer"));
-        jobArrayList.add(new Job("Middle-Tier Developer"));
-        jobArrayList.add(new Job("Web Developer"));
-        jobArrayList.add(new Job("Desktop Developer"));
-        jobArrayList.add(new Job("Mobile Developer"));
-        jobArrayList.add(new Job("Graphics Developer"));
-        jobAdapter = new JobAdapter(getContext(), jobArrayList);
-        jobRecyclerView.setAdapter(jobAdapter);
+//        jobArrayList = new ArrayList<>();
+//        jobArrayList.add(new Job("Front-end Developer"));
+//        jobArrayList.add(new Job("Backend Developer"));
+//        jobArrayList.add(new Job("Full-stack Developer"));
+//        jobArrayList.add(new Job("Middle-Tier Developer"));
+//        jobArrayList.add(new Job("Web Developer"));
+//        jobArrayList.add(new Job("Desktop Developer"));
+//        jobArrayList.add(new Job("Mobile Developer"));
+//        jobArrayList.add(new Job("Graphics Developer"));
+//        jobAdapter = new JobAdapter(getContext(), jobArrayList);
+//        jobRecyclerView.setAdapter(jobAdapter);
         return view;
 
     }

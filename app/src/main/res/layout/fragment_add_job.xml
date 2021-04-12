@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/jobtitle"
+            android:layout_width="315dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="18dp"
+            android:autofillHints="Job Title"
+            app:startIconDrawable="@drawable/ic_job"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/add_job_input"
+            android:textSize="14sp">
+
+        </androidx.appcompat.widget.AppCompatSpinner>
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/jobQualification"
+            android:layout_width="315dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:autofillHints="Job Title"
+            app:startIconDrawable="@drawable/ic_job"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/add_job_input"
+            android:textSize="14sp">
+
+        </androidx.appcompat.widget.AppCompatSpinner>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email_layout"
+            android:layout_width="315dp"
+            android:layout_height="50dp"
+            app:startIconDrawable="@drawable/ic_designation"
+            app:hintEnabled="false"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_desig"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/add_job_input"
+                android:hint="Designation"
+                android:textSize="13sp"
+                android:inputType="textCapWords"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/description_layout"
+            android:layout_width="315dp"
+            android:layout_height="wrap_content"
+            app:startIconDrawable="@drawable/ic_job_descri"
+            app:hintEnabled="false"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_desc"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:background="@drawable/add_job_input"
+                android:hint="Description"
+                android:inputType="textCapWords"
+                android:lines="2"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/salary_layout"
+            android:layout_width="315dp"
+            android:layout_height="50dp"
+            app:startIconDrawable="@drawable/ic_salary"
+            app:hintEnabled="false"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_salary"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/add_job_input"
+                android:hint="Salary"
+                android:inputType="numberDecimal"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/company_layout"
+            android:layout_width="315dp"
+            android:layout_height="50dp"
+            app:startIconDrawable="@drawable/ic_company"
+            app:hintEnabled="false"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_company_name"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/add_job_input"
+                android:hint="Company Name"
+                android:inputType="textCapWords"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/city_layout"
+            android:layout_width="315dp"
+            android:layout_height="50dp"
+            app:startIconDrawable="@drawable/ic_city"
+            app:hintEnabled="false"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_city"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/add_job_input"
+                android:hint="City"
+                android:inputType="textCapWords"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/website_layout"
+            android:layout_width="315dp"
+            android:layout_height="50dp"
+            app:startIconDrawable="@drawable/ic_website"
+            app:hintEnabled="false"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="20dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_website"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/add_job_input"
+                android:hint="Website"
+                android:inputType="text"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/layout"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="20dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/vacancy_layout"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                app:hintEnabled="false">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_vacancy"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/add_job_input"
+                    android:hint="No of Vacancy"
+                    android:inputType="numberDecimal"
+                    android:maxLength="2"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/post_layout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:hintEnabled="false"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_post_date"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/add_job_input"
+                    android:hint="Post Date"
+                    android:inputType="date"
+                    android:saveEnabled="false"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_addjob"
+        android:layout_width="315dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/button"
+        android:drawableLeft="@drawable/ic_add"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="100dp"
+        android:text="ADD JOB"
+        android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

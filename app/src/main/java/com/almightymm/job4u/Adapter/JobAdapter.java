@@ -37,7 +37,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
         Job job = jobArrayList.get(position);
-        holder.jobTitleTextView.setText(job.getTitle());
+//        holder.jobTitleTextView.setText(job.getTitle());
         final String positionPlusOne = Integer.toString(position+1);
         holder.jobCardView.setOnClickListener(new View.OnClickListener() {
             @Override

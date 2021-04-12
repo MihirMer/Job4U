@@ -42,6 +42,9 @@
         <action
             android:id="@+id/action_profileFragment_to_companyDetailsFragment"
             app:destination="@id/companyDetailsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_addJobFragment"
+            app:destination="@id/addJobFragment" />
 
     </fragment>
     <fragment
@@ -84,4 +87,9 @@
         android:name="com.almightymm.job4u.fragment.CompanyDetailsFragment"
         android:label="Company Details"
         tools:layout="@layout/fragment_company_details" />
+    <fragment
+        android:id="@+id/addJobFragment"
+        android:name="com.almightymm.job4u.fragment.AddJobFragment"
+        android:label="Add Job"
+        tools:layout="@layout/fragment_add_job" />
 </navigation>
