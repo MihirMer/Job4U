@@ -45,6 +45,9 @@
         <action
             android:id="@+id/action_profileFragment_to_addJobFragment"
             app:destination="@id/addJobFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_jobPreviewFragment"
+            app:destination="@id/jobPreviewFragment" />
 
     </fragment>
     <fragment
@@ -64,9 +67,9 @@
     </fragment>
     <fragment
         android:id="@+id/educationDetailsFragment"
-        android:name="com.almightymm.job4u.fragment.EducationDetailsFragment"
+        android:name="com.almightymm.job4u.fragment.AddEducationDetailsFragment"
         android:label="Education Details"
-        tools:layout="@layout/fragment_education_details" />
+        tools:layout="@layout/fragment_add_education_details" />
     <fragment
         android:id="@+id/addSkillFragment"
         android:name="com.almightymm.job4u.fragment.AddSkillFragment"
@@ -84,12 +87,17 @@
         tools:layout="@layout/fragment_project_work" />
     <fragment
         android:id="@+id/companyDetailsFragment"
-        android:name="com.almightymm.job4u.fragment.CompanyDetailsFragment"
+        android:name="com.almightymm.job4u.fragment.AddCompanyDetailsFragment"
         android:label="Company Details"
-        tools:layout="@layout/fragment_company_details" />
+        tools:layout="@layout/fragment_add_company_details" />
     <fragment
         android:id="@+id/addJobFragment"
         android:name="com.almightymm.job4u.fragment.AddJobFragment"
         android:label="Add Job"
         tools:layout="@layout/fragment_add_job" />
+    <fragment
+        android:id="@+id/jobPreviewFragment"
+        android:name="com.almightymm.job4u.fragment.JobPreviewFragment"
+        android:label="Job Preview"
+        tools:layout="@layout/fragment_job_preview"/>
 </navigation>

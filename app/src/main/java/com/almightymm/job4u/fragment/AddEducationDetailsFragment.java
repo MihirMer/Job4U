@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,7 @@ import java.util.Calendar;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class EducationDetailsFragment extends Fragment {
+public class AddEducationDetailsFragment extends Fragment {
 
     EditText degreename, collegename, stream, edu_year, cgpa, achivenment, otherskill;
     Button add_education;
@@ -35,7 +34,7 @@ public class EducationDetailsFragment extends Fragment {
     SharedPreferences preferences;
     private static final String TAG = "EducationDetailsFragmen";
 
-    public EducationDetailsFragment() {
+    public AddEducationDetailsFragment() {
         // Required empty public constructor
     }
 
@@ -43,7 +42,7 @@ public class EducationDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_education_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_education_details, container, false);
         initPreferences();
         String userId = preferences.getString("userId", "");
         db_add_education_details = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("EDUCATION_DETAILS");

@@ -32,7 +32,7 @@ import java.util.Calendar;
 import static android.content.Context.MODE_PRIVATE;
 
 public class PersonalDetailsFragment extends Fragment {
-    private static final String TAG = "PersonalDetailsFragment";
+    private static final String TAG = "AddPersonalDetails";
     EditText firstname, lastname, email, phone, dob, address;
     DatePickerDialog datePickerDialog;
     Spinner gendertxt;

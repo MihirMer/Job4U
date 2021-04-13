@@ -242,7 +242,7 @@ public class ProfileFragment extends Fragment {
             "\n" +
             "\\end{document}\n" +
             "\n";
-    private Button button, educationButton, addSkillButton, workExp, projectWork, companyDetails;
+    private Button button, educationButton, addSkillButton, workExp, projectWork, companyDetails, jobPreviewButton;
     private Permissions currentPermission;
     private Document document;
     private LinkedList<Document> documents = new LinkedList<>();
@@ -341,6 +341,7 @@ public class ProfileFragment extends Fragment {
 
 //        add job
         addJobButton = view.findViewById(R.id.add_job_button);
+        jobPreviewButton = view.findViewById(R.id.preview_job);
 
     }
 
@@ -398,6 +399,12 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_addJobFragment);
 
+            }
+        });
+        jobPreviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_jobPreviewFragment);
             }
         });
     }

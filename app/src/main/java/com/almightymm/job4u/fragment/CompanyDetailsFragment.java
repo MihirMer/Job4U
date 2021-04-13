@@ -1,27 +1,29 @@
 package com.almightymm.job4u.fragment;
 
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-
-import androidx.fragment.app.Fragment;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.almightymm.job4u.R;
 import com.almightymm.job4u.model.CompanyDetails;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class CompanyDetailsFragment extends Fragment {
-    EditText company_name, about_company, location, phone_no, website;
-    Button btn_conti;
-    DatabaseReference db_addcompany_details;
-
-
+    TextView company_name,about,location,website;
+    RelativeLayout relativeLayout;
+    DatabaseReference databaseReference;
     public CompanyDetailsFragment() {
         // Required empty public constructor
     }
@@ -30,75 +32,40 @@ public class CompanyDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_company_details, container, false);
-
-        initViews(view);
-        db_addcompany_details = FirebaseDatabase.getInstance().getReference().child("Users").child("COMPANY_DETAILS");
-        setListeners(view);
-        return view;
+        return inflater.inflate(R.layout.fragment_company_details, container, false);
     }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-    private void setListeners(View view) {
+        company_name  = view.findViewById(R.id.txt_company_name);
+        location  = view.findViewById(R.id.txt_company_location);
+        about  = view.findViewById(R.id.txt_company_about);
+        website  = view.findViewById(R.id.txt_company_website);
+        relativeLayout  = view.findViewById(R.id.company_detail_layout);
 
-        btn_conti.setOnClickListener(new View.OnClickListener() {
+
+        databaseReference= FirebaseDatabase.getInstance().getReference("HR").child("COMPANY_DETAILS").child("-MY92Hn-9fZORoo6so8P");
+//        databaseReference= FirebaseDatabase.getInstance().getReference().child("Users").child("COMPANY_DETAILS").child("-MXmw4NhrRjWcUvGO8tY");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                addCompanyProfile();
-                clear();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                CompanyDetails addcompanyDetails = snapshot.getValue(CompanyDetails.class);
+                if (addcompanyDetails !=null) {
+                    company_name.setText(addcompanyDetails.getCompanyName());
+                    about.setText(addcompanyDetails.getAbout());
+                    location.setText(addcompanyDetails.getLocation());
+                    website.setText(addcompanyDetails.getWebsite());
+
+                    relativeLayout.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
 
-
-    public void addCompanyProfile() {
-        String cname = company_name.getText().toString().trim();
-        String cabout = about_company.getText().toString().trim();
-        String clocation = location.getText().toString().trim();
-        String cphone = phone_no.getText().toString().trim();
-        String cwebsite = website.getText().toString().trim();
-
-        if (cname.isEmpty()) {
-            company_name.requestFocus();
-            Toast.makeText(getContext(), "Company name is required !", Toast.LENGTH_SHORT).show();
-        } else if (cabout.isEmpty()) {
-            about_company.requestFocus();
-            Toast.makeText(getContext(), "Company description is required !", Toast.LENGTH_SHORT).show();
-        } else if (clocation.isEmpty()) {
-            location.requestFocus();
-            Toast.makeText(getContext(), "Company location is required !", Toast.LENGTH_SHORT).show();
-        } else if (cphone.isEmpty()) {
-            phone_no.requestFocus();
-            Toast.makeText(getContext(), "Phone no is required !", Toast.LENGTH_SHORT).show();
-        } else if (cwebsite.isEmpty()) {
-            website.requestFocus();
-            Toast.makeText(getContext(), "Website is required !", Toast.LENGTH_SHORT).show();
-        } else {
-            String id = db_addcompany_details.push().getKey();
-            CompanyDetails addcompanyDetails = new CompanyDetails(cname, cabout, clocation, cphone, cwebsite);
-
-            db_addcompany_details.child(id).setValue(addcompanyDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Toast.makeText(getContext(), "done", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
-    public void clear() {
-        company_name.setText("");
-        about_company.setText("");
-        location.setText("");
-        phone_no.setText("");
-        website.setText("");
-    }
-
-    private void initViews(View view) {
-        company_name = (EditText) view.findViewById(R.id.edit_company_name);
-        about_company = (EditText) view.findViewById(R.id.edit_about);
-        location = (EditText) view.findViewById(R.id.edit_location);
-        phone_no = (EditText) view.findViewById(R.id.edit_phone);
-        website = (EditText) view.findViewById(R.id.edit_website);
-        btn_conti = (Button) view.findViewById(R.id.btn_continue);
-    }
 }

@@ -82,7 +82,13 @@
                 android:layout_marginTop="15dp"
                 android:text="Add Job" />
 
-
+            <Button
+                android:id="@+id/preview_job"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="15dp"
+                android:text="Preview job" />
 
         </LinearLayout>
 
