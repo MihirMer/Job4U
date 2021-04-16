@@ -4,16 +4,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 public class SplashScreenActivity extends AppCompatActivity {
-    private ImageView logo;
     int timeOut = 3000;
     SharedPreferences preferences;
+    private ImageView logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +37,13 @@ public class SplashScreenActivity extends AppCompatActivity {
                 if (!userId.isEmpty()) {
                     boolean roleAssigned = preferences.getBoolean("roleAssigned", false);
                     if (roleAssigned) {
-                        intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+                        boolean  areaOfInterestSelected= preferences.getBoolean("areaOfInterestSelected", false);
+                        if (areaOfInterestSelected){
+                            intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+                        }
+                        else {
+                            intent = new Intent(SplashScreenActivity.this, JobCategoryActivity.class);
+                        }
                     } else {
                         intent = new Intent(SplashScreenActivity.this, RoleSelectionActivity.class);
                     }
@@ -54,6 +63,5 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private void initPreferences() {
         preferences = getSharedPreferences("User_Details", MODE_PRIVATE);
-
     }
 }

@@ -1,12 +1,16 @@
 package com.almightymm.job4u.Adapter;
 
 import android.content.Context;
+import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.almightymm.job4u.R;
@@ -17,7 +21,7 @@ import java.util.ArrayList;
 public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.EducationViewHolder> {
     private final Context context;
     private ArrayList<EducationDetails> educationDetails;
-
+    private static final String TAG = "EducationAdapter";
     public EducationAdapter(Context context, ArrayList<EducationDetails> educationDetails) {
         this.context = context;
         this.educationDetails = educationDetails;
@@ -36,11 +40,21 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.Educ
         EducationDetails details = educationDetails.get(position);
 
         holder.college.setText(details.getCollegeName());
-        holder.streem.setText(details.getStream());
-        holder.degree.setText(details.getDegreeName() + " in ");
+//        holder.streem.setText();
+        holder.degree.setText(details.getDegreeName() + " in "+details.getStream());
         holder.gyear.setText("Graduation Year" + " : " + details.getYear());
         holder.cgpa.setText("CGPA" + " : " + details.getGpa());
         holder.achievements.setText("Achievements" + " : " + details.getOtherAchievements());
+        if (position == getItemCount()-1){
+            holder.sep.setVisibility(View.GONE);
+        }
+        holder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_educationDetailsFragment);
+
+            }
+        });
     }
 
     @Override
@@ -52,6 +66,8 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.Educ
     public static class EducationViewHolder extends RecyclerView.ViewHolder {
 
         TextView info1, college, streem, degree, cgpa, gyear_txt, gyear, achievements;
+        ImageView edit;
+        View sep;
 
         public EducationViewHolder(@NonNull View view) {
             super(view);
@@ -61,6 +77,8 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.Educ
             gyear = view.findViewById(R.id.txt_my_gyear);
             cgpa = view.findViewById(R.id.txt_my_cgpa);
             achievements = view.findViewById(R.id.txt_my_achievements);
+            sep = view.findViewById(R.id.sep);
+            edit =view.findViewById(R.id.icon2);
         }
     }
 

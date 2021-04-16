@@ -159,12 +159,13 @@ public class WorkExperienceFragment extends Fragment {
     }
 
     private void clear() {
-        designation.setText("");
-        yearOfExperience.setText("");
-        from_year.setText("");
-        to_year.setText("");
-        companName.setText("");
-        city.setText("");
+        getActivity().onBackPressed();
+//        designation.setText("");
+//        yearOfExperience.setText("");
+//        from_year.setText("");
+//        to_year.setText("");
+//        companName.setText("");
+//        city.setText("");
     }
 
     private void initPreferences() {

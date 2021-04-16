@@ -1,10 +1,12 @@
 package com.almightymm.job4u.fragment;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -128,8 +130,24 @@ public class AddSkillFragment extends Fragment {
 
     public void addskills() {
         Skills add_skill = new Skills((ArrayList<String>) tagContainerLayout.getTags());
-        db_add_skill.setValue(add_skill);
-        Toast.makeText(getContext(), "Skills added", Toast.LENGTH_LONG).show();
+        db_add_skill.setValue(add_skill).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                hideKeyboard(getActivity());
+                Toast.makeText(getContext(), "Skills added", Toast.LENGTH_LONG).show();
+                getActivity().onBackPressed();
+            }
+        });
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void initPreferences() {

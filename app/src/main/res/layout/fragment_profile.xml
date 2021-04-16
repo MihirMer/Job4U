@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profile_scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/background"
+    android:background="@color/lighter_gray"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -17,7 +20,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="50dp"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/btn"
@@ -92,19 +95,16 @@
 
         </LinearLayout>
 
-
         <RelativeLayout
             android:id="@+id/layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible">
-
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/header_cover_image"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:background="@color/white"
+                android:background="@color/lighter_gray"
                 android:scaleType="centerCrop" />
 
             <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -124,34 +124,23 @@
 
             <RelativeLayout
                 android:id="@+id/profile_layout"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_width="300dp"
+                android:layout_height="90dp"
+                android:layout_centerHorizontal="true"
                 android:layout_below="@+id/header_cover_image"
-                android:background="#3BBECF"
-                android:elevation="4dp"
-                android:paddingBottom="15dp">
+                android:background="@drawable/bgcolor"
+                android:layout_marginHorizontal="10dp"
+                android:elevation="4dp">
 
-
-                <ImageView
-                    android:id="@+id/edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="16dp"
-                    android:clickable="true"
-
-                    android:src="@android:drawable/ic_menu_edit" />
 
                 <TextView
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="55dp"
+                    android:layout_marginTop="50dp"
                     android:text="My Account"
-                    android:textColor="#fff"
+                    android:textColor="@color/green"
                     android:textSize="24sp"
                     android:textStyle="bold" />
             </RelativeLayout>
@@ -160,151 +149,286 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/profile_layout"
-                android:background="@color/lighter_gray">
+                android:background="@color/lighter_gray"
+                android:paddingBottom="10dp">
 
-                <RelativeLayout
-                    android:id="@+id/list_layout"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/label3"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/re"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="4dp"
+                    android:text="Key Skills"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <RelativeLayout
+                    android:id="@+id/skill_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/label3"
+                    android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="5dp"
+                    android:background="@drawable/bgcolor"
                     android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"></RelativeLayout>
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
+
+                    <ImageView
+                        android:id="@+id/icon1"
+                        android:layout_width="25dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_edit"/>
+                    <TextView
+                        android:id="@+id/txt_0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_alignParentLeft="true"
+                        android:text="Give your Key Skills."
+                        android:textSize="15dp" />
+
+                    <co.lujun.androidtagview.TagContainerLayout
+                        android:id="@+id/tag_skill"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginHorizontal="20dp"
+                        android:visibility="visible"
+                        app:container_enable_drag="false"
+                        app:horizontal_interval="10dp"
+                        app:tag_clickable="true"
+                        app:tag_theme="pure_cyan"
+                        app:vertical_interval="10dp"
+                        android:layout_toLeftOf="@id/icon1"
+                        android:layout_below="@id/txt_0" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/label1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/skill_layout"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/re"
+                    android:paddingLeft="4dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:text="Personal Details"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
 
                 <RelativeLayout
                     android:id="@+id/personal_layout"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/label1"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="5dp"
+                    android:background="@drawable/bgcolor"
                     android:orientation="vertical"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp">
 
                     <ImageView
-                        android:id="@+id/edit_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="30dp"
-                        android:clickable="true"
-
-                        android:src="@android:drawable/ic_menu_edit" />
-
-                    <TextView
-                        android:id="@+id/label1"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/icon2"
+                        android:layout_width="25dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="5dp"
-                        android:fontFamily="@font/re"
-                        android:text="Personal Details"
-                        android:textColor="#000000"
-                        android:textSize="22sp" />
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/ic_edit"/>
 
                     <TextView
                         android:id="@+id/txt_my_mail"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/label1"
-                        android:layout_marginHorizontal="23dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginHorizontal="20dp"
                         android:drawableLeft="@drawable/ic_my_mail"
                         android:drawablePadding="10dp"
+                        android:text=""
                         android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/txt_my_phone"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/txt_my_mail"
-                        android:layout_marginHorizontal="23dp"
+                        android:layout_marginHorizontal="20dp"
                         android:layout_marginTop="5dp"
                         android:drawableStart="@drawable/ic_my_phone"
                         android:drawablePadding="10dp"
-                        android:textSize="15dp" />
+                        android:text=""
+                        android:textSize="15dp"
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/txt_my_city"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/txt_my_phone"
-                        android:layout_marginHorizontal="23dp"
+                        android:layout_marginHorizontal="20dp"
                         android:layout_marginTop="5dp"
                         android:drawableStart="@drawable/ic_my_location"
                         android:drawablePadding="10dp"
-                        android:textSize="15dp" />
+                        android:text=""
+                        android:textSize="15dp"
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/txt_my_dob"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/txt_my_city"
-                        android:layout_marginHorizontal="23dp"
+                        android:layout_marginHorizontal="20dp"
                         android:layout_marginTop="5dp"
                         android:drawableStart="@drawable/ic_my_date"
                         android:drawablePadding="10dp"
-                        android:textSize="15dp" />
+                        android:text=""
+                        android:textSize="15dp"
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/txt_my_gender"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/txt_my_dob"
-                        android:layout_marginHorizontal="23dp"
+                        android:layout_marginHorizontal="20dp"
                         android:layout_marginTop="5dp"
                         android:drawableStart="@drawable/ic_my_gender"
                         android:drawablePadding="10dp"
-                        android:textSize="15dp" />
+                        android:text=""
+                        android:textSize="15dp"
+                        android:visibility="gone"/>
 
 
                 </RelativeLayout>
 
-
-<!--                education layout-->
-                <RelativeLayout
-                    android:id="@+id/education_layout"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/label2"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/personal_layout"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="5dp"
-                    android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
+                    android:fontFamily="@font/re"
+                    android:paddingLeft="4dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:text="Education"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
 
-                    <TextView
-                        android:id="@+id/label2"
-                        android:layout_width="330dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
-                        android:fontFamily="@font/re"
-                        android:text="Education"
-                        android:textColor="#000000"
-                        android:textSize="22sp" />
+                <RelativeLayout
+                    android:id="@+id/education_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/label2"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/bgcolor"
+                    android:orientation="vertical"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/txt_1"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/label2"
-                        android:layout_marginHorizontal="5dp"
-                        android:layout_marginTop="8dp"
-                        android:drawablePadding="10dp"
-                        android:text="Give your educational details"
+                        android:layout_marginLeft="15dp"
+                        android:layout_alignParentLeft="true"
+                        android:text="Give your educational details."
                         android:textSize="15dp" />
 
+                    <TextView
+                        android:id="@+id/icon3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:drawableRight="@drawable/ic_edit"
+                        android:visibility="gone" />
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/txt_my_college"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_below="@+id/txt_1"-->
+                    <!--                        android:layout_marginHorizontal="23dp"-->
+                    <!--                        android:text=""-->
+                    <!--                        android:textStyle="bold"-->
+                    <!--                        android:textSize="15dp"-->
+                    <!--                        android:visibility="gone"/>-->
+                    <!--                    <LinearLayout-->
+                    <!--                        android:id="@+id/lyl1_21"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:orientation="horizontal"-->
+                    <!--                        android:layout_marginHorizontal="23dp"-->
+                    <!--                        android:layout_below="@+id/txt_my_college"-->
+                    <!--                        android:background="@drawable/bgcolor"-->
+                    <!--                        android:visibility="gone">-->
 
+
+                    <!--                        <TextView-->
+                    <!--                            android:id="@+id/txt_my_degree"-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:layout_below="@+id/txt_my_college"-->
+                    <!--                            android:text="B.E."-->
+                    <!--                            android:textSize="15dp" />-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:id="@+id/txt_my_streem"-->
+                    <!--                            android:layout_width="match_parent"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:text="Computer"-->
+                    <!--                            android:textSize="15dp" />-->
+                    <!--                    </LinearLayout>-->
+
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/txt_my_gyear"-->
+                    <!--                        android:layout_below="@+id/lyl1_21"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginHorizontal="23dp"-->
+                    <!--                        android:text=""-->
+                    <!--                        android:visibility="gone"-->
+                    <!--                        android:textSize="15dp" />-->
+
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/txt_my_cgpa"-->
+                    <!--                        android:layout_below="@+id/txt_my_gyear"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginHorizontal="23dp"-->
+                    <!--                        android:text=""-->
+                    <!--                        android:visibility="gone"-->
+                    <!--                        android:textSize="15dp" />-->
+
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/txt_my_achievements"-->
+                    <!--                        android:layout_below="@id/txt_my_cgpa"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginHorizontal="23dp"-->
+                    <!--                        android:text=""-->
+                    <!--                        android:visibility="gone"-->
+                    <!--                        android:textSize="15dp" />-->
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/education_list"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        tools:listitem="@layout/education_details_layout"
-                        tools:itemCount="2"
+                        android:layout_below="@id/txt_1"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        android:layout_below="@id/txt_1"/>
+                        tools:itemCount="2"
+                        tools:listitem="@layout/education_details_layout" />
 
                     <Button
                         android:id="@+id/btn_addeducation"
@@ -314,148 +438,163 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginHorizontal="5dp"
                         android:layout_marginTop="10dp"
+                        android:background="@drawable/border_button"
                         android:drawableLeft="@drawable/ic_add"
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
                         android:paddingLeft="91dp"
-                        android:text="EDUCATION"
-                        android:textColor="@color/green" />
+                        android:text="Add Education"
+                        android:textAllCaps="false"
+                        android:textColor="@color/green"
+                        android:layout_marginBottom="10dp"/>
                 </RelativeLayout>
 
-
-                <RelativeLayout
-                    android:id="@+id/skill_layout"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/label4"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/education_layout"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="5dp"
-                    android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
-
-                    <ImageView
-                        android:id="@+id/edit1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:clickable="true"
-                        android:src="@android:drawable/ic_menu_edit" />
-
-                    <TextView
-                        android:id="@+id/label3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
-                        android:fontFamily="@font/re"
-                        android:text="Skills"
-                        android:textColor="#000000"
-                        android:textSize="22sp" />
-
-                    <co.lujun.androidtagview.TagContainerLayout
-                        android:id="@+id/tag_skill"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/label3"
-                        android:layout_marginHorizontal="5dp"
-                        android:layout_marginTop="15dp"
-                        android:visibility="visible"
-                        app:container_enable_drag="false"
-                        app:horizontal_interval="10dp"
-                        app:tag_clickable="true"
-                        app:tag_theme="pure_cyan"
-                        app:vertical_interval="10dp" />
-
-                </RelativeLayout>
-
+                    android:fontFamily="@font/re"
+                    android:paddingLeft="4dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:text="Project Work"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
 
                 <RelativeLayout
                     android:id="@+id/projectWork_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/skill_layout"
+                    android:layout_below="@+id/label4"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="5dp"
+                    android:background="@drawable/bgcolor"
                     android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
+                    android:paddingTop="10dp">
 
-                    <TextView
-                        android:id="@+id/label4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
-                        android:fontFamily="@font/re"
-                        android:text="Project Work"
-                        android:textColor="#000000"
-                        android:textSize="22sp" />
 
                     <TextView
                         android:id="@+id/txt_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/label4"
-                        android:layout_marginHorizontal="5dp"
-                        android:layout_marginTop="8dp"
-                        android:text="Give your project work details.."
-                        android:textSize="15dp"/>
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="15dp"
+                        android:text="Give your project work details."
+                        android:textSize="15dp" />
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/txt_my_project_name"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_below="@+id/txt_2"-->
+                    <!--                        android:layout_marginHorizontal="23dp"-->
+                    <!--                        android:text="job4u"-->
+                    <!--                        android:visibility="gone"-->
+                    <!--                        android:textStyle="bold"-->
+                    <!--                        android:textSize="15dp" />-->
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/icon4"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginHorizontal="5dp"-->
+                    <!--                        android:drawableRight="@drawable/ic_edit"-->
+                    <!--                        android:visibility="gone"/>-->
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/txt_my_project_description"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_below="@+id/txt_my_project_name"-->
+                    <!--                        android:layout_marginHorizontal="23dp"-->
+                    <!--                        android:text=""-->
+                    <!--                        android:visibility="gone"-->
+                    <!--                        android:textSize="15dp" />-->
+                    <!--                    <LinearLayout-->
+                    <!--                        android:id="@+id/lyl1_22"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:orientation="horizontal"-->
+                    <!--                        android:layout_marginHorizontal="23dp"-->
+                    <!--                        android:layout_below="@+id/txt_my_project_description"-->
+                    <!--                        android:background="@drawable/bgcolor">-->
+                    <!--                        <TextView-->
+                    <!--                            android:id="@+id/txt_my_project_start_year"-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:layout_below="@+id/txt_my_college"-->
+                    <!--                            android:text=""-->
+                    <!--                            android:visibility="gone"-->
+                    <!--                            android:textSize="15dp" />-->
 
-
+                    <!--                        <TextView-->
+                    <!--                            android:id="@+id/txt_my_project_end_year"-->
+                    <!--                            android:layout_width="match_parent"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:text=""-->
+                    <!--                            android:visibility="gone"-->
+                    <!--                            android:textSize="15dp" />-->
+                    <!--                    </LinearLayout>-->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/project_list"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_below="@id/txt_2"
-                        tools:listitem="@layout/project_layout"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:itemCount="2"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                        tools:listitem="@layout/project_layout" />
 
                     <Button
                         android:id="@+id/btn_add_projectWork"
                         android:layout_width="315dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/project_list"
-                        android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:layout_marginHorizontal="5dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/border_button"
                         android:drawableLeft="@drawable/ic_add"
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
-                        android:paddingLeft="60dp"
-                        android:text="ADD PROJECT WORK"
-                        android:textColor="@color/green" />
+                        android:paddingLeft="80dp"
+                        android:text="Add Project Work"
+                        android:textAllCaps="false"
+                        android:textColor="@color/green"
+                        android:layout_marginBottom="10dp" />
                 </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/label5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/projectWork_layout"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/re"
+                    android:paddingLeft="4dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:text="Experience"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
 
                 <RelativeLayout
                     android:id="@+id/experience_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/projectWork_layout"
+                    android:layout_below="@+id/label5"
                     android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/bgcolor"
                     android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
-
-                    <TextView
-                        android:id="@+id/label5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
-                        android:fontFamily="@font/re"
-                        android:text="Experience"
-                        android:textColor="#000000"
-                        android:textSize="22sp" />
+                    android:paddingTop="10dp">
 
                     <RadioGroup
                         android:id="@+id/lyl1_23"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/label5"
                         android:layout_marginHorizontal="23dp"
+                        android:background="@drawable/bgcolor"
                         android:orientation="horizontal">
 
                         <RadioButton
@@ -463,7 +602,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Freshers"
-                            android:textSize="15dp" />
+                            android:textSize="15dp"
+                            android:checked="true"/>
 
                         <RadioButton
                             android:id="@+id/rbtn_experience"
@@ -478,9 +618,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/lyl1_23"
-                        android:layout_marginHorizontal="5dp"
-                        android:layout_marginTop="8dp"
-                        android:text="Give your experience details.."
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="4dp"
+                        android:text="Give your experience details."
                         android:textSize="15dp"
                         android:visibility="gone" />
 
@@ -489,32 +630,34 @@
                         android:layout_width="315dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/experience_list"
-                        android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:layout_marginHorizontal="5dp"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/border_button"
                         android:drawableLeft="@drawable/ic_add"
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
-                        android:paddingLeft="76dp"
-                        android:text="ADD EXPERIENCE"
+                        android:paddingLeft="80dp"
+                        android:text="Add Experience"
+                        android:textAllCaps="false"
                         android:textColor="@color/green"
-                        android:visibility="visible" />
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/experience_list"
+                        android:visibility="visible"
+                        android:layout_marginBottom="10dp"/>
+
+                    <TextView
+                        android:id="@+id/icon5"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_below="@id/lyl1_23"
-                        tools:listitem="@layout/experience_layout"
-                        tools:itemCount="2"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:drawableRight="@drawable/ic_edit"
+                        android:visibility="gone" />
+
                     <TextView
                         android:id="@+id/txt_my_experience"
-                        android:layout_width="match_parent"
+                        android:layout_width="280dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/btn_add_workExperience"
                         android:layout_marginHorizontal="23dp"
-                        android:layout_marginTop="5dp"
                         android:text=""
                         android:textSize="15dp"
                         android:visibility="gone" />
@@ -529,11 +672,20 @@
                         android:textSize="15dp"
                         android:visibility="gone" />
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/experience_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/txt_3"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/experience_layout" />
 
                 </RelativeLayout>
 
             </RelativeLayout>
         </RelativeLayout>
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

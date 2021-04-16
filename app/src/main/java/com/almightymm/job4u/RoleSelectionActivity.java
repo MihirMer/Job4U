@@ -67,7 +67,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
                     preferenceEditor.putBoolean("roleAssigned", true);
                     preferenceEditor.putString("role", "Job Seeker");
                     preferenceEditor.apply();
-                    Intent intent = new Intent(RoleSelectionActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(RoleSelectionActivity.this, JobCategoryActivity.class);
                     startActivity(intent);
                     finish();
                 }

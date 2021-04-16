@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ public class CompanyDetailsFragment extends Fragment {
     TextView company_name,about,location,website;
     RelativeLayout relativeLayout;
     DatabaseReference databaseReference;
+    private static final String TAG = "CompanyDetailsFragment";
     public CompanyDetailsFragment() {
         // Required empty public constructor
     }
@@ -45,13 +47,14 @@ public class CompanyDetailsFragment extends Fragment {
         relativeLayout  = view.findViewById(R.id.company_detail_layout);
 
 
-        databaseReference= FirebaseDatabase.getInstance().getReference("HR").child("COMPANY_DETAILS").child("-MY92Hn-9fZORoo6so8P");
+        databaseReference= FirebaseDatabase.getInstance().getReference("HR").child("COMPANY_DETAILS").child("-MYKc_nA3jOEIL4Wk8te");
 //        databaseReference= FirebaseDatabase.getInstance().getReference().child("Users").child("COMPANY_DETAILS").child("-MXmw4NhrRjWcUvGO8tY");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 CompanyDetails addcompanyDetails = snapshot.getValue(CompanyDetails.class);
                 if (addcompanyDetails !=null) {
+                    Log.e(TAG, "onDataChange: hrerere" );
                     company_name.setText(addcompanyDetails.getCompanyName());
                     about.setText(addcompanyDetails.getAbout());
                     location.setText(addcompanyDetails.getLocation());

@@ -10,12 +10,12 @@ public class PersonalDetails {
     String address;
     String gender;
     private String role;
-    private boolean roleAssigned;
+    private boolean roleAssigned ,areaOfInterestSelected ,personalDetailsAdded ,keySkillAdded ,educationAdded ,projectWorkAdded ,experienceAdded;
 
     public PersonalDetails() {
     }
 
-    public PersonalDetails(String firstName, String lastName, String emailAddress, String phone, String DOB, String address, String gender, String role, boolean roleAssigned) {
+    public PersonalDetails(String firstName, String lastName, String emailAddress, String phone, String DOB, String address, String gender, String role, boolean roleAssigned, boolean areaOfInterestSelected, boolean personalDetailsAdded, boolean keySkillAdded, boolean educationAdded, boolean projectWorkAdded, boolean experienceAdded) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
@@ -25,6 +25,12 @@ public class PersonalDetails {
         this.gender = gender;
         this.role = role;
         this.roleAssigned = roleAssigned;
+        this.areaOfInterestSelected = areaOfInterestSelected;
+        this.personalDetailsAdded = personalDetailsAdded;
+        this.keySkillAdded = keySkillAdded;
+        this.educationAdded = educationAdded;
+        this.projectWorkAdded = projectWorkAdded;
+        this.experienceAdded = experienceAdded;
     }
 
     public String getFirstName() {
@@ -97,5 +103,53 @@ public class PersonalDetails {
 
     public void setRoleAssigned(boolean roleAssigned) {
         this.roleAssigned = roleAssigned;
+    }
+
+    public boolean isAreaOfInterestSelected() {
+        return areaOfInterestSelected;
+    }
+
+    public void setAreaOfInterestSelected(boolean areaOfInterestSelected) {
+        this.areaOfInterestSelected = areaOfInterestSelected;
+    }
+
+    public boolean isPersonalDetailsAdded() {
+        return personalDetailsAdded;
+    }
+
+    public void setPersonalDetailsAdded(boolean personalDetailsAdded) {
+        this.personalDetailsAdded = personalDetailsAdded;
+    }
+
+    public boolean isKeySkillAdded() {
+        return keySkillAdded;
+    }
+
+    public void setKeySkillAdded(boolean keySkillAdded) {
+        this.keySkillAdded = keySkillAdded;
+    }
+
+    public boolean isEducationAdded() {
+        return educationAdded;
+    }
+
+    public void setEducationAdded(boolean educationAdded) {
+        this.educationAdded = educationAdded;
+    }
+
+    public boolean isProjectWorkAdded() {
+        return projectWorkAdded;
+    }
+
+    public void setProjectWorkAdded(boolean projectWorkAdded) {
+        this.projectWorkAdded = projectWorkAdded;
+    }
+
+    public boolean isExperienceAdded() {
+        return experienceAdded;
+    }
+
+    public void setExperienceAdded(boolean experienceAdded) {
+        this.experienceAdded = experienceAdded;
     }
 }

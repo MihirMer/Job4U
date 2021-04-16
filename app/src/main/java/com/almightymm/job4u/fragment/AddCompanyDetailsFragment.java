@@ -44,7 +44,7 @@ public class AddCompanyDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 addCompanyProfile();
-                clear();
+
             }
         });
     }
@@ -74,23 +74,20 @@ public class AddCompanyDetailsFragment extends Fragment {
             Toast.makeText(getContext(), "Website is required !", Toast.LENGTH_SHORT).show();
         } else {
             String id = db_addcompany_details.push().getKey();
-            CompanyDetails addcompanyDetails = new CompanyDetails(cname, cabout, clocation, cphone, cwebsite);
+            CompanyDetails addcompanyDetails = new CompanyDetails(id,cname, cabout, clocation, cphone, cwebsite);
 
             db_addcompany_details.child(id).setValue(addcompanyDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    Toast.makeText(getContext(), "done", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Data saved", Toast.LENGTH_SHORT).show();
+                    clear();
                 }
             });
         }
     }
 
     public void clear() {
-        company_name.setText("");
-        about_company.setText("");
-        location.setText("");
-        phone_no.setText("");
-        website.setText("");
+        getActivity().onBackPressed();
     }
 
     private void initViews(View view) {

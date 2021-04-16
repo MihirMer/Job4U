@@ -21,7 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class JobDetailsFragment extends Fragment {
-    TextView job_name,company,dop,description,salary,designation,website,city,vacancy,qualification;
+    TextView description,vacancy,qualification;
     DatabaseReference databaseReference;
     RelativeLayout relativeLayout;
     public JobDetailsFragment() {
@@ -38,33 +38,18 @@ public class JobDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        job_name = view.findViewById(R.id.txt_job_name);
-        company = view.findViewById(R.id.txt_company_name);
-        dop = view.findViewById(R.id.txt_post_date);
         description = view.findViewById(R.id.txt_description);
-        designation = view.findViewById(R.id.txt_job_designation);
-        website =view.findViewById(R.id.txt_job_website);
-        salary = view.findViewById(R.id.txt_job_salary);
-        city = view.findViewById(R.id.txt_job_city);
         vacancy=view.findViewById(R.id.txt_Vacancy);
         qualification= view.findViewById(R.id.txt_Qualification);
         relativeLayout= view.findViewById(R.id.job_detail_layout);
 
-        databaseReference= FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB").child("-MY6JZObLOQm2asNhvVS");
+        databaseReference= FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB").child("-MYJf5ThpA6-Wb8TeD7d");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Job addjob = snapshot.getValue(Job.class);
 
-                job_name.setText(addjob.getName());
-                dop.setText(" Post Date : "+addjob.getPost_date());
-                company.setText(addjob.getCompanyName());
                 description.setText(addjob.getDescription());
-                designation.setText(" Designation : "+addjob.getDesignation());
-                salary.setText(" Salary : "+addjob.getSalary());
-                //           Log.e(TAG, "onDataChange: "+addjob.getJob_City() );
-                city.setText(" City : "+addjob.getCity());
-                website.setText(" Website : "+addjob.getWebsite());
                 vacancy.setText(addjob.getVacancy());
                 qualification.setText(addjob.getQualification());
 

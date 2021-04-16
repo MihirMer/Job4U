@@ -138,14 +138,22 @@ public class SignUpActivity extends AppCompatActivity {
                                         null,
                                         null,
                                         null,
+                                        false,
+                                        false,
+                                        false,
+                                        false,
+                                        false,
+                                        false,
                                         false
                                 );
-                                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                final FirebaseUser firebaseUser = mAuth.getCurrentUser();
                                 FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
+                                            firebaseUser.sendEmailVerification();
                                             Toast.makeText(SignUpActivity.this, "User has been registered successfully !", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(SignUpActivity.this, "Please check your email & verify to login", Toast.LENGTH_LONG).show();
                                             Intent i = new Intent(SignUpActivity.this, SignInActivity.class);
                                             startActivity(i);
                                             finishAfterTransition();

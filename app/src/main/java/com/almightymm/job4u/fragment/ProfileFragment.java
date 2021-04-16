@@ -2,6 +2,7 @@ package com.almightymm.job4u.fragment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -11,9 +12,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -21,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -33,15 +39,16 @@ import com.almightymm.job4u.Adapter.EducationAdapter;
 import com.almightymm.job4u.Adapter.ExperienceAdapter;
 import com.almightymm.job4u.Adapter.ProjectAdapter;
 import com.almightymm.job4u.R;
+import com.almightymm.job4u.SignInActivity;
 import com.almightymm.job4u.latex.Document;
 import com.almightymm.job4u.latex.LatexCompiler;
 import com.almightymm.job4u.latex.PreferenceHelper;
 import com.almightymm.job4u.model.EducationDetails;
-import com.almightymm.job4u.model.PersonalDetails;
 import com.almightymm.job4u.model.ProjectWork;
 import com.almightymm.job4u.model.Skills;
 import com.almightymm.job4u.model.WorkExperience;
 import com.almightymm.job4u.utils.FilesUtils;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,6 +59,7 @@ import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import co.lujun.androidtagview.TagContainerLayout;
 import cz.msebera.android.httpclient.Header;
@@ -72,8 +80,10 @@ public class ProfileFragment extends Fragment {
     public static final String DEFAULT_OUTPUT_FOLDER =
             FilesUtils.getDocumentsDir().getPath();
     private static final String TAG = "ProfileFragment";
-    TextView name;
-    TextView gmail, phone, city, dob, gender;
+    private final LinkedList<Document> documents = new LinkedList<>();
+    //    personal details
+    TextView name, gmail, phone, city, dob, gender;
+    ImageView personalEditImageView;
     //    edu
     TextView info1, college, streem, degree, cgpa, gyear_txt, gyear, achievements;
     RecyclerView edu_rec;
@@ -96,163 +106,39 @@ public class ProfileFragment extends Fragment {
     LinearLayoutManager expLinearLayoutManager;
     Button add_education, add_projectWork, add_exp;
     LinearLayout l1, l2;
+    //    skill
     TagContainerLayout skill;
+    ImageView editSkillImageView;
+    TextView skillinfo;
+    //    database
     DatabaseReference databaseReference;
+    //    preferences
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
     String userId;
     //    generate resume
     Button generateResume;
-    String Name = "Mihir Mer";
-    String email = "mihirmer@gmail.com";
+    String Name;
     String outputPath;
     String imagesPath;
     String filename;
     LatexCompiler latexCompiler;
-    String texFilecontent = "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            "\\documentclass{article}\n" +
-            "\n" +
-            "\\usepackage[top=0.5in, bottom=0.5in, left=0.5in, right=0.5in]{geometry}\n" +
-            "\\usepackage{enumitem}\n" +
-            "\n" +
-            "\\begin{document}\n" +
-            "\\begin{center}\n" +
-            "\\thispagestyle{empty}\n" +
-            "\\large \\textbf{" + Name + " \\\\}\n" +
-            "\\normalsize " + email + " $\\mid$ 000-000-0000 $\\mid$ www.mywebsite.com    \\\\\n" +
-            "\\hrulefill\n" +
-            "\\end{center}\n" +
-            "\n" +
-            "\n" +
-            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            "% OBJECTIVE\n" +
-            "% Who you are, what domain, what are you looking for and when?\n" +
-            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            "\\noindent \\textbf{\\underline{OBJECTIVE}} \\\\\n" +
-            "\\noindent Graduate student looking for domain positions starting month and year. \\\\\n" +
-            "\n" +
-            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            "% SKILLS: Important and relevant to the job you are applying for\n" +
-            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            "\n" +
-            "\\noindent \\textbf{\\underline{CORE SKILLS}} \\\\\n" +
-            "Skill 1 (years of experience), Skill 2 (years of experience), Skill 3 (years of experience) \\\\\n" +
-            "% Skill 1 (level of expertise), Skill 2 (level of expertise), Skill 3 (level of expertise) \\\\\n" +
-            "\n" +
-            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            "% EDUCATION\n" +
-            "% University name, degree, year of graduation, GPA (optional)\n" +
-            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            "\\noindent \\textbf{\\underline{EDUCATION}} \\\\\n" +
-            "\\textbf{University name} \\hfill City, State \\\\\n" +
-            "\\textit{Degree name + Specialization} \\hfill GPA: x.x/x.x \\hfill month-year \\\\ \\\\\n" +
-            "\\textbf{University name} \\hfill City, State \\\\\n" +
-            "\\textit{Degree name + Specialization} \\hfill GPA: x.x/x.x \\hfill month-year \\\\\n" +
-            "\n" +
-            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            "% WORK EXPERIENCE\n" +
-            "% What did you do? -> Project goals OR what problem did you solve?\n" +
-            "% How did you do it? -> Skills and technologies\n" +
-            "% What impact did you create? -> Numbers and percentages.\n" +
-            "% Example: \n" +
-            "% + Developed an app for matching mentor and mentees for Android and iOS platform.\n" +
-            "% + Successfully matched 85% of the applications and randomized the rest.\n" +
-            "% \n" +
-            "% Talk about team work, initiative, soft skills.\n" +
-            "%\n" +
-            "% Can also include personal projects, competitions, contribution to Open source.\n" +
-            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            "\\noindent \\textbf{\\underline{WORK EXPERIENCE}} \\\\\n" +
-            "\\noindent \\textbf{Company name} \\hfill City Name, State \\\\\n" +
-            "\\textit{Role name, Deparment Name} \\hfill Month, Year $-$ Month, Year\n" +
-            "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
-            "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
-            "\\item {Led an initiative XYZ to identify the root cause.}\n" +
-            "\\item {Collaborated with XYZ team to work on XYZ feature. \\\\}\n" +
-            "\\end{itemize}\n" +
-            "\n" +
-            "\\noindent \\textbf{Company name} \\hfill City Name, State \\\\\n" +
-            "\\textit{Role name} \\hfill Month, Year $-$ Month, Year\n" +
-            "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
-            "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
-            "\\item {... \\\\}\n" +
-            "\\end{itemize}\n" +
-            "\n" +
-            "\\noindent \\textbf{Competition Name} \\hfill City Name, State \\\\\n" +
-            "\\textit{Role name, Team name} \\hfill Month, Year $-$ Month, Year\n" +
-            "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
-            "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
-            "\\item{Came in the top 10 OR received the most innovative award.}\n" +
-            "\\item {... \\\\}\n" +
-            "\\end{itemize}\n" +
-            "\n" +
-            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            "% PROJECT\n" +
-            "% What did you do?\n" +
-            "% How did you do it? -> Skills and technologies\n" +
-            "% What impact did you create? -> Numbers and percentages.\n" +
-            "%\n" +
-            "% Talk about team work, initiative, soft skills.\n" +
-            "%\n" +
-            "% Can also include personal projects, competitions, contribution to Open source.\n" +
-            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            "\\noindent \\textbf{\\underline{PROJECT WORK}} \\\\\n" +
-            "\\noindent \\textbf{Project Name} \\textit{Course Name} \\hfill  Month, Year $-$ Month, Year\n" +
-            "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
-            "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
-            "\\item {Led an initiative XYZ to identify the root cause.}\n" +
-            "\\item {Collaborated with XYZ team to work on XYZ feature. \\\\}\n" +
-            "\\end{itemize}\n" +
-            "\n" +
-            "\\noindent \\textbf{Project Name} \\textit{Course Name} \\hfill  Month, Year $-$ Month, Year\n" +
-            "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
-            "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
-            "\\item {Led an initiative XYZ to identify the root cause.}\n" +
-            "\\item {Collaborated with XYZ team to work on XYZ feature. \\\\}\n" +
-            "\\end{itemize}\n" +
-            "\n" +
-            "\\noindent \\textbf{Project Name} \\textit{Course Name} \\hfill  Month, Year $-$ Month, Year\n" +
-            "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
-            "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
-            "\\item {... \\\\}\n" +
-            "\\end{itemize}\n" +
-            "\n" +
-            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            "% Extra Curricular Activities, Leadership, etc \n" +
-            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            "\\noindent \\textbf{\\underline{EXTRA SECTION}} \\\\\n" +
-            "\\noindent \\textbf{Activity/ Role} \\hfill Month, Year $-$ Month, Year\n" +
-            "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
-            "\\item {What did you do, how did you do it and what did you achieve? \\\\}\n" +
-            "\\end{itemize}\n" +
-            "\n" +
-            "\\noindent \\textbf{Activity/ Role} \\hfill Month, Year $-$ Month, Year\n" +
-            "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
-            "\\item {What did you do, how did you do it and what did you achieve? \\\\}\n" +
-            "\\end{itemize}\n" +
-            "\n" +
-            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            "% Other Skills: you can add all your other skills here.\n" +
-            "% Continue to keep only relevant skills\n" +
-            "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            "\\noindent \\textbf{\\underline{OTHER SKILLS}} \\\\\n" +
-            "\\noindent \\textbf{Skill Group 1:} Skill 1, Skill 2, Skill 3 \\\\\n" +
-            "\\noindent \\textbf{Skill Group 2: } Skill 1, Skill 2, Skill 3, Skill 4\n" +
-            "\n" +
-            "\n" +
-            "\\end{document}\n" +
-            "\n";
+    StringBuilder texFilecontent;
+    //    addjob
+    Button addJobButton;
     private Button button, educationButton, addSkillButton, workExp, projectWork, companyDetails, jobPreviewButton;
     private Permissions currentPermission;
     private Document document;
-    private LinkedList<Document> documents = new LinkedList<>();
-
-//    addjob
-    Button addJobButton;
 
 
     public ProfileFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -262,7 +148,6 @@ public class ProfileFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_profile, container, false);
         initViews(view);
         setListeners(view);
-        initPreferences();
         initPreferences();
         userId = preferences.getString("userId", "");
         setValues(view);
@@ -277,6 +162,7 @@ public class ProfileFragment extends Fragment {
         city = view.findViewById(R.id.txt_my_city);
         dob = view.findViewById(R.id.txt_my_dob);
         gender = view.findViewById(R.id.txt_my_gender);
+        personalEditImageView = view.findViewById(R.id.icon2);
 
         //For Education Display
         college = view.findViewById(R.id.txt_my_college);
@@ -296,6 +182,8 @@ public class ProfileFragment extends Fragment {
 
 //        skill details
         skill = view.findViewById(R.id.tag_skill);
+        editSkillImageView = view.findViewById(R.id.icon1);
+        skillinfo = view.findViewById(R.id.txt_0);
 
         // Project Work Display
         project_name = view.findViewById(R.id.txt_my_project_name);
@@ -320,6 +208,7 @@ public class ProfileFragment extends Fragment {
         freshers = view.findViewById(R.id.rbtn_freshers);
         experience = view.findViewById(R.id.rbtn_experience);
         add_exp = view.findViewById(R.id.btn_add_workExperience);
+        add_exp.setVisibility(View.GONE);
         rg1 = view.findViewById(R.id.lyl1_23);
 
         exp_rec = view.findViewById(R.id.experience_list);
@@ -346,34 +235,37 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setListeners(final View view) {
-        button.setOnClickListener(new View.OnClickListener() {
+
+
+        //        personal details
+
+        personalEditImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_personalDetailsFragment);
             }
         });
-        educationButton.setOnClickListener(new View.OnClickListener() {
+        add_education.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_educationDetailsFragment);
-
             }
         });
-        addSkillButton.setOnClickListener(new View.OnClickListener() {
+        editSkillImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_addSkillFragment);
 
             }
         });
-        workExp.setOnClickListener(new View.OnClickListener() {
+        add_exp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_workExperienceFragment);
 
             }
         });
-        projectWork.setOnClickListener(new View.OnClickListener() {
+        add_projectWork.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_projectWorkFragment);
@@ -390,7 +282,7 @@ public class ProfileFragment extends Fragment {
         generateResume.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                generateResume(view);
+                generateResume();
             }
         });
 
@@ -434,7 +326,6 @@ public class ProfileFragment extends Fragment {
         // Creates the folders if they not exists
         final String imagesFolderPath = PreferenceHelper.getImageFolder(getContext());
         final String outputFolderPath = PreferenceHelper.getOutputFolder(getContext());
-        Log.e(TAG, "initPreferences: i'm here");
         File imagesFolder = new File(imagesFolderPath);
         if (!imagesFolder.exists()) {
             FilesUtils.newDirectory(imagesFolderPath);
@@ -451,24 +342,54 @@ public class ProfileFragment extends Fragment {
     private void setValues(View view) {
 
 //        personal details
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                PersonalDetails personaldetails = dataSnapshot.getValue(PersonalDetails.class);
-                name.setText(personaldetails.getFirstName() + " " + personaldetails.getLastName());
-                gmail.setText(personaldetails.getEmailAddress());
-                phone.setText(personaldetails.getPhone());
-                city.setText(personaldetails.getAddress());
-                dob.setText(personaldetails.getDOB());
-                gender.setText(personaldetails.getGender());
+        name.setText(preferences.getString("firstName", "") + " " + preferences.getString("lastName", ""));
+        gmail.setText(preferences.getString("emailAddress", ""));
+        if (preferences.getString("phone", null) != null && preferences.getString("DOB", null) != null && preferences.getString("address", null) != null && preferences.getString("gender", null) != null) {
+            phone.setText(preferences.getString("phone", null));
+            city.setText(preferences.getString("DOB", null));
+            dob.setText(preferences.getString("address", null));
+            gender.setText(preferences.getString("gender", null));
+            phone.setVisibility(View.VISIBLE);
+            city.setVisibility(View.VISIBLE);
+            dob.setVisibility(View.VISIBLE);
+            gender.setVisibility(View.VISIBLE);
+        } else {
+            phone.setVisibility(View.GONE);
+            city.setVisibility(View.GONE);
+            dob.setVisibility(View.GONE);
+            gender.setVisibility(View.GONE);
+        }
 
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
+//        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                PersonalDetails personaldetails = dataSnapshot.getValue(PersonalDetails.class);
+//                name.setText(personaldetails.getFirstName() + " " + personaldetails.getLastName());
+//                gmail.setText(personaldetails.getEmailAddress());
+//                if(personaldetails.getPhone()!=null && personaldetails.getAddress()!=null && personaldetails.getDOB()!=null && personaldetails.getGender()!=null){
+//                    phone.setText(personaldetails.getPhone());
+//                    city.setText(personaldetails.getAddress());
+//                    dob.setText(personaldetails.getDOB());
+//                    gender.setText(personaldetails.getGender());
+//                    phone.setVisibility(View.VISIBLE);
+//                    city.setVisibility(View.VISIBLE);
+//                    dob.setVisibility(View.VISIBLE);
+//                    gender.setVisibility(View.VISIBLE);
+//                }
+//                else {
+//                    phone.setVisibility(View.GONE);
+//                    city.setVisibility(View.GONE);
+//                    dob.setVisibility(View.GONE);
+//                    gender.setVisibility(View.GONE);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//            }
+//        });
 
 //        education details
 
@@ -484,6 +405,7 @@ public class ProfileFragment extends Fragment {
                     edu_list.add(details);
                     educationAdapter = new EducationAdapter(getContext(), edu_list);
                     edu_rec.setAdapter(educationAdapter);
+                    info1.setVisibility(View.GONE);
                 }
             }
 
@@ -524,10 +446,17 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Skills add_skill = dataSnapshot.getValue(Skills.class);
-                skill.setTags(add_skill.getSkills());
-                skill.setVisibility(View.VISIBLE);
-                skill.setBackgroundColor(Color.WHITE);
-                skill.setBorderColor(Color.WHITE);
+                if (add_skill != null) {
+                    skill.setTags(add_skill.getSkills());
+                    skill.setVisibility(View.VISIBLE);
+                    skill.setBackgroundColor(Color.WHITE);
+                    skill.setBorderColor(Color.WHITE);
+                    skillinfo.setVisibility(View.GONE);
+                } else {
+                    skillinfo.setVisibility(View.VISIBLE);
+                    skill.removeAllTags();
+                }
+
             }
 
             @Override
@@ -544,10 +473,14 @@ public class ProfileFragment extends Fragment {
                 proj_list.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     ProjectWork projectWork1 = dataSnapshot.getValue(ProjectWork.class);
-                    proj_list.add(projectWork1);
-                    projectAdapter = new ProjectAdapter(getContext(), proj_list);
-                    proj_rec.setAdapter(projectAdapter);
+                    if (projectWork1 != null) {
+                        proj_list.add(projectWork1);
+                        projectAdapter = new ProjectAdapter(getContext(), proj_list);
+                        proj_rec.setAdapter(projectAdapter);
+                        info2.setVisibility(View.GONE);
+                    }
                 }
+
             }
 
             @Override
@@ -586,9 +519,19 @@ public class ProfileFragment extends Fragment {
                 exp_list.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     WorkExperience workExperience = dataSnapshot.getValue(WorkExperience.class);
-                    exp_list.add(workExperience);
-                    experienceAdapter = new ExperienceAdapter(getContext(), exp_list);
-                    exp_rec.setAdapter(experienceAdapter);
+                    if (workExperience != null) {
+                        exp_list.add(workExperience);
+                        experienceAdapter = new ExperienceAdapter(getContext(), exp_list);
+                        exp_rec.setAdapter(experienceAdapter);
+                        add_exp.setVisibility(View.VISIBLE);
+                        info3.setVisibility(View.GONE);
+                        rg1.setVisibility(View.GONE);
+                    } else {
+                        freshers.setSelected(true);
+                        add_exp.setVisibility(View.GONE);
+                        info3.setVisibility(View.VISIBLE);
+                        rg1.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -598,20 +541,20 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-//        experience.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                add_exp.setVisibility(View.VISIBLE);
-//                info3.setVisibility(View.VISIBLE);
-//            }
-//        });
-//        freshers.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                info3.setVisibility(View.GONE);
-//                add_exp.setVisibility(View.GONE);
-//            }
-//        });
+        experience.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                add_exp.setVisibility(View.VISIBLE);
+                info3.setVisibility(View.VISIBLE);
+            }
+        });
+        freshers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                info3.setVisibility(View.GONE);
+                add_exp.setVisibility(View.GONE);
+            }
+        });
 //
 //        add_exp.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -643,7 +586,7 @@ public class ProfileFragment extends Fragment {
 //        });
     }
 
-    public void generateResume(View view) {
+    public void generateResume() {
         onNewFileClick();
         saveFile();
         generatePDF();
@@ -670,7 +613,7 @@ public class ProfileFragment extends Fragment {
                 filename = filename.replaceAll(" ", "_");
                 renameFile(document.getPath(), filename);
             } else {
-                FilesUtils.writeFile(document, texFilecontent);
+                FilesUtils.writeFile(document, texFilecontent.toString());
                 exists = true;
                 document.setSaved(true);
             }
@@ -748,7 +691,7 @@ public class ProfileFragment extends Fragment {
                 asyncDialog.setMessage("Compressing and sending files...");
                 asyncDialog.show();
                 Log.e(TAG, "generatePDF: " + imagesPath + "\n" + outputPath);
-                latexCompiler.generatePDF(texFilecontent, imagesFolder, outputFolder, document, new FileAsyncHttpResponseHandler(getContext()) {
+                latexCompiler.generatePDF(texFilecontent.toString(), imagesFolder, outputFolder, document, new FileAsyncHttpResponseHandler(getContext()) {
                     @Override
                     public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, File file) {
                         asyncDialog.dismiss();
@@ -761,7 +704,7 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, File file) {
                         asyncDialog.dismiss();
-                        Toast.makeText(getContext(), "Your file is saved at Document folder\n namely: " + filename+".pdf", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Your file is saved at Document folder\n namely: " + filename + ".pdf", Toast.LENGTH_LONG).show();
                         Header header = null;
                         // Retrieves the content-type header
                         for (Header h : headers) {
@@ -787,7 +730,7 @@ public class ProfileFragment extends Fragment {
         final String headerType = header.getValue();
         // If it's a PDF, the compile succeeded
         if (headerType.equals("application/pdf") || headerType.equals("application/x-dvi")) {
-            String ext = headerType.substring(headerType.length() - 3, headerType.length());
+            String ext = headerType.substring(headerType.length() - 3);
             // Saves the file in the output directory and tries to open it
             byte[] bytes = FilesUtils.readBinaryFile(file);
             String pdfName = document.getName().substring(0, document.getName().lastIndexOf(".") + 1) + ext;
@@ -821,6 +764,187 @@ public class ProfileFragment extends Fragment {
         Document document = new Document(path);
         documents.remove(document);
         FilesUtils.deleteFile(document);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.profile_menu, menu);
+    }
+
+
+//option menu
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.app_bar_download_resume:
+//                Toast.makeText(getContext(), "Download resume", Toast.LENGTH_SHORT).show();
+                generateString();
+                generateResume();
+                return true;
+            case R.id.app_bar_logout:
+                SharedPreferences pref = getActivity().getSharedPreferences("User_Details", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.clear();
+                editor.apply();
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getActivity(), SignInActivity.class);
+                startActivity(intent);
+                getActivity().finishAfterTransition();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private void generateString() {
+
+        Name = preferences.getString("firstName", "") + " " + preferences.getString("lastName", "");
+        String emailAddress = preferences.getString("emailAddress", "");
+        String phone = preferences.getString("phone", "");
+        phone = phone.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
+        List<String> skillTags = skill.getTags();
+
+
+        Log.e(TAG, "generateString: ");
+        texFilecontent = new StringBuilder();
+        texFilecontent.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                "\\documentclass{article}\n" +
+                "\n" +
+                "\\usepackage[top=0.5in, bottom=0.5in, left=0.5in, right=0.5in]{geometry}\n" +
+                "\\usepackage{enumitem}\n" +
+                "\n" +
+                "\\begin{document}\n" +
+                "\\begin{center}\n" +
+                "\\thispagestyle{empty}\n" +
+                "\\large \\textbf{" + Name + "\\\\}\n" +
+                "\\normalsize " + emailAddress + " $\\mid$ " + phone + " \\\\\n" +
+                "\\hrulefill\n" +
+                "\\end{center}\n" +
+                "\n" +
+                "\n" +
+                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                "% OBJECTIVE\n" +
+                "% Who you are, what domain, what are you looking for and when?\n" +
+                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                "\\noindent \\textbf{\\underline{OBJECTIVE}} \\\\\n" +
+                "\\noindent Graduate student looking for domain positions starting month and year. \\\\\n" +
+                "\n" +
+                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                "% SKILLS: Important and relevant to the job you are applying for\n" +
+                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                "\n" +
+                "\\noindent \\textbf{\\underline{CORE SKILLS}} \\\\\n");
+        texFilecontent.append(skillTags.get(0));
+        for (int i = 1; i < skillTags.size(); i++) {
+            texFilecontent.append(", " + skillTags.get(i));
+        }
+        texFilecontent.append(" \\\\\n");
+        texFilecontent.append("% Skill 1 (level of expertise), Skill 2 (level of expertise), Skill 3 (level of expertise) \\\\\n" +
+                "\n" +
+                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                "% EDUCATION\n" +
+                "% University name, degree, year of graduation, GPA (optional)\n" +
+                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                "\\noindent \\textbf{\\underline{EDUCATION}} \\\\\n");
+
+        for (EducationDetails edu : edu_list) {
+            texFilecontent.append("\\textbf{" + edu.getCollegeName() + "}  \\\\\n" +
+                    "\\textit{" + edu.getDegreeName() + " in " + edu.getStream() + "} \\hfill GPA: " + edu.getGpa() + " \\hfill " + edu.getYear() + " \\\\ \\\\\n");
+        }
+        texFilecontent.append("\n" +
+                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                        "% WORK EXPERIENCE\n" +
+                        "% What did you do? -> Project goals OR what problem did you solve?\n" +
+                        "% How did you do it? -> Skills and technologies\n" +
+                        "% What impact did you create? -> Numbers and percentages.\n" +
+                        "% Example: \n" +
+                        "% + Developed an app for matching mentor and mentees for Android and iOS platform.\n" +
+                        "% + Successfully matched 85% of the applications and randomized the rest.\n" +
+                        "% \n" +
+                        "% Talk about team work, initiative, soft skills.\n" +
+                        "%\n" +
+                        "% Can also include personal projects, competitions, contribution to Open source.\n" +
+                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                        "\\noindent \\textbf{\\underline{WORK EXPERIENCE}} \\\\\n");
+
+        for (WorkExperience exp:exp_list) {
+            texFilecontent.append(
+                    "\n"+"\n"+"\\noindent \\textbf{"+exp.getCompanyName()+"} \\hfill "+exp.getCity()+" \\\\\n" +
+                            "\\textit{"+exp.getDesignation()+"} \\hfill "+exp.getFromYear()+" $-$ "+exp.getToYear()+"\n");
+        }
+        texFilecontent.append(
+                        "\n" +
+                        "\\noindent \\textbf{Company name} \\hfill City Name, State \\\\\n" +
+                        "\\textit{Role name} \\hfill Month, Year $-$ Month, Year\n" +
+                        "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
+                        "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
+                        "\\item {... \\\\}\n" +
+                        "\\end{itemize}\n" +
+                        "\n" +
+                        "\\noindent \\textbf{Competition Name} \\hfill City Name, State \\\\\n" +
+                        "\\textit{Role name, Team name} \\hfill Month, Year $-$ Month, Year\n" +
+                        "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
+                        "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
+                        "\\item{Came in the top 10 OR received the most innovative award.}\n" +
+                        "\\item {... \\\\}\n" +
+                        "\\end{itemize}\n" +
+                        "\n" +
+                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                        "% PROJECT\n" +
+                        "% What did you do?\n" +
+                        "% How did you do it? -> Skills and technologies\n" +
+                        "% What impact did you create? -> Numbers and percentages.\n" +
+                        "%\n" +
+                        "% Talk about team work, initiative, soft skills.\n" +
+                        "%\n" +
+                        "% Can also include personal projects, competitions, contribution to Open source.\n" +
+                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                        "\\noindent \\textbf{\\underline{PROJECT WORK}} \\\\\n" +
+                        "\\noindent \\textbf{Project Name} \\textit{Course Name} \\hfill  Month, Year $-$ Month, Year\n" +
+                        "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
+                        "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
+                        "\\item {Led an initiative XYZ to identify the root cause.}\n" +
+                        "\\item {Collaborated with XYZ team to work on XYZ feature. \\\\}\n" +
+                        "\\end{itemize}\n" +
+                        "\n" +
+                        "\\noindent \\textbf{Project Name} \\textit{Course Name} \\hfill  Month, Year $-$ Month, Year\n" +
+                        "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
+                        "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
+                        "\\item {Led an initiative XYZ to identify the root cause.}\n" +
+                        "\\item {Collaborated with XYZ team to work on XYZ feature. \\\\}\n" +
+                        "\\end{itemize}\n" +
+                        "\n" +
+                        "\\noindent \\textbf{Project Name} \\textit{Course Name} \\hfill  Month, Year $-$ Month, Year\n" +
+                        "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
+                        "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
+                        "\\item {... \\\\}\n" +
+                        "\\end{itemize}\n" +
+                        "\n" +
+                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                        "% Extra Curricular Activities, Leadership, etc \n" +
+                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                        "\\noindent \\textbf{\\underline{EXTRA SECTION}} \\\\\n" +
+                        "\\noindent \\textbf{Activity/ Role} \\hfill Month, Year $-$ Month, Year\n" +
+                        "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
+                        "\\item {What did you do, how did you do it and what did you achieve? \\\\}\n" +
+                        "\\end{itemize}\n" +
+                        "\n" +
+                        "\\noindent \\textbf{Activity/ Role} \\hfill Month, Year $-$ Month, Year\n" +
+                        "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
+                        "\\item {What did you do, how did you do it and what did you achieve? \\\\}\n" +
+                        "\\end{itemize}\n" +
+                        "\n" +
+                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                        "% Other Skills: you can add all your other skills here.\n" +
+                        "% Continue to keep only relevant skills\n" +
+                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                        "\\noindent \\textbf{\\underline{OTHER SKILLS}} \\\\\n" +
+                        "\\noindent \\textbf{Skill Group 1:} Skill 1, Skill 2, Skill 3 \\\\\n" +
+                        "\\noindent \\textbf{Skill Group 2: } Skill 1, Skill 2, Skill 3, Skill 4\n" +
+                        "\n" +
+                        "\n" +
+                        "\\end{document}\n");
     }
 
     private enum Permissions {

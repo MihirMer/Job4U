@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,18 +20,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.almightymm.job4u.Adapter.CategoryAdapter;
 import com.almightymm.job4u.Adapter.JobAdapter;
+import com.almightymm.job4u.HomeActivity;
 import com.almightymm.job4u.R;
 import com.almightymm.job4u.SignInActivity;
 import com.almightymm.job4u.model.Category;
 import com.almightymm.job4u.model.Job;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class HomeFragment extends Fragment {
 
-    private static final String ARG_ID = "arg_id";
 
 //  recycler
 
@@ -46,13 +51,12 @@ public class HomeFragment extends Fragment {
     JobAdapter jobAdapter;
     LinearLayoutManager jobLinearLayoutManager;
 
-    public static HomeFragment newInstance(int id) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(ARG_ID, id);
-        HomeFragment homeFragment = new HomeFragment();
-        homeFragment.setArguments(bundle);
-        return homeFragment;
-    }
+    DatabaseReference firebaseDatabase;
+
+    SharedPreferences preferences;
+    SharedPreferences.Editor preferenceEditor;
+
+    String userId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,55 +73,95 @@ public class HomeFragment extends Fragment {
             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        initPreferences();
         recyclerView = view.findViewById(R.id.category);
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         categoryArrayList = new ArrayList<>();
-        categoryArrayList.add(new Category(1, "Front-end Developer"));
-        categoryArrayList.add(new Category(2, "Backend Developer"));
-        categoryArrayList.add(new Category(3, "Full-stack Developer"));
-        categoryArrayList.add(new Category(4, "Middle-Tier Developer"));
-        categoryArrayList.add(new Category(5, "Web Developer"));
-        categoryArrayList.add(new Category(6, "Desktop Developer"));
-        categoryArrayList.add(new Category(7, "Mobile Developer"));
-        categoryArrayList.add(new Category(8, "Graphics Developer"));
-        categoryAdapter = new CategoryAdapter(getContext(), categoryArrayList);
-        recyclerView.setAdapter(categoryAdapter);
+        userId = preferences.getString("userId", "");
+        firebaseDatabase = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("JOBCATEGORY");
+        firebaseDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                        Category category = dataSnapshot.getValue(Category.class);
+                        categoryArrayList.add(category);
+                    }
+                    categoryAdapter = new CategoryAdapter(getContext(), categoryArrayList);
+                    recyclerView.setAdapter(categoryAdapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         //        for job recycler view
         jobRecyclerView = view.findViewById(R.id.job);
         jobLinearLayoutManager = new LinearLayoutManager(getContext());
         jobLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         jobRecyclerView.setLayoutManager(jobLinearLayoutManager);
+        jobArrayList = new ArrayList<>();
+//        jobArrayList.add(new Job("","Front-end Developer","","","","","","","","",""));
+//        jobArrayList.add(new Job("","Backend Developer","","","","","","","","",""));
+//        jobArrayList.add(new Job("","Full-stack Developer","","","","","","","","",""));
+//        jobArrayList.add(new Job("","Middle-Tier Developer","","","","","","","","",""));
+//        jobArrayList.add(new Job("","Web Developer","","","","","","","","",""));
+//        jobArrayList.add(new Job("","Desktop Developer","","","","","","","","",""));
+//        jobArrayList.add(new Job("","Mobile Developer","","","","","","","","",""));
+//        jobArrayList.add(new Job("","Graphics Developer","","","","","","","","",""));
 
-//        jobArrayList = new ArrayList<>();
-//        jobArrayList.add(new Job("Front-end Developer"));
-//        jobArrayList.add(new Job("Backend Developer"));
-//        jobArrayList.add(new Job("Full-stack Developer"));
-//        jobArrayList.add(new Job("Middle-Tier Developer"));
-//        jobArrayList.add(new Job("Web Developer"));
-//        jobArrayList.add(new Job("Desktop Developer"));
-//        jobArrayList.add(new Job("Mobile Developer"));
-//        jobArrayList.add(new Job("Graphics Developer"));
-//        jobAdapter = new JobAdapter(getContext(), jobArrayList);
-//        jobRecyclerView.setAdapter(jobAdapter);
+        firebaseDatabase = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB");
+        firebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Job job = dataSnapshot.getValue(Job.class);
+                        jobArrayList.add(job);
+
+
+                    }
+                    jobAdapter = new JobAdapter(getContext(), filter());
+                    jobRecyclerView.setAdapter(jobAdapter);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         return view;
 
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-//        int id = requireArguments().getInt(ARG_ID);
+    private ArrayList<Job> filter() {
+        ArrayList<Job> filterList = new ArrayList<>();
+        for (Job job : jobArrayList) {
+            for (Category category : categoryArrayList) {
+                //Log.e("errr", "filter: "+job.getJob_Name()+" "+category.getC_Job_name() );
+                if (job.getName() != null && category.getC_Job_name() != null) {
+                    if (job.getName().equals(category.getC_Job_name())) {
+                        filterList.add(job);
+                    }
+                }
+            }
+        }
+        return filterList;
+
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main_menu,menu);
+
+    private void initPreferences() {
+        preferences = getActivity().getSharedPreferences("User_Details", MODE_PRIVATE);
+        preferenceEditor = preferences.edit();
     }
-
-
 }

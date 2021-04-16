@@ -92,7 +92,6 @@ public class AddJobFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 addjob();
-                clear();
             }
         });
     }
@@ -145,22 +144,25 @@ public class AddJobFragment extends Fragment {
                 public void onSuccess(Void aVoid) {
 
                     Toast.makeText(getContext(), "Job added", Toast.LENGTH_LONG).show();
+                    clear();
                 }
             });
         }
     }
 
     private void clear() {
-        jobtype.setSelection(0);
-        jobQualification.setSelection(0);
-        desigation.setText("");
-        description.setText("");
-        salary.setText("");
-        companyname.setText("");
-        city.setText("");
-        website.setText("");
-        vacancy.setText("");
-        pod.setText("");
+//        jobtype.setSelection(0);
+//        jobQualification.setSelection(0);
+//        desigation.setText("");
+//        description.setText("");
+//        salary.setText("");
+//        companyname.setText("");
+//        city.setText("");
+//        website.setText("");
+//        vacancy.setText("");
+//        pod.setText("");
+
+        getActivity().onBackPressed();
 
     }
 

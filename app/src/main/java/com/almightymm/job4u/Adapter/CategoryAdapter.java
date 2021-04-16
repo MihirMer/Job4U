@@ -37,7 +37,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, final int position) {
         Category category = categoryArrayList.get(position);
-        holder.categoryTitleTextView.setText(category.getCategoryTitle());
+        holder.categoryTitleTextView.setText(category.getC_Job_name());
+        holder.categoryImageView.setImageResource(category.getC_Image());
         holder.categoryCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,5 +70,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         getItemCount();
         notifyDataSetChanged();
     }
+
+
 
 }

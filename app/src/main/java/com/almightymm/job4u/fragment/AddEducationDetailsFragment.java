@@ -153,11 +153,18 @@ public class AddEducationDetailsFragment extends Fragment {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Toast.makeText(getContext(), "Details Save", Toast.LENGTH_LONG).show();
+                    clear();
                 }
             });
         }
 
     }
+
+    private void clear() {
+        getActivity().onBackPressed();
+    }
+
+
     public void txt_gyear(View view) {
 
         final Calendar today = Calendar.getInstance();
@@ -169,7 +176,7 @@ public class AddEducationDetailsFragment extends Fragment {
         },today.get(Calendar.YEAR),today.get(Calendar.MONTH));
 
         builder.setActivatedMonth(Calendar.JULY).setMinYear(1990).
-                setActivatedYear(today.get(Calendar.YEAR)).setMaxYear(2021)
+                setActivatedYear(today.get(Calendar.YEAR)).setMaxYear(2990)
                 .setTitle("Select Year").showYearOnly()
                 .build().show();
 

@@ -71,4 +71,5 @@ public final class BottomNavigationBehavior
             snackbarLayout.setLayoutParams(params);
         }
     }
+
 }

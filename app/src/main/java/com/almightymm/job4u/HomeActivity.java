@@ -7,13 +7,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -22,20 +25,24 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
-    private BottomNavigationView navigation;
-    private Toolbar toolbar;
-
-
+    static View fragment;
     //    share pref
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
     NavController navController;
+    private BottomNavigationView navigation;
+    private Toolbar toolbar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        fragment = findViewById(R.id.nav_host_fragment);
+
         initPreferences();
-        Log.d(TAG, "onCreate: "+ preferences.getBoolean("roleAssigned", false));
+        Log.d(TAG, "onCreate: " + preferences.getBoolean("roleAssigned", false));
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -48,36 +55,27 @@ public class HomeActivity extends AppCompatActivity {
         navigation = findViewById(R.id.navigation);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+        final AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.homeFragment,
                 R.id.searchFragment,
                 R.id.savedJobFragment,
                 R.id.notificationFragment,
                 R.id.profileFragment
-                )
+        )
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navigation, navController);
+        navigation.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem item) {
 
+            }
+        });
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.app_bar_search) {
-            SharedPreferences pref = getSharedPreferences("User_Details", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
-            editor.clear();
-            editor.apply();
-            FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(HomeActivity.this, SignInActivity.class);
-            startActivity(intent);
-            finish();
 
-        }
-        return true;
-    }
 
     private void initPreferences() {
         preferences = getSharedPreferences("User_Details", MODE_PRIVATE);
@@ -87,4 +85,5 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         return navController.navigateUp();
     }
+
 }

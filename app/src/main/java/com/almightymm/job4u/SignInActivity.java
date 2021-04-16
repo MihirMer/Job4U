@@ -156,7 +156,6 @@ public class SignInActivity extends AppCompatActivity {
                         if (firebaseUser.isEmailVerified()) {
                             initUserInDatabase("EmailPassword");
                         } else {
-                            firebaseUser.sendEmailVerification();
                             Toast.makeText(SignInActivity.this, "Please check your email & verify to login", Toast.LENGTH_LONG).show();
                         }
                     } else {
@@ -229,6 +228,12 @@ public class SignInActivity extends AppCompatActivity {
                                 null,
                                 null,
                                 null,
+                                false,
+                                false,
+                                false,
+                                false,
+                                false,
+                                false,
                                 false
                         );
 
@@ -265,9 +270,18 @@ public class SignInActivity extends AppCompatActivity {
         preferenceEditor.putString("firstName", user.getFirstName());
         preferenceEditor.putString("lastName", user.getLastName());
         preferenceEditor.putString("emailAddress", user.getEmailAddress());
-        preferenceEditor.putString("userId", userId);
+        preferenceEditor.putString("phone", user.getPhone());
+        preferenceEditor.putString("DOB", user.getDOB());
+        preferenceEditor.putString("address", user.getAddress());
+        preferenceEditor.putString("gender", user.getGender());
         preferenceEditor.putBoolean("roleAssigned", user.isRoleAssigned());
         preferenceEditor.putString("role", user.getRole());
+        preferenceEditor.putBoolean("areaOfInterestSelected", user.isAreaOfInterestSelected());
+        preferenceEditor.putBoolean("personalDetailsAdded", user.isPersonalDetailsAdded());
+        preferenceEditor.putBoolean("keySkillAdded", user.isKeySkillAdded());
+        preferenceEditor.putBoolean("educationAdded", user.isEducationAdded());
+        preferenceEditor.putBoolean("projectWorkAdded", user.isProjectWorkAdded());
+        preferenceEditor.putBoolean("experienceAdded", user.isExperienceAdded());
         preferenceEditor.apply();
     }
 

@@ -131,10 +131,10 @@ public class PersonalDetailsFragment extends Fragment {
         String fn = firstname.getText().toString().trim();
         String ln = lastname.getText().toString().trim();
         String mail = email.getText().toString().trim();
-        String phoneno = phone.getText().toString().trim();
-        String dateofbirth = dob.getText().toString().trim();
-        String adre = address.getText().toString().trim();
-        String gender = gendertxt.getSelectedItem().toString().trim();
+        final String phoneno = phone.getText().toString().trim();
+        final String dateofbirth = dob.getText().toString().trim();
+        final String adre = address.getText().toString().trim();
+        final String gender = gendertxt.getSelectedItem().toString().trim();
 
 
         if (fn.isEmpty()) {
@@ -170,7 +170,7 @@ public class PersonalDetailsFragment extends Fragment {
             Toast.makeText(getContext(), "Address is required !", Toast.LENGTH_SHORT).show();
         } else {
 //            PersonalDetails personalDetails = new PersonalDetails(fn, ln, mail, phoneno, dateofbirth, adre, gender);
-            PersonalDetails personalDetails = new PersonalDetails(
+            final PersonalDetails personalDetails = new PersonalDetails(
                     fn,
                     ln,
                     mail,
@@ -179,12 +179,26 @@ public class PersonalDetailsFragment extends Fragment {
                     adre,
                     gender,
                     preferences.getString("role", ""),
-                    preferences.getBoolean("roleAssigned", false)
+                    preferences.getBoolean("roleAssigned", false),
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
             );
             db_add_personal_detail.setValue(personalDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
+                    preferenceEditor.putString("phone", phoneno);
+                    preferenceEditor.putString("DOB", dateofbirth);
+                    preferenceEditor.putString("address", adre);
+                    preferenceEditor.putString("gender", gender);
+                    preferenceEditor.apply();
+                    preferenceEditor.commit();
+
                     Toast.makeText(getContext(), "Details Saved", Toast.LENGTH_LONG).show();
+                    getActivity().onBackPressed();
                 }
             });
         }

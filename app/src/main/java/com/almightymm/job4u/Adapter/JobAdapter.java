@@ -10,9 +10,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.almightymm.job4u.R;
+import com.almightymm.job4u.fragment.HomeFragment;
+import com.almightymm.job4u.fragment.HomeFragmentDirections;
 import com.almightymm.job4u.model.Job;
 
 import java.util.ArrayList;
@@ -36,13 +40,17 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
-        Job job = jobArrayList.get(position);
-//        holder.jobTitleTextView.setText(job.getTitle());
+        final Job job = jobArrayList.get(position);
+        holder.jobTitleTextView.setText(job.getName());
         final String positionPlusOne = Integer.toString(position+1);
         holder.jobCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Position " + positionPlusOne, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Position " + positionPlusOne, Toast.LENGTH_SHORT).show();
+                HomeFragmentDirections.ActionHomeFragmentToJobPreviewFragment action = HomeFragmentDirections.actionHomeFragmentToJobPreviewFragment();
+                action.setJobId(job.getId());
+                Navigation.findNavController(v).navigate(action);
+//                Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_jobPreviewFragment);
             }
         });
         holder.jobApplyNowButton.setOnClickListener(new View.OnClickListener() {

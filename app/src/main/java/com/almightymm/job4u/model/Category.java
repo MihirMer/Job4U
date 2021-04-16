@@ -1,30 +1,30 @@
 package com.almightymm.job4u.model;
 
 public class Category {
-    private int categoryIcon;
-    private String categoryTitle;
+    private int c_Image;
+    private String c_Job_name;
 
     public Category() {
     }
 
-    public Category(int categoryIcon, String categoryTitle) {
-        this.categoryIcon = categoryIcon;
-        this.categoryTitle = categoryTitle;
+    public Category(int c_Image, String c_Job_name) {
+        this.c_Image = c_Image;
+        this.c_Job_name = c_Job_name;
     }
 
-    public int getCategoryIcon() {
-        return categoryIcon;
+    public int getC_Image() {
+        return c_Image;
     }
 
-    public void setCategoryIcon(int categoryIcon) {
-        this.categoryIcon = categoryIcon;
+    public void setC_Image(int c_Image) {
+        this.c_Image = c_Image;
     }
 
-    public String getCategoryTitle() {
-        return categoryTitle;
+    public String getC_Job_name() {
+        return c_Job_name;
     }
 
-    public void setCategoryTitle(String categoryTitle) {
-        this.categoryTitle = categoryTitle;
+    public void setC_Job_name(String c_Job_name) {
+        this.c_Job_name = c_Job_name;
     }
 }

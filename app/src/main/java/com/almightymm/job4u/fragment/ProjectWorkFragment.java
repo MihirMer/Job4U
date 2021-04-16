@@ -1,14 +1,18 @@
 package com.almightymm.job4u.fragment;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 
 import com.almightymm.job4u.R;
@@ -41,6 +45,7 @@ public class ProjectWorkFragment extends Fragment {
         initViews(view);
         initPreferences();
         String userId = preferences.getString("userId", "");
+
         db_add_projectWork = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("PROJECT_WORK");
         addListeners(view);
 
@@ -52,19 +57,20 @@ public class ProjectWorkFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 add_projectwork();
-                clear();
             }
         });
         start_year.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 txt_start_year(v);
+                hideKeyboard(getActivity());
             }
         });
         end_year.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 txt_end_year(v);
+                hideKeyboard(getActivity());
             }
         });
     }
@@ -100,6 +106,17 @@ public class ProjectWorkFragment extends Fragment {
                 .setTitle("Select Year").showYearOnly()
                 .build().show();
     }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
 
     private void add_projectwork() {
         String pn = projectName.getText().toString().trim();
@@ -128,16 +145,14 @@ public class ProjectWorkFragment extends Fragment {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Toast.makeText(getContext(), "Details Save", Toast.LENGTH_LONG).show();
+                    clear();
                 }
             });
         }
     }
 
     private void clear() {
-        projectName.setText("");
-        description.setText("");
-        start_year.setText("");
-        end_year.setText("");
+        getActivity().onBackPressed();
     }
 
     private void initViews(View view) {
@@ -147,7 +162,6 @@ public class ProjectWorkFragment extends Fragment {
 //        language = (EditText) view.findViewById(R.id.txt_language);
         start_year = (EditText) view.findViewById(R.id.txt_start_year);
         end_year = (EditText) view.findViewById(R.id.txt_end_year);
-
         add_projectWork = (Button) view.findViewById(R.id.btn_add_projectWork);
 
     }
