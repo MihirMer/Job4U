@@ -800,151 +800,216 @@ public class ProfileFragment extends Fragment {
     private void generateString() {
 
         Name = preferences.getString("firstName", "") + " " + preferences.getString("lastName", "");
+        String firstName = preferences.getString("firstName", "");
+        String lastName = preferences.getString("lastName", "");
         String emailAddress = preferences.getString("emailAddress", "");
         String phone = preferences.getString("phone", "");
         phone = phone.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
+        String address = preferences.getString("address", "");
         List<String> skillTags = skill.getTags();
 
 
         Log.e(TAG, "generateString: ");
         texFilecontent = new StringBuilder();
-        texFilecontent.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-                "\\documentclass{article}\n" +
+        texFilecontent.append("%% start of file `new.tex'.\n" +
+                        "%% Copyright 2006-2012 Xavier Danaux (xdanaux@gmail.com).\n" +
+                        "%\n" +
+                        "% This work may be distributed and/or modified under the\n" +
+                        "% conditions of the LaTeX Project Public License version 1.3c,\n" +
+                        "% available at http://www.latex-project.org/lppl/.\n" +
+                        "\n" +
+                        "\n" +
+                        "\\documentclass[11pt,a4paper,roman]{moderncv}   % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')\n" +
+                        "\n" +
+                        "% moderncv themes\n" +
+                        "\\moderncvstyle{classic}                        % style options are 'casual' (default), 'classic', 'oldstyle' and 'banking'\n" +
+                        "\\moderncvcolor{blue}                          % color options 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'\n" +
+                        "%\\renewcommand{\\familydefault}{\\rmdefault}    % to set the default font; use '\\sfdefault' for the default sans serif font, '\\rmdefault' for the default roman one, or any tex font name\n" +
+                        "%\\nopagenumbers{}                             % uncomment to suppress automatic page numbering for CVs longer than one page\n" +
+                        "\n" +
+                        "% character encoding\n" +
+                        "%\\usepackage[utf8]{inputenc}                  % if you are not using xelatex ou lualatex, replace by the encoding you are using\n" +
+                        "%\\usepackage{CJKutf8}                         % if you need to use CJK to typeset your resume in Chinese, Japanese or Korean\n" +
+                        "\n" +
+                        "% adjust the page margins\n" +
+                        "\\usepackage[scale=0.75]{geometry}\n" +
+                        "%\\setlength{\\hintscolumnwidth}{3cm}           % if you want to change the width of the column with the dates\n" +
+                        "%\\setlength{\\makecvtitlenamewidth}{10cm}      % for the 'classic' style, if you want to force the width allocated to your name and avoid line breaks. be careful though, the length is normally calculated to avoid any overlap with your personal info; use this at your own typographical risks...\n" +
+                        "\n" +
+                        "% personal data\n" +
+                        "\\firstname{" + firstName + "}\n" +
+                        "\\familyname{" + lastName + "}\n" +
+                        "\\title{Curriculum Vitae}               % optional, remove the line if not wanted\n" +
+                        "\\address{" + address + "}    % optional, remove the line if not wanted\n" +
+                        "\\mobile{" + phone + "}                     % optional, remove the line if not wanted\n" +
+                        "\\email{" + emailAddress + "}                          % optional, remove the line if not wanted\n" +
+                        "\n" +
+                        "% to show numerical labels in the bibliography (default is to show no labels); only useful if you make citations in your resume\n" +
+                        "%\\makeatletter\n" +
+                        "%\\renewcommand*{\\bibliographyitemlabel}{\\@biblabel{\\arabic{enumiv}}}\n" +
+                        "%\\makeatother\n" +
+                        "\n" +
+                        "% bibliography with mutiple entries\n" +
+                        "%\\usepackage{multibib}\n" +
+                        "%\\newcites{book,misc}{{Books},{Others}}\n" +
+                        "%----------------------------------------------------------------------------------\n" +
+                        "%            content\n" +
+                        "%----------------------------------------------------------------------------------\n" +
+                        "\\begin{document}\n" +
+                        "%\\begin{CJK*}{UTF8}{gbsn}                     % to typeset your resume in Chinese using CJK\n" +
+                        "%-----       resume       ---------------------------------------------------------\n" +
+                        "\\makecvtitle\n" +
+                        "\n" +
+                        "\\section{Objective}\n" +
+                        "\\cvlistitem {Graduate student looking for domain positions starting month and year.}\n" +
+                "\\section{Education}\n");
+        for (EducationDetails edu : edu_list) {
+            texFilecontent.append("\\cventry{StartDate--" + edu.getYear() + "}{" + edu.getDegreeName() + " in " + edu.getStream() + "}{}{GPA: " + edu.getGpa() + ", " + edu.getCollegeName() + "}{}{}{}\n");
+//                    "\\cvlistitem {\\textbf{Ph.D. Thesis:} \"\\textit{Title of Ph.D. Thesis},\" under supervision of \\textbf{Prof. SupervisorName} }\n");
+        }
+        texFilecontent.append(
                 "\n" +
-                "\\usepackage[top=0.5in, bottom=0.5in, left=0.5in, right=0.5in]{geometry}\n" +
-                "\\usepackage{enumitem}\n" +
+                        "\n" +
+                        "\n" +
+                        "\\section{Project Works}\n" +
+                        "\n");
+        for (ProjectWork proj : proj_list) {
+            texFilecontent.append("\\cventry{" + proj.getStartYear() + "--" + proj.getEndYear() + "}{" + proj.getProjectName() + "}{}{}{}{}{}\n" +
+                    "\\cvlistitem {\\textit{" + proj.getDescription() + "}}\n");
+        }
+        texFilecontent.append("\\section{Work Experiences}\n");
+        for (WorkExperience exp : exp_list) {
+            texFilecontent.append(
+                    "\n" +
+                            "\\cventry{" + exp.getFromYear() + "--" + exp.getToYear() + "}{" + exp.getDesignation() + "}{}{}{}{}\n" +
+                            "\\cvlistitem {\\textit{" + exp.getCompanyName() + ", " + exp.getCity() + "}\n" +
+                            "}\n");
+        }
+
+        texFilecontent.append(
                 "\n" +
-                "\\begin{document}\n" +
-                "\\begin{center}\n" +
-                "\\thispagestyle{empty}\n" +
-                "\\large \\textbf{" + Name + "\\\\}\n" +
-                "\\normalsize " + emailAddress + " $\\mid$ " + phone + " \\\\\n" +
-                "\\hrulefill\n" +
-                "\\end{center}\n" +
-                "\n" +
-                "\n" +
-                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-                "% OBJECTIVE\n" +
-                "% Who you are, what domain, what are you looking for and when?\n" +
-                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-                "\\noindent \\textbf{\\underline{OBJECTIVE}} \\\\\n" +
-                "\\noindent Graduate student looking for domain positions starting month and year. \\\\\n" +
-                "\n" +
-                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-                "% SKILLS: Important and relevant to the job you are applying for\n" +
-                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-                "\n" +
-                "\\noindent \\textbf{\\underline{CORE SKILLS}} \\\\\n");
+                        "\\section{Skills}\n" +
+                        "\\cvlistitem {\\textbf{Key Skills} \\\\ ");
         texFilecontent.append(skillTags.get(0));
         for (int i = 1; i < skillTags.size(); i++) {
             texFilecontent.append(", " + skillTags.get(i));
         }
-        texFilecontent.append(" \\\\\n");
-        texFilecontent.append("% Skill 1 (level of expertise), Skill 2 (level of expertise), Skill 3 (level of expertise) \\\\\n" +
-                "\n" +
-                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-                "% EDUCATION\n" +
-                "% University name, degree, year of graduation, GPA (optional)\n" +
-                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-                "\\noindent \\textbf{\\underline{EDUCATION}} \\\\\n");
+        texFilecontent.append("}\n" +
+                "\\end{document}\n" +
+                "%% end of file `template.tex'.\n");
 
-        for (EducationDetails edu : edu_list) {
-            texFilecontent.append("\\textbf{" + edu.getCollegeName() + "}  \\\\\n" +
-                    "\\textit{" + edu.getDegreeName() + " in " + edu.getStream() + "} \\hfill GPA: " + edu.getGpa() + " \\hfill " + edu.getYear() + " \\\\ \\\\\n");
-        }
-        texFilecontent.append("\n" +
-                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-                        "% WORK EXPERIENCE\n" +
-                        "% What did you do? -> Project goals OR what problem did you solve?\n" +
-                        "% How did you do it? -> Skills and technologies\n" +
-                        "% What impact did you create? -> Numbers and percentages.\n" +
-                        "% Example: \n" +
-                        "% + Developed an app for matching mentor and mentees for Android and iOS platform.\n" +
-                        "% + Successfully matched 85% of the applications and randomized the rest.\n" +
-                        "% \n" +
-                        "% Talk about team work, initiative, soft skills.\n" +
-                        "%\n" +
-                        "% Can also include personal projects, competitions, contribution to Open source.\n" +
-                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-                        "\\noindent \\textbf{\\underline{WORK EXPERIENCE}} \\\\\n");
 
-        for (WorkExperience exp:exp_list) {
-            texFilecontent.append(
-                    "\n"+"\n"+"\\noindent \\textbf{"+exp.getCompanyName()+"} \\hfill "+exp.getCity()+" \\\\\n" +
-                            "\\textit{"+exp.getDesignation()+"} \\hfill "+exp.getFromYear()+" $-$ "+exp.getToYear()+"\n");
-        }
-        texFilecontent.append(
-                        "\n" +
-                        "\\noindent \\textbf{Company name} \\hfill City Name, State \\\\\n" +
-                        "\\textit{Role name} \\hfill Month, Year $-$ Month, Year\n" +
-                        "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
-                        "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
-                        "\\item {... \\\\}\n" +
-                        "\\end{itemize}\n" +
-                        "\n" +
-                        "\\noindent \\textbf{Competition Name} \\hfill City Name, State \\\\\n" +
-                        "\\textit{Role name, Team name} \\hfill Month, Year $-$ Month, Year\n" +
-                        "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
-                        "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
-                        "\\item{Came in the top 10 OR received the most innovative award.}\n" +
-                        "\\item {... \\\\}\n" +
-                        "\\end{itemize}\n" +
-                        "\n" +
-                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-                        "% PROJECT\n" +
-                        "% What did you do?\n" +
-                        "% How did you do it? -> Skills and technologies\n" +
-                        "% What impact did you create? -> Numbers and percentages.\n" +
-                        "%\n" +
-                        "% Talk about team work, initiative, soft skills.\n" +
-                        "%\n" +
-                        "% Can also include personal projects, competitions, contribution to Open source.\n" +
-                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-                        "\\noindent \\textbf{\\underline{PROJECT WORK}} \\\\\n" +
-                        "\\noindent \\textbf{Project Name} \\textit{Course Name} \\hfill  Month, Year $-$ Month, Year\n" +
-                        "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
-                        "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
-                        "\\item {Led an initiative XYZ to identify the root cause.}\n" +
-                        "\\item {Collaborated with XYZ team to work on XYZ feature. \\\\}\n" +
-                        "\\end{itemize}\n" +
-                        "\n" +
-                        "\\noindent \\textbf{Project Name} \\textit{Course Name} \\hfill  Month, Year $-$ Month, Year\n" +
-                        "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
-                        "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
-                        "\\item {Led an initiative XYZ to identify the root cause.}\n" +
-                        "\\item {Collaborated with XYZ team to work on XYZ feature. \\\\}\n" +
-                        "\\end{itemize}\n" +
-                        "\n" +
-                        "\\noindent \\textbf{Project Name} \\textit{Course Name} \\hfill  Month, Year $-$ Month, Year\n" +
-                        "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
-                        "\\item {Developed XYZ using XYZ that led to X\\% improvement.}\n" +
-                        "\\item {... \\\\}\n" +
-                        "\\end{itemize}\n" +
-                        "\n" +
-                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-                        "% Extra Curricular Activities, Leadership, etc \n" +
-                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-                        "\\noindent \\textbf{\\underline{EXTRA SECTION}} \\\\\n" +
-                        "\\noindent \\textbf{Activity/ Role} \\hfill Month, Year $-$ Month, Year\n" +
-                        "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
-                        "\\item {What did you do, how did you do it and what did you achieve? \\\\}\n" +
-                        "\\end{itemize}\n" +
-                        "\n" +
-                        "\\noindent \\textbf{Activity/ Role} \\hfill Month, Year $-$ Month, Year\n" +
-                        "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
-                        "\\item {What did you do, how did you do it and what did you achieve? \\\\}\n" +
-                        "\\end{itemize}\n" +
-                        "\n" +
-                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-                        "% Other Skills: you can add all your other skills here.\n" +
-                        "% Continue to keep only relevant skills\n" +
-                        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-                        "\\noindent \\textbf{\\underline{OTHER SKILLS}} \\\\\n" +
-                        "\\noindent \\textbf{Skill Group 1:} Skill 1, Skill 2, Skill 3 \\\\\n" +
-                        "\\noindent \\textbf{Skill Group 2: } Skill 1, Skill 2, Skill 3, Skill 4\n" +
-                        "\n" +
-                        "\n" +
-                        "\\end{document}\n");
+//        texFilecontent.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+//                "\\documentclass{article}\n" +
+//                "\n" +
+//                "\\usepackage[top=0.5in, bottom=0.5in, left=0.5in, right=0.5in]{geometry}\n" +
+//                "\\usepackage{enumitem}\n" +
+//                "\n" +
+//                "\\begin{document}\n" +
+//                "\\begin{center}\n" +
+//                "\\thispagestyle{empty}\n" +
+//                "\\large \\textbf{" + Name + "\\\\}\n" +
+//                "\\normalsize " + emailAddress + " $\\mid$ " + phone + " $\\mid$ "+address+" \\\\\n" +
+//                "\\hrulefill\n" +
+//                "\\end{center}\n" +
+//                "\n" +
+//                "\n" +
+//                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+//                "% OBJECTIVE\n" +
+//                "% Who you are, what domain, what are you looking for and when?\n" +
+//                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+//                "\\noindent \\textbf{\\underline{OBJECTIVE}} \\\\\n" +
+//                "\\noindent Graduate student looking for domain positions starting month and year. \\\\\n" +
+//                "\n" +
+//                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+//                "% SKILLS: Important and relevant to the job you are applying for\n" +
+//                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+//                "\n" +
+//                "\\noindent \\textbf{\\underline{CORE SKILLS}} \\\\\n");
+//        texFilecontent.append(skillTags.get(0));
+//        for (int i = 1; i < skillTags.size(); i++) {
+//            texFilecontent.append(", " + skillTags.get(i));
+//        }
+//        texFilecontent.append(" \\\\\n");
+//        texFilecontent.append("% Skill 1 (level of expertise), Skill 2 (level of expertise), Skill 3 (level of expertise) \\\\\n" +
+//                "\n" +
+//                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+//                "% EDUCATION\n" +
+//                "% University name, degree, year of graduation, GPA (optional)\n" +
+//                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+//                "\\noindent \\textbf{\\underline{EDUCATION}} \\\\\n");
+//
+//        for (EducationDetails edu : edu_list) {
+//            texFilecontent.append("\\textbf{" + edu.getCollegeName() + "}  \\\\\n" +
+//                    "\\textit{" + edu.getDegreeName() + " in " + edu.getStream() + "} \\hfill GPA: " + edu.getGpa() + " \\hfill " + edu.getYear() + " \\\\ \\\\\n");
+//        }
+//        texFilecontent.append("\n" +
+//                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+//                "% WORK EXPERIENCE\n" +
+//                "% What did you do? -> Project goals OR what problem did you solve?\n" +
+//                "% How did you do it? -> Skills and technologies\n" +
+//                "% What impact did you create? -> Numbers and percentages.\n" +
+//                "% Example: \n" +
+//                "% + Developed an app for matching mentor and mentees for Android and iOS platform.\n" +
+//                "% + Successfully matched 85% of the applications and randomized the rest.\n" +
+//                "% \n" +
+//                "% Talk about team work, initiative, soft skills.\n" +
+//                "%\n" +
+//                "% Can also include personal projects, competitions, contribution to Open source.\n" +
+//                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+//                "\\noindent \\textbf{\\underline{WORK EXPERIENCE}} \\\\");
+//        for (WorkExperience exp: exp_list) {
+//            texFilecontent.append("\\noindent \\textbf{"+exp.getCompanyName()+"} \\hfill "+exp.getCity()+" \\\\\n" +
+//                    "\\textit{"+exp.getDesignation()+"} \\hfill "+exp.getFromYear()+" $-$ "+exp.getToYear()+" \\\\\n" +
+//                    "\n");
+//        }
+//        texFilecontent.append(
+//                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+//                "% PROJECT\n" +
+//                "% What did you do?\n" +
+//                "% How did you do it? -> Skills and technologies\n" +
+//                "% What impact did you create? -> Numbers and percentages.\n" +
+//                "%\n" +
+//                "% Talk about team work, initiative, soft skills.\n" +
+//                "%\n" +
+//                "% Can also include personal projects, competitions, contribution to Open source.\n" +
+//                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+//                "\\noindent \\textbf{\\underline{PROJECT WORK}} \\\\\n" );
+//        for(ProjectWork proj: proj_list) {
+//            texFilecontent.append(
+//                    "\\noindent \\textbf{"+proj.getProjectName()+"} \\hfill  "+proj.getStartYear()+" $-$ "+proj.getEndYear()+"\n" +
+//                            "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
+//                            "\\item {"+proj.getDescription()+" \\\\}\n" +
+//                            "\\end{itemize}\n");
+//        }
+//        texFilecontent.append(
+//                "\n" +
+//                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+//                "% Extra Curricular Activities, Leadership, etc \n" +
+//                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+//                "\\noindent \\textbf{\\underline{EXTRA SECTION}} \\\\\n" +
+//                "\\noindent \\textbf{Activity/ Role} \\hfill Month, Year $-$ Month, Year\n" +
+//                "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
+//                "\\item {What did you do, how did you do it and what did you achieve? \\\\}\n" +
+//                "\\end{itemize}\n" +
+//                "\n" +
+//                "\\noindent \\textbf{Activity/ Role} \\hfill Month, Year $-$ Month, Year\n" +
+//                "\\begin{itemize}[noitemsep,nolistsep,leftmargin=*]\n" +
+//                "\\item {What did you do, how did you do it and what did you achieve? \\\\}\n" +
+//                "\\end{itemize}\n" +
+//                "\n" +
+//                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+//                "% Other Skills: you can add all your other skills here.\n" +
+//                "% Continue to keep only relevant skills\n" +
+//                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+//                "\\noindent \\textbf{\\underline{OTHER SKILLS}} \\\\\n" +
+//                "\\noindent \\textbf{Skill Group 1:} Skill 1, Skill 2, Skill 3 \\\\\n" +
+//                "\\noindent \\textbf{Skill Group 2: } Skill 1, Skill 2, Skill 3, Skill 4\n" +
+//                "\n" +
+//                "\n" +
+//                "\\end{document}\n");
+
+
     }
 
     private enum Permissions {

@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="Degree Name"
-                android:inputType="textCapSentences"
+                android:inputType="textCapWords"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="College Name"
-                android:inputType="textCapSentences"
+                android:inputType="textCapWords"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="Stream"
-                android:inputType="textCapSentences"
+                android:inputType="textCapWords"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -126,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="Other Achivenment"
-                android:inputType="textCapSentences"
+                android:inputType="textCapWords"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -145,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="Other Skills"
-                android:inputType="textCapSentences"
+                android:inputType="textCapWords"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
