@@ -32,7 +32,7 @@ public class HomeActivity extends AppCompatActivity {
     NavController navController;
     private BottomNavigationView navigation;
     private Toolbar toolbar;
-
+String role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,15 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         navigation = findViewById(R.id.navigation);
+        role = preferences.getString("role", "");
+
+        if (role.equals("HR")) {
+            navigation.getMenu().clear();
+            navigation.inflateMenu(R.menu.hr_bottom_nav_menu);
+        } else {
+            navigation.getMenu().clear();
+            navigation.inflateMenu(R.menu.bottom_nav_menu);
+        }
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         final AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(

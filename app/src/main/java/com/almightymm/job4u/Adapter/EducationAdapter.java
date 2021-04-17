@@ -42,9 +42,8 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.Educ
         holder.college.setText(details.getCollegeName());
 //        holder.streem.setText();
         holder.degree.setText(details.getDegreeName() + " in "+details.getStream());
-        holder.gyear.setText("Graduation Year" + " : " + details.getYear());
+        holder.gyear.setText("Graduation" + " : " +details.getAdmissionYear()+" - "+ details.getYear());
         holder.cgpa.setText("CGPA" + " : " + details.getGpa());
-        holder.achievements.setText("Achievements" + " : " + details.getOtherAchievements());
         if (position == getItemCount()-1){
             holder.sep.setVisibility(View.GONE);
         }

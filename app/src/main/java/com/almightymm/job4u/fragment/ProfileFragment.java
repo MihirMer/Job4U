@@ -861,7 +861,7 @@ public class ProfileFragment extends Fragment {
                         "\\makecvtitle\n" +
                         "\n" +
                         "\\section{Objective}\n" +
-                        "\\cvlistitem {Graduate student looking for domain positions starting month and year.}\n" +
+                        "\\cvlistitem {To be a successful professional in a globally respected company and to continuously upgrade my knowledge and skill as well.}\n" +
                 "\\section{Education}\n");
         for (EducationDetails edu : edu_list) {
             texFilecontent.append("\\cventry{StartDate--" + edu.getYear() + "}{" + edu.getDegreeName() + " in " + edu.getStream() + "}{}{GPA: " + edu.getGpa() + ", " + edu.getCollegeName() + "}{}{}{}\n");

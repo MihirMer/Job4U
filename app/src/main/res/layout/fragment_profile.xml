@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="50dp"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <Button
                 android:id="@+id/btn"

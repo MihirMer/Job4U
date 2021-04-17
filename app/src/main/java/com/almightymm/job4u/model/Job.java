@@ -1,12 +1,12 @@
 package com.almightymm.job4u.model;
 
 public class Job {
-    String id, name, designation, description, salary, companyName, city, website, vacancy, post_date, qualification;
+    String id, name, designation, description, salary, companyName, city, website, vacancy, post_date, qualification, companyId;
 
     public Job() {
     }
 
-    public Job(String id, String name, String designation, String description, String salary, String companyName, String city, String website, String vacancy, String post_date, String qualification) {
+    public Job(String id, String name, String designation, String description, String salary, String companyName, String city, String website, String vacancy, String post_date, String qualification, String companyId) {
         this.id = id;
         this.name = name;
         this.designation = designation;
@@ -18,6 +18,7 @@ public class Job {
         this.vacancy = vacancy;
         this.post_date = post_date;
         this.qualification = qualification;
+        this.companyId = companyId;
     }
 
     public String getId() {
@@ -106,5 +107,13 @@ public class Job {
 
     public void setQualification(String qualification) {
         this.qualification = qualification;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
     }
 }

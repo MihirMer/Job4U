@@ -128,7 +128,7 @@ public class HomeFragment extends Fragment {
 
 
                     }
-                    jobAdapter = new JobAdapter(getContext(), filter());
+                    jobAdapter = new JobAdapter(getContext(), filter(),preferences,preferenceEditor);
                     jobRecyclerView.setAdapter(jobAdapter);
 
                 }

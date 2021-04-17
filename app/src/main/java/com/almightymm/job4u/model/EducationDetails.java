@@ -1,20 +1,19 @@
 package com.almightymm.job4u.model;
 
 public class EducationDetails {
-    private String id, degreeName, collegeName, stream, year, gpa, otherAchievements, otherSkills;
+    private String id, degreeName, collegeName, stream, admissionYear, year, gpa;
 
     public EducationDetails() {
     }
 
-    public EducationDetails(String id, String degreeName, String collegeName, String stream, String year, String gpa, String otherAchievements, String otherSkills) {
+    public EducationDetails(String id, String degreeName, String collegeName, String stream, String admissionYear, String year, String gpa) {
         this.id = id;
         this.degreeName = degreeName;
         this.collegeName = collegeName;
         this.stream = stream;
+        this.admissionYear = admissionYear;
         this.year = year;
         this.gpa = gpa;
-        this.otherAchievements = otherAchievements;
-        this.otherSkills = otherSkills;
     }
 
     public String getId() {
@@ -49,6 +48,14 @@ public class EducationDetails {
         this.stream = stream;
     }
 
+    public String getAdmissionYear() {
+        return admissionYear;
+    }
+
+    public void setAdmissionYear(String admissionYear) {
+        this.admissionYear = admissionYear;
+    }
+
     public String getYear() {
         return year;
     }
@@ -63,21 +70,5 @@ public class EducationDetails {
 
     public void setGpa(String gpa) {
         this.gpa = gpa;
-    }
-
-    public String getOtherAchievements() {
-        return otherAchievements;
-    }
-
-    public void setOtherAchievements(String otherAchievements) {
-        this.otherAchievements = otherAchievements;
-    }
-
-    public String getOtherSkills() {
-        return otherSkills;
-    }
-
-    public void setOtherSkills(String otherSkills) {
-        this.otherSkills = otherSkills;
     }
 }

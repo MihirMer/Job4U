@@ -28,7 +28,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class AddEducationDetailsFragment extends Fragment {
 
-    EditText degreename, collegename, stream, edu_year, cgpa, achivenment, otherskill;
+    EditText degreename, collegename, stream, edu_year, cgpa, ayear;
     Button add_education;
     DatabaseReference db_add_education_details;
     SharedPreferences preferences;
@@ -63,8 +63,8 @@ public class AddEducationDetailsFragment extends Fragment {
                     stream.setText(educationDetails.getStream());
                     edu_year.setText(educationDetails.getYear());
                     cgpa.setText(educationDetails.getGpa());
-                    otherskill.setText(educationDetails.getOtherSkills());
-                    achivenment.setText(educationDetails.getOtherAchievements());
+                    ayear.setText(educationDetails.getAdmissionYear());
+
                 }
                 else
                     Log.e(TAG, "onSuccess: null" );
@@ -78,8 +78,7 @@ public class AddEducationDetailsFragment extends Fragment {
         stream = view.findViewById(R.id.txt_streem);
         edu_year = view.findViewById(R.id.txt_gyear);
         cgpa = view.findViewById(R.id.txt_cgpa);
-        otherskill = view.findViewById(R.id.txt_skill);
-        achivenment = view.findViewById(R.id.txt_achive);
+        ayear = view.findViewById(R.id.txt_ayear);
         add_education = view.findViewById(R.id.btn_addeducation);
     }
 
@@ -115,8 +114,7 @@ public class AddEducationDetailsFragment extends Fragment {
         String stre = stream.getText().toString().trim();
         String gyear = edu_year.getText().toString().trim();
         String CGPA = cgpa.getText().toString().trim();
-        String achive = achivenment.getText().toString().trim();
-        String skill = otherskill.getText().toString().trim();
+        String aYear = ayear.getText().toString().trim();
 
         if (dn.isEmpty()) {
 //            signInEmailId.setError("Email Id is required !");
@@ -127,13 +125,16 @@ public class AddEducationDetailsFragment extends Fragment {
             collegename.requestFocus();
         } else if (stre.isEmpty()) {
             Toast.makeText(getContext(), "Stream is required !", Toast.LENGTH_SHORT).show();
-            collegename.requestFocus();
+            stream.requestFocus();
+        } else if (aYear.isEmpty()) {
+            Toast.makeText(getContext(), "Admission year is required !", Toast.LENGTH_SHORT).show();
+            ayear.requestFocus();
         } else if (gyear.isEmpty()) {
-            Toast.makeText(getContext(), "Graduation is required !", Toast.LENGTH_SHORT).show();
-            collegename.requestFocus();
+            Toast.makeText(getContext(), "Graduation year is required !", Toast.LENGTH_SHORT).show();
+            edu_year.requestFocus();
         } else if (CGPA.isEmpty()) {
             Toast.makeText(getContext(), "CGPA is required !", Toast.LENGTH_SHORT).show();
-            collegename.requestFocus();
+            cgpa.requestFocus();
         } else {
 
 //        do after validation
@@ -143,10 +144,9 @@ public class AddEducationDetailsFragment extends Fragment {
                     dn,
                     cn,
                     stre,
+                    aYear,
                     gyear,
-                    CGPA,
-                    achive,
-                    skill
+                    CGPA
             );
 
             db_add_education_details.child(id).setValue(educationDetails).addOnSuccessListener(new OnSuccessListener<Void>() {

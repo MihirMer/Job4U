@@ -1,5 +1,6 @@
 package com.almightymm.job4u.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +17,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class AddCompanyDetailsFragment extends Fragment {
     EditText company_name, about_company, location, phone_no, website;
     Button btn_conti;
     DatabaseReference db_addcompany_details;
-
+    SharedPreferences preferences;
+    SharedPreferences.Editor preferenceEditor;
+    String userId;
 
     public AddCompanyDetailsFragment() {
         // Required empty public constructor
@@ -33,7 +38,9 @@ public class AddCompanyDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_company_details, container, false);
 
         initViews(view);
-        db_addcompany_details = FirebaseDatabase.getInstance().getReference().child("HR").child("COMPANY_DETAILS");
+        initPreferences();
+        userId = preferences.getString("userId", "");
+        db_addcompany_details = FirebaseDatabase.getInstance().getReference().child("HR").child("COMPANY_DETAILS").child(userId);
         setListeners(view);
         return view;
     }
@@ -73,10 +80,9 @@ public class AddCompanyDetailsFragment extends Fragment {
             website.requestFocus();
             Toast.makeText(getContext(), "Website is required !", Toast.LENGTH_SHORT).show();
         } else {
-            String id = db_addcompany_details.push().getKey();
-            CompanyDetails addcompanyDetails = new CompanyDetails(id,cname, cabout, clocation, cphone, cwebsite);
+            CompanyDetails addcompanyDetails = new CompanyDetails(userId, cname, cabout, clocation, cphone, cwebsite);
 
-            db_addcompany_details.child(id).setValue(addcompanyDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
+            db_addcompany_details.setValue(addcompanyDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Toast.makeText(getContext(), "Data saved", Toast.LENGTH_SHORT).show();
@@ -97,5 +103,10 @@ public class AddCompanyDetailsFragment extends Fragment {
         phone_no = (EditText) view.findViewById(R.id.edit_phone);
         website = (EditText) view.findViewById(R.id.edit_website);
         btn_conti = (Button) view.findViewById(R.id.btn_continue);
+    }
+
+    private void initPreferences() {
+        preferences = getActivity().getSharedPreferences("User_Details", MODE_PRIVATE);
+        preferenceEditor = preferences.edit();
     }
 }

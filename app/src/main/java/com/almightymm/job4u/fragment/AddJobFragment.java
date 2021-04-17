@@ -33,6 +33,7 @@ public class AddJobFragment extends Fragment {
     DatabaseReference db_add_job;
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
+    String userId;
 
     public AddJobFragment() {
         // Required empty public constructor
@@ -48,7 +49,7 @@ public class AddJobFragment extends Fragment {
         initPreferences();
         addListeners(view);
 
-
+        userId = preferences.getString("userId", "");
         db_add_job = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB");
 
 
@@ -138,7 +139,7 @@ public class AddJobFragment extends Fragment {
         } else {
             String id = db_add_job.push().getKey();
 
-            Job job = new Job(id, title, desi, desc, sala, company, cit, web, vacan, post_date, quali);
+            Job job = new Job(id, title, desi, desc, sala, company, cit, web, vacan, post_date, quali, userId);
             db_add_job.child(id).setValue(job).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {

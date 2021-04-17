@@ -1,5 +1,6 @@
 package com.almightymm.job4u.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,10 +21,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class JobDetailsFragment extends Fragment {
     TextView description,vacancy,qualification;
     DatabaseReference databaseReference;
     RelativeLayout relativeLayout;
+    SharedPreferences preferences;
+    SharedPreferences.Editor preferenceEditor;
+    String jobId;
     public JobDetailsFragment() {
         // Required empty public constructor
     }
@@ -37,13 +43,14 @@ public class JobDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+initPreferences();
         description = view.findViewById(R.id.txt_description);
         vacancy=view.findViewById(R.id.txt_Vacancy);
         qualification= view.findViewById(R.id.txt_Qualification);
         relativeLayout= view.findViewById(R.id.job_detail_layout);
 
-        databaseReference= FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB").child("-MYJf5ThpA6-Wb8TeD7d");
+        jobId = preferences.getString("jobId", "");
+        databaseReference= FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB").child(jobId);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -61,5 +68,9 @@ public class JobDetailsFragment extends Fragment {
 
             }
         });
+    }
+    private void initPreferences() {
+        preferences = getActivity().getSharedPreferences("User_Details", MODE_PRIVATE);
+        preferenceEditor = preferences.edit();
     }
 }

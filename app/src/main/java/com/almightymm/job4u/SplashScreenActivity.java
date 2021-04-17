@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.database.FirebaseDatabase;
 
 public class SplashScreenActivity extends AppCompatActivity {
     int timeOut = 3000;
@@ -36,14 +33,19 @@ public class SplashScreenActivity extends AppCompatActivity {
                 String userId = preferences.getString("userId", "");
                 if (!userId.isEmpty()) {
                     boolean roleAssigned = preferences.getBoolean("roleAssigned", false);
+                    String role = preferences.getString("role", "");
                     if (roleAssigned) {
-                        boolean  areaOfInterestSelected= preferences.getBoolean("areaOfInterestSelected", false);
-                        if (areaOfInterestSelected){
+                        if (role.equals("HR")) {
                             intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+                        } else {
+                            boolean areaOfInterestSelected = preferences.getBoolean("areaOfInterestSelected", false);
+                            if (areaOfInterestSelected) {
+                                intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+                            } else {
+                                intent = new Intent(SplashScreenActivity.this, JobCategoryActivity.class);
+                            }
                         }
-                        else {
-                            intent = new Intent(SplashScreenActivity.this, JobCategoryActivity.class);
-                        }
+
                     } else {
                         intent = new Intent(SplashScreenActivity.this, RoleSelectionActivity.class);
                     }

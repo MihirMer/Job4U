@@ -10,12 +10,12 @@ public class PersonalDetails {
     String address;
     String gender;
     private String role;
-    private boolean roleAssigned ,areaOfInterestSelected ,personalDetailsAdded ,keySkillAdded ,educationAdded ,projectWorkAdded ,experienceAdded;
+    private boolean roleAssigned ,areaOfInterestSelected ,personalDetailsAdded ,keySkillAdded ,educationAdded ,projectWorkAdded ,experienceAdded, companyDetailsAdded;
 
     public PersonalDetails() {
     }
 
-    public PersonalDetails(String firstName, String lastName, String emailAddress, String phone, String DOB, String address, String gender, String role, boolean roleAssigned, boolean areaOfInterestSelected, boolean personalDetailsAdded, boolean keySkillAdded, boolean educationAdded, boolean projectWorkAdded, boolean experienceAdded) {
+    public PersonalDetails(String firstName, String lastName, String emailAddress, String phone, String DOB, String address, String gender, String role, boolean roleAssigned, boolean areaOfInterestSelected, boolean personalDetailsAdded, boolean keySkillAdded, boolean educationAdded, boolean projectWorkAdded, boolean experienceAdded, boolean companyDetailsAdded) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
@@ -31,6 +31,7 @@ public class PersonalDetails {
         this.educationAdded = educationAdded;
         this.projectWorkAdded = projectWorkAdded;
         this.experienceAdded = experienceAdded;
+        this.companyDetailsAdded = companyDetailsAdded;
     }
 
     public String getFirstName() {
@@ -151,5 +152,13 @@ public class PersonalDetails {
 
     public void setExperienceAdded(boolean experienceAdded) {
         this.experienceAdded = experienceAdded;
+    }
+
+    public boolean isCompanyDetailsAdded() {
+        return companyDetailsAdded;
+    }
+
+    public void setCompanyDetailsAdded(boolean companyDetailsAdded) {
+        this.companyDetailsAdded = companyDetailsAdded;
     }
 }

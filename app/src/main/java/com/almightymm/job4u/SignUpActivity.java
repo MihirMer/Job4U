@@ -144,6 +144,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         false,
                                         false,
                                         false,
+                                        false,
                                         false
                                 );
                                 final FirebaseUser firebaseUser = mAuth.getCurrentUser();

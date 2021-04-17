@@ -11,7 +11,8 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_jobPreviewFragment"
-            app:destination="@id/jobPreviewFragment" />
+            app:destination="@id/jobPreviewFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -104,10 +105,5 @@
         android:name="com.almightymm.job4u.fragment.JobPreviewFragment"
         android:label="Job Preview"
         tools:layout="@layout/fragment_job_preview">
-        <argument
-            android:name="jobId"
-            app:argType="string"
-            android:defaultValue="@null"
-            app:nullable="true"/>
     </fragment>
 </navigation>

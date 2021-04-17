@@ -61,8 +61,7 @@
             android:layout_gravity="bottom"
             android:background="@drawable/bottom_nav"
             android:paddingTop="20dp"
-            app:layout_behavior="com.almightymm.job4u.colaps.BottomNavigationBehavior"
-            app:menu="@menu/bottom_nav_menu" />
+            app:layout_behavior="com.almightymm.job4u.colaps.BottomNavigationBehavior"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

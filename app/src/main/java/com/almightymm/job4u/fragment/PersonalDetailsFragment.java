@@ -185,6 +185,7 @@ public class PersonalDetailsFragment extends Fragment {
                     false,
                     false,
                     false,
+                    false,
                     false
             );
             db_add_personal_detail.setValue(personalDetails).addOnSuccessListener(new OnSuccessListener<Void>() {

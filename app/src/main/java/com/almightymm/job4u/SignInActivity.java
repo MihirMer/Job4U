@@ -234,6 +234,7 @@ public class SignInActivity extends AppCompatActivity {
                                 false,
                                 false,
                                 false,
+                                false,
                                 false
                         );
 
@@ -282,6 +283,7 @@ public class SignInActivity extends AppCompatActivity {
         preferenceEditor.putBoolean("educationAdded", user.isEducationAdded());
         preferenceEditor.putBoolean("projectWorkAdded", user.isProjectWorkAdded());
         preferenceEditor.putBoolean("experienceAdded", user.isExperienceAdded());
+        preferenceEditor.putBoolean("companyDetailsAdded", user.isCompanyDetailsAdded());
         preferenceEditor.apply();
     }
 

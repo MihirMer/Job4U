@@ -1,5 +1,6 @@
 package com.almightymm.job4u.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.almightymm.job4u.Adapter.JobFragmentPagerAdapter;
@@ -22,10 +22,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class JobPreviewFragment extends Fragment {
-    TextView job_name,company,dop,salary,designation,website,city;
-    DatabaseReference databaseReference;
+import static android.content.Context.MODE_PRIVATE;
 
+public class JobPreviewFragment extends Fragment {
+    TextView job_name, company, dop, salary, designation, website, city;
+    DatabaseReference databaseReference;
+    SharedPreferences preferences;
+    SharedPreferences.Editor preferenceEditor;
     String jobId;
 
     public JobPreviewFragment() {
@@ -43,60 +46,34 @@ public class JobPreviewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        final ViewPager viewPager = view.findViewById(R.id.view_pager);
-//        JobFragmentPagerAdapter adapter = new JobFragmentPagerAdapter(getChildFragmentManager());
-//        viewPager.setAdapter(adapter);
-//        viewPager.setOffscreenPageLimit(adapter.getCount()-1);
-//        TabLayout tabLayout = view.findViewById(R.id.tab_layout);
-//        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-//        tabLayout.setupWithViewPager(viewPager);
-//        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-//        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//                viewPager.setCurrentItem(tab.getPosition());
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        });
+        initPreferences();
 
-        job_name =view.findViewById(R.id.txt_job_name);
-        company =view.findViewById(R.id.txt_company_name);
+        job_name = view.findViewById(R.id.txt_job_name);
+        company = view.findViewById(R.id.txt_company_name);
         dop = view.findViewById(R.id.txt_post_date);
-        designation =view.findViewById(R.id.txt_job_designation);
-        website =view.findViewById(R.id.txt_job_website);
+        designation = view.findViewById(R.id.txt_job_designation);
+        website = view.findViewById(R.id.txt_job_website);
         salary = view.findViewById(R.id.txt_job_salary);
         city = view.findViewById(R.id.txt_job_city);
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager);
 
-        if (getArguments()!=null){
-            JobPreviewFragmentArgs args = JobPreviewFragmentArgs.fromBundle(getArguments());
-            jobId = args.getJobId();
-        }
+        jobId = preferences.getString("jobId", "");
 
-        databaseReference= FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB").child(jobId);
+        databaseReference = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB").child(jobId);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Job addjob = snapshot.getValue(Job.class);
 
                 job_name.setText(addjob.getName());
-                dop.setText(" Post Date : "+addjob.getPost_date());
+                dop.setText(" Post Date : " + addjob.getPost_date());
                 company.setText(addjob.getCompanyName());
-                designation.setText(" Designation : "+addjob.getDesignation());
-                salary.setText(" Salary : "+addjob.getSalary());
+                designation.setText(" Designation : " + addjob.getDesignation());
+                salary.setText(" Salary : " + addjob.getSalary());
                 //           Log.e(TAG, "onDataChange: "+addjob.getJob_City() );
-                city.setText(" City : "+addjob.getCity());
-                website.setText(" Website : "+addjob.getWebsite());
+                city.setText(" City : " + addjob.getCity());
+                website.setText(" Website : " + addjob.getWebsite());
             }
 
             @Override
@@ -110,7 +87,7 @@ public class JobPreviewFragment extends Fragment {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         JobFragmentPagerAdapter adapter = new JobFragmentPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(adapter.getCount()-1);
+        viewPager.setOffscreenPageLimit(adapter.getCount() - 1);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -132,4 +109,8 @@ public class JobPreviewFragment extends Fragment {
         });
     }
 
+    private void initPreferences() {
+        preferences = getActivity().getSharedPreferences("User_Details", MODE_PRIVATE);
+        preferenceEditor = preferences.edit();
+    }
 }

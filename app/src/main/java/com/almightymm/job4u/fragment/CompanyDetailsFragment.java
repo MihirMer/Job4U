@@ -1,17 +1,17 @@
 package com.almightymm.job4u.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.almightymm.job4u.R;
 import com.almightymm.job4u.model.CompanyDetails;
@@ -21,11 +21,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class CompanyDetailsFragment extends Fragment {
-    TextView company_name,about,location,website;
+    private static final String TAG = "CompanyDetailsFragment";
+    TextView company_name, about, location, website;
     RelativeLayout relativeLayout;
     DatabaseReference databaseReference;
-    private static final String TAG = "CompanyDetailsFragment";
+    String companyId;
+    SharedPreferences preferences;
+    SharedPreferences.Editor preferenceEditor;
+
     public CompanyDetailsFragment() {
         // Required empty public constructor
     }
@@ -36,25 +42,25 @@ public class CompanyDetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_company_details, container, false);
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initPreferences();
+        company_name = view.findViewById(R.id.txt_company_name);
+        location = view.findViewById(R.id.txt_company_location);
+        about = view.findViewById(R.id.txt_company_about);
+        website = view.findViewById(R.id.txt_company_website);
+        relativeLayout = view.findViewById(R.id.company_detail_layout);
 
-        company_name  = view.findViewById(R.id.txt_company_name);
-        location  = view.findViewById(R.id.txt_company_location);
-        about  = view.findViewById(R.id.txt_company_about);
-        website  = view.findViewById(R.id.txt_company_website);
-        relativeLayout  = view.findViewById(R.id.company_detail_layout);
-
-
-        databaseReference= FirebaseDatabase.getInstance().getReference("HR").child("COMPANY_DETAILS").child("-MYKc_nA3jOEIL4Wk8te");
+        companyId = preferences.getString("companyId", "");
+        databaseReference = FirebaseDatabase.getInstance().getReference("HR").child("COMPANY_DETAILS").child(companyId);
 //        databaseReference= FirebaseDatabase.getInstance().getReference().child("Users").child("COMPANY_DETAILS").child("-MXmw4NhrRjWcUvGO8tY");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 CompanyDetails addcompanyDetails = snapshot.getValue(CompanyDetails.class);
-                if (addcompanyDetails !=null) {
-                    Log.e(TAG, "onDataChange: hrerere" );
+                if (addcompanyDetails != null) {
                     company_name.setText(addcompanyDetails.getCompanyName());
                     about.setText(addcompanyDetails.getAbout());
                     location.setText(addcompanyDetails.getLocation());
@@ -69,6 +75,11 @@ public class CompanyDetailsFragment extends Fragment {
 
             }
         });
+    }
+
+    private void initPreferences() {
+        preferences = getActivity().getSharedPreferences("User_Details", MODE_PRIVATE);
+        preferenceEditor = preferences.edit();
     }
 
 }
