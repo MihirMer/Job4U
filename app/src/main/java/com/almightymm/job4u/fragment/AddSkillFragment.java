@@ -36,6 +36,7 @@ public class AddSkillFragment extends Fragment {
     Button add, addall;
     AutoCompleteTextView addskills;
     DatabaseReference db_add_skill;
+    DatabaseReference personalDetails;
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
 
@@ -52,6 +53,7 @@ public class AddSkillFragment extends Fragment {
         initPreferences();
         String userId = preferences.getString("userId", "");
         db_add_skill = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("ADDSKILLS");
+        personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("keySkillAdded");
         setValues(view);
         setListeners(view);
 
@@ -129,11 +131,22 @@ public class AddSkillFragment extends Fragment {
     }
 
     public void addskills() {
-        Skills add_skill = new Skills((ArrayList<String>) tagContainerLayout.getTags());
+        final Skills add_skill = new Skills((ArrayList<String>) tagContainerLayout.getTags());
         db_add_skill.setValue(add_skill).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 hideKeyboard(getActivity());
+                if(add_skill.getSkills().isEmpty()) {
+//                    Toast.makeText(getContext(), "empty", Toast.LENGTH_SHORT).show();
+                    personalDetails.setValue(false);
+                    preferenceEditor.putBoolean("keySkillAdded", false);
+                } else {
+//                    Toast.makeText(getContext(), "not empty", Toast.LENGTH_SHORT).show();
+                    personalDetails.setValue(true);
+                    preferenceEditor.putBoolean("keySkillAdded", true);
+                }
+                preferenceEditor.apply();
+                preferenceEditor.commit();
                 Toast.makeText(getContext(), "Skills added", Toast.LENGTH_LONG).show();
                 getActivity().onBackPressed();
             }

@@ -30,6 +30,7 @@
                 android:background="@drawable/input"
                 android:hint="First Name"
                 android:inputType="textCapSentences"
+                android:imeOptions="actionNext"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -49,6 +50,7 @@
                 android:background="@drawable/input"
                 android:hint="Last Name"
                 android:inputType="textCapSentences"
+                android:imeOptions="actionNext"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -67,6 +69,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="Email"
+                android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -87,6 +90,7 @@
                 android:background="@drawable/input"
                 android:hint="Phone no."
                 android:inputType="number"
+                android:imeOptions="actionNext"
                 android:maxLength="10"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -106,6 +110,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="Date of Birth"
+                android:imeOptions="actionNext"
                 android:inputType="date"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -136,6 +141,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="Address"
+                android:imeOptions="actionDone"
                 android:inputType="textMultiLine"
                 android:lines="5"
                 android:textSize="14sp" />

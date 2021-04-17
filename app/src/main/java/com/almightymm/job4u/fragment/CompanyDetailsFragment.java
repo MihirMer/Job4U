@@ -65,7 +65,6 @@ public class CompanyDetailsFragment extends Fragment {
                     about.setText(addcompanyDetails.getAbout());
                     location.setText(addcompanyDetails.getLocation());
                     website.setText(addcompanyDetails.getWebsite());
-
                     relativeLayout.setVisibility(View.VISIBLE);
                 }
             }

@@ -29,7 +29,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="Company Name"
-                android:inputType="text"
+                android:inputType="textCapWords"
+                android:imeOptions="actionNext"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -48,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="About Company"
-                android:inputType="textMultiLine"
+                android:inputType="textMultiLine|textCapSentences"
                 android:lines="3"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -68,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="Location"
-                android:inputType="textMultiLine"
+                android:inputType="textMultiLine|textCapWords"
                 android:lines="2"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -89,6 +90,7 @@
                 android:background="@drawable/input"
                 android:hint="Phone No."
                 android:inputType="phone"
+                android:imeOptions="actionNext"
                 android:textSize="14sp"
                 android:ems="10" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -109,6 +111,7 @@
                 android:background="@drawable/input"
                 android:hint="Website"
                 android:inputType="text"
+                android:imeOptions="actionDone"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 

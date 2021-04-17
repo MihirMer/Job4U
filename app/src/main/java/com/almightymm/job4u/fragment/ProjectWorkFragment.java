@@ -30,6 +30,7 @@ public class ProjectWorkFragment extends Fragment {
     EditText projectName, description, start_year, end_year;
     Button add_projectWork;
     DatabaseReference db_add_projectWork;
+    DatabaseReference personalDetails;
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
 
@@ -45,7 +46,7 @@ public class ProjectWorkFragment extends Fragment {
         initViews(view);
         initPreferences();
         String userId = preferences.getString("userId", "");
-
+        personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("projectWorkAdded");
         db_add_projectWork = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("PROJECT_WORK");
         addListeners(view);
 
@@ -144,6 +145,10 @@ public class ProjectWorkFragment extends Fragment {
             db_add_projectWork.child(id).setValue(projectwork).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
+                    personalDetails.setValue(true);
+                    preferenceEditor.putBoolean("projectWorkAdded", true);
+                    preferenceEditor.apply();
+                    preferenceEditor.commit();
                     Toast.makeText(getContext(), "Details Save", Toast.LENGTH_LONG).show();
                     clear();
                 }

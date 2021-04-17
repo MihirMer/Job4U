@@ -31,7 +31,9 @@ public class AddEducationDetailsFragment extends Fragment {
     EditText degreename, collegename, stream, edu_year, cgpa, ayear;
     Button add_education;
     DatabaseReference db_add_education_details;
+    DatabaseReference personalDetails;
     SharedPreferences preferences;
+    SharedPreferences.Editor preferenceEditor;
     private static final String TAG = "EducationDetailsFragmen";
 
     public AddEducationDetailsFragment() {
@@ -46,6 +48,7 @@ public class AddEducationDetailsFragment extends Fragment {
         initPreferences();
         String userId = preferences.getString("userId", "");
         db_add_education_details = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("EDUCATION_DETAILS");
+        personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("educationAdded");
         initViews(view);
         setValues(view);
         setListeners(view);
@@ -94,6 +97,14 @@ public class AddEducationDetailsFragment extends Fragment {
             public void onClick(View v) {
                 hideKeyboard(getActivity());
                 txt_gyear(v);
+
+            }
+        });
+        ayear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideKeyboard(getActivity());
+                txt_ayear(v);
             }
         });
     }
@@ -152,6 +163,10 @@ public class AddEducationDetailsFragment extends Fragment {
             db_add_education_details.child(id).setValue(educationDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
+                    personalDetails.setValue(true);
+                    preferenceEditor.putBoolean("educationAdded", true);
+                    preferenceEditor.apply();
+                    preferenceEditor.commit();
                     Toast.makeText(getContext(), "Details Save", Toast.LENGTH_LONG).show();
                     clear();
                 }
@@ -181,8 +196,25 @@ public class AddEducationDetailsFragment extends Fragment {
                 .build().show();
 
     }
+    public void txt_ayear(View view) {
+
+        final Calendar today = Calendar.getInstance();
+        MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(getContext(), new MonthPickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(int selectedMonth, int selectedYear) {
+                ayear.setText(String.valueOf(selectedYear));
+            }
+        },today.get(Calendar.YEAR),today.get(Calendar.MONTH));
+
+        builder.setActivatedMonth(Calendar.JULY).setMinYear(1990).
+                setActivatedYear(today.get(Calendar.YEAR)).setMaxYear(2990)
+                .setTitle("Select Year").showYearOnly()
+                .build().show();
+
+    }
 
     private void initPreferences() {
         preferences = getActivity().getSharedPreferences("User_Details", MODE_PRIVATE);
+        preferenceEditor = preferences.edit();
     }
 }

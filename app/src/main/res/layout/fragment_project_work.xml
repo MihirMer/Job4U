@@ -29,6 +29,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="Project Name"
+                android:imeOptions="actionNext"
                 android:inputType="textCapWords"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -70,6 +71,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input"
                 android:hint="Start Year"
+                android:imeOptions="actionNext"
                 android:inputType="date"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -90,6 +92,7 @@
                 android:background="@drawable/input"
                 android:hint="End Year"
                 android:inputType="date"
+                android:imeOptions="actionDone"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 

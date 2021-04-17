@@ -23,6 +23,7 @@ public class AddCompanyDetailsFragment extends Fragment {
     EditText company_name, about_company, location, phone_no, website;
     Button btn_conti;
     DatabaseReference db_addcompany_details;
+    DatabaseReference personalDetails;
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
     String userId;
@@ -40,6 +41,7 @@ public class AddCompanyDetailsFragment extends Fragment {
         initViews(view);
         initPreferences();
         userId = preferences.getString("userId", "");
+        personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("companyDetailsAdded");
         db_addcompany_details = FirebaseDatabase.getInstance().getReference().child("HR").child("COMPANY_DETAILS").child(userId);
         setListeners(view);
         return view;
@@ -85,6 +87,10 @@ public class AddCompanyDetailsFragment extends Fragment {
             db_addcompany_details.setValue(addcompanyDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
+                    personalDetails.setValue(true);
+                    preferenceEditor.putBoolean("companyDetailsAdded", true);
+                    preferenceEditor.apply();
+                    preferenceEditor.commit();
                     Toast.makeText(getContext(), "Data saved", Toast.LENGTH_SHORT).show();
                     clear();
                 }

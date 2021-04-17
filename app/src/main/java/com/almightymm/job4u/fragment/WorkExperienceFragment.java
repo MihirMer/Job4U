@@ -27,6 +27,7 @@ public class WorkExperienceFragment extends Fragment {
     EditText designation, yearOfExperience, from_year, to_year, companName, city;
     Button add_workExperience;
     DatabaseReference db_add_workExperience;
+    DatabaseReference personalDetails;
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
 
@@ -41,9 +42,10 @@ public class WorkExperienceFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_work_experience, container, false);
         initViews(view);
         initPreferences();
-        setListeners(view);
         String userId = preferences.getString("userId", "");
         db_add_workExperience = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("WORK_EXPERIENCE");
+        personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("experienceAdded");
+        setListeners(view);
         return view;
     }
 
@@ -150,6 +152,10 @@ public class WorkExperienceFragment extends Fragment {
                 db_add_workExperience.child(id).setValue(workexperience).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        personalDetails.setValue(true);
+                        preferenceEditor.putBoolean("experienceAdded", true);
+                        preferenceEditor.apply();
+                        preferenceEditor.commit();
                         Toast.makeText(getContext(), "Details Save", Toast.LENGTH_LONG).show();
                         clear();
                     }

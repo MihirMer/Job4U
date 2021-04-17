@@ -779,8 +779,18 @@ public class ProfileFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.app_bar_download_resume:
 //                Toast.makeText(getContext(), "Download resume", Toast.LENGTH_SHORT).show();
-                generateString();
-                generateResume();
+                if (!preferences.getBoolean("personalDetailsAdded", false)) {
+                    Toast.makeText(getContext(), "Please add Personal Details first.", Toast.LENGTH_SHORT).show();
+                } else if (!preferences.getBoolean("educationAdded", false)) {
+                    Toast.makeText(getContext(), "Please add Educational Details first.", Toast.LENGTH_SHORT).show();
+                } else if (!preferences.getBoolean("projectWorkAdded", false)) {
+                    Toast.makeText(getContext(), "Please add Project Work first.", Toast.LENGTH_SHORT).show();
+                } else if (!preferences.getBoolean("keySkillAdded", false)) {
+                    Toast.makeText(getContext(), "Please add Key Skills first.", Toast.LENGTH_SHORT).show();
+                } else {
+                    generateString();
+                    generateResume();
+                }
                 return true;
             case R.id.app_bar_logout:
                 SharedPreferences pref = getActivity().getSharedPreferences("User_Details", Context.MODE_PRIVATE);
@@ -812,59 +822,63 @@ public class ProfileFragment extends Fragment {
         Log.e(TAG, "generateString: ");
         texFilecontent = new StringBuilder();
         texFilecontent.append("%% start of file `new.tex'.\n" +
-                        "%% Copyright 2006-2012 Xavier Danaux (xdanaux@gmail.com).\n" +
-                        "%\n" +
-                        "% This work may be distributed and/or modified under the\n" +
-                        "% conditions of the LaTeX Project Public License version 1.3c,\n" +
-                        "% available at http://www.latex-project.org/lppl/.\n" +
-                        "\n" +
-                        "\n" +
-                        "\\documentclass[11pt,a4paper,roman]{moderncv}   % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')\n" +
-                        "\n" +
-                        "% moderncv themes\n" +
-                        "\\moderncvstyle{classic}                        % style options are 'casual' (default), 'classic', 'oldstyle' and 'banking'\n" +
-                        "\\moderncvcolor{blue}                          % color options 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'\n" +
-                        "%\\renewcommand{\\familydefault}{\\rmdefault}    % to set the default font; use '\\sfdefault' for the default sans serif font, '\\rmdefault' for the default roman one, or any tex font name\n" +
-                        "%\\nopagenumbers{}                             % uncomment to suppress automatic page numbering for CVs longer than one page\n" +
-                        "\n" +
-                        "% character encoding\n" +
-                        "%\\usepackage[utf8]{inputenc}                  % if you are not using xelatex ou lualatex, replace by the encoding you are using\n" +
-                        "%\\usepackage{CJKutf8}                         % if you need to use CJK to typeset your resume in Chinese, Japanese or Korean\n" +
-                        "\n" +
-                        "% adjust the page margins\n" +
-                        "\\usepackage[scale=0.75]{geometry}\n" +
-                        "%\\setlength{\\hintscolumnwidth}{3cm}           % if you want to change the width of the column with the dates\n" +
-                        "%\\setlength{\\makecvtitlenamewidth}{10cm}      % for the 'classic' style, if you want to force the width allocated to your name and avoid line breaks. be careful though, the length is normally calculated to avoid any overlap with your personal info; use this at your own typographical risks...\n" +
-                        "\n" +
-                        "% personal data\n" +
-                        "\\firstname{" + firstName + "}\n" +
-                        "\\familyname{" + lastName + "}\n" +
-                        "\\title{Curriculum Vitae}               % optional, remove the line if not wanted\n" +
-                        "\\address{" + address + "}    % optional, remove the line if not wanted\n" +
-                        "\\mobile{" + phone + "}                     % optional, remove the line if not wanted\n" +
-                        "\\email{" + emailAddress + "}                          % optional, remove the line if not wanted\n" +
-                        "\n" +
-                        "% to show numerical labels in the bibliography (default is to show no labels); only useful if you make citations in your resume\n" +
-                        "%\\makeatletter\n" +
-                        "%\\renewcommand*{\\bibliographyitemlabel}{\\@biblabel{\\arabic{enumiv}}}\n" +
-                        "%\\makeatother\n" +
-                        "\n" +
-                        "% bibliography with mutiple entries\n" +
-                        "%\\usepackage{multibib}\n" +
-                        "%\\newcites{book,misc}{{Books},{Others}}\n" +
-                        "%----------------------------------------------------------------------------------\n" +
-                        "%            content\n" +
-                        "%----------------------------------------------------------------------------------\n" +
-                        "\\begin{document}\n" +
-                        "%\\begin{CJK*}{UTF8}{gbsn}                     % to typeset your resume in Chinese using CJK\n" +
-                        "%-----       resume       ---------------------------------------------------------\n" +
-                        "\\makecvtitle\n" +
-                        "\n" +
-                        "\\section{Objective}\n" +
-                        "\\cvlistitem {To be a successful professional in a globally respected company and to continuously upgrade my knowledge and skill as well.}\n" +
+                "%% Copyright 2006-2012 Xavier Danaux (xdanaux@gmail.com).\n" +
+                "%\n" +
+                "% This work may be distributed and/or modified under the\n" +
+                "% conditions of the LaTeX Project Public License version 1.3c,\n" +
+                "% available at http://www.latex-project.org/lppl/.\n" +
+                "\n" +
+                "\n" +
+                "\\documentclass[11pt,a4paper,roman]{moderncv}   % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')\n" +
+                "\n" +
+                "% moderncv themes\n" +
+                "\\moderncvstyle{classic}                        % style options are 'casual' (default), 'classic', 'oldstyle' and 'banking'\n" +
+                "\\moderncvcolor{blue}                          % color options 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'\n" +
+                "%\\renewcommand{\\familydefault}{\\rmdefault}    % to set the default font; use '\\sfdefault' for the default sans serif font, '\\rmdefault' for the default roman one, or any tex font name\n" +
+                "%\\nopagenumbers{}                             % uncomment to suppress automatic page numbering for CVs longer than one page\n" +
+                "\n" +
+                "% character encoding\n" +
+                "%\\usepackage[utf8]{inputenc}                  % if you are not using xelatex ou lualatex, replace by the encoding you are using\n" +
+                "%\\usepackage{CJKutf8}                         % if you need to use CJK to typeset your resume in Chinese, Japanese or Korean\n" +
+                "\n" +
+                "% adjust the page margins\n" +
+                "\\usepackage[scale=0.75]{geometry}\n" +
+                "%\\setlength{\\hintscolumnwidth}{3cm}           % if you want to change the width of the column with the dates\n" +
+                "%\\setlength{\\makecvtitlenamewidth}{10cm}      % for the 'classic' style, if you want to force the width allocated to your name and avoid line breaks. be careful though, the length is normally calculated to avoid any overlap with your personal info; use this at your own typographical risks...\n" +
+                "\n" +
+                "% personal data\n" +
+                "\\firstname{" + firstName + "}\n" +
+                "\\familyname{" + lastName + "}\n");
+        if (preferences.getBoolean("experienceAdded", false)) {
+            texFilecontent.append("\\title{Curriculum Vitae}               % optional, remove the line if not wanted\n");
+        } else {
+            texFilecontent.append("\\title{Resume}               % optional, remove the line if not wanted\n");
+        }
+        texFilecontent.append("\\address{" + address + "}    % optional, remove the line if not wanted\n" +
+                "\\mobile{" + phone + "}                     % optional, remove the line if not wanted\n" +
+                "\\email{" + emailAddress + "}                          % optional, remove the line if not wanted\n" +
+                "\n" +
+                "% to show numerical labels in the bibliography (default is to show no labels); only useful if you make citations in your resume\n" +
+                "%\\makeatletter\n" +
+                "%\\renewcommand*{\\bibliographyitemlabel}{\\@biblabel{\\arabic{enumiv}}}\n" +
+                "%\\makeatother\n" +
+                "\n" +
+                "% bibliography with mutiple entries\n" +
+                "%\\usepackage{multibib}\n" +
+                "%\\newcites{book,misc}{{Books},{Others}}\n" +
+                "%----------------------------------------------------------------------------------\n" +
+                "%            content\n" +
+                "%----------------------------------------------------------------------------------\n" +
+                "\\begin{document}\n" +
+                "%\\begin{CJK*}{UTF8}{gbsn}                     % to typeset your resume in Chinese using CJK\n" +
+                "%-----       resume       ---------------------------------------------------------\n" +
+                "\\makecvtitle\n" +
+                "\n" +
+                "\\section{Objective}\n" +
+                "\\cvlistitem {To be a successful professional in a globally respected company and to continuously upgrade my knowledge and skill as well.}\n" +
                 "\\section{Education}\n");
         for (EducationDetails edu : edu_list) {
-            texFilecontent.append("\\cventry{StartDate--" + edu.getYear() + "}{" + edu.getDegreeName() + " in " + edu.getStream() + "}{}{GPA: " + edu.getGpa() + ", " + edu.getCollegeName() + "}{}{}{}\n");
+            texFilecontent.append("\\cventry{"+edu.getAdmissionYear()+"--" + edu.getYear() + "}{" + edu.getDegreeName() + " in " + edu.getStream() + "}{}{GPA: " + edu.getGpa() + ", " + edu.getCollegeName() + "}{}{}{}\n");
 //                    "\\cvlistitem {\\textbf{Ph.D. Thesis:} \"\\textit{Title of Ph.D. Thesis},\" under supervision of \\textbf{Prof. SupervisorName} }\n");
         }
         texFilecontent.append(
@@ -877,13 +891,15 @@ public class ProfileFragment extends Fragment {
             texFilecontent.append("\\cventry{" + proj.getStartYear() + "--" + proj.getEndYear() + "}{" + proj.getProjectName() + "}{}{}{}{}{}\n" +
                     "\\cvlistitem {\\textit{" + proj.getDescription() + "}}\n");
         }
-        texFilecontent.append("\\section{Work Experiences}\n");
-        for (WorkExperience exp : exp_list) {
-            texFilecontent.append(
-                    "\n" +
-                            "\\cventry{" + exp.getFromYear() + "--" + exp.getToYear() + "}{" + exp.getDesignation() + "}{}{}{}{}\n" +
-                            "\\cvlistitem {\\textit{" + exp.getCompanyName() + ", " + exp.getCity() + "}\n" +
-                            "}\n");
+        if (preferences.getBoolean("experienceAdded", false)) {
+            texFilecontent.append("\\section{Work Experiences}\n");
+            for (WorkExperience exp : exp_list) {
+                texFilecontent.append(
+                        "\n" +
+                                "\\cventry{" + exp.getFromYear() + "--" + exp.getToYear() + "}{" + exp.getDesignation() + "}{}{}{}{}\n" +
+                                "\\cvlistitem {\\textit{" + exp.getCompanyName() + ", " + exp.getCity() + "}\n" +
+                                "}\n");
+            }
         }
 
         texFilecontent.append(

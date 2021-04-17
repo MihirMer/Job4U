@@ -181,7 +181,7 @@ public class PersonalDetailsFragment extends Fragment {
                     preferences.getString("role", ""),
                     preferences.getBoolean("roleAssigned", false),
                     false,
-                    false,
+                    true,
                     false,
                     false,
                     false,
