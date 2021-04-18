@@ -40,11 +40,23 @@ public class AddCompanyDetailsFragment extends Fragment {
 
         initViews(view);
         initPreferences();
+        setValue(view);
         userId = preferences.getString("userId", "");
         personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("companyDetailsAdded");
         db_addcompany_details = FirebaseDatabase.getInstance().getReference().child("HR").child("COMPANY_DETAILS").child(userId);
         setListeners(view);
         return view;
+    }
+
+    private void setValue(View view) {
+        if (preferences.getBoolean("companyDetailsAdded", false)) {
+            company_name.setText(preferences.getString("companyName", ""));
+            about_company.setText(preferences.getString("about", ""));
+            location.setText(preferences.getString("companyLocation", ""));
+            phone_no.setText(preferences.getString("companyPhone", ""));
+            website.setText(preferences.getString("companyWebsite", ""));
+
+        }
     }
 
     private void setListeners(View view) {
@@ -82,13 +94,18 @@ public class AddCompanyDetailsFragment extends Fragment {
             website.requestFocus();
             Toast.makeText(getContext(), "Website is required !", Toast.LENGTH_SHORT).show();
         } else {
-            CompanyDetails addcompanyDetails = new CompanyDetails(userId, cname, cabout, clocation, cphone, cwebsite);
+            final CompanyDetails addcompanyDetails = new CompanyDetails(userId, cname, cabout, clocation, cphone, cwebsite);
 
             db_addcompany_details.setValue(addcompanyDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     personalDetails.setValue(true);
                     preferenceEditor.putBoolean("companyDetailsAdded", true);
+                    preferenceEditor.putString("companyName",addcompanyDetails.getCompanyName());
+                    preferenceEditor.putString("about",addcompanyDetails.getAbout());
+                    preferenceEditor.putString("companyLocation",addcompanyDetails.getLocation());
+                    preferenceEditor.putString("companyPhone",addcompanyDetails.getPhone());
+                    preferenceEditor.putString("companyWebsite",addcompanyDetails.getWebsite());
                     preferenceEditor.apply();
                     preferenceEditor.commit();
                     Toast.makeText(getContext(), "Data saved", Toast.LENGTH_SHORT).show();

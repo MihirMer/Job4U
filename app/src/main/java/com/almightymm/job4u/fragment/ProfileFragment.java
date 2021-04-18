@@ -125,8 +125,7 @@ public class ProfileFragment extends Fragment {
     LatexCompiler latexCompiler;
     StringBuilder texFilecontent;
     //    addjob
-    Button addJobButton;
-    private Button button, educationButton, addSkillButton, workExp, projectWork, companyDetails, jobPreviewButton;
+    private Button button, educationButton, addSkillButton, workExp, projectWork,jobPreviewButton;
     private Permissions currentPermission;
     private Document document;
 
@@ -222,14 +221,11 @@ public class ProfileFragment extends Fragment {
         addSkillButton = view.findViewById(R.id.addskill);
         workExp = view.findViewById(R.id.worl_experience);
         projectWork = view.findViewById(R.id.project_work);
-        companyDetails = view.findViewById(R.id.company_details);
 
 //        generate resume
         generateResume = view.findViewById(R.id.gen_resume);
         latexCompiler = new LatexCompiler(getContext());
 
-//        add job
-        addJobButton = view.findViewById(R.id.add_job_button);
         jobPreviewButton = view.findViewById(R.id.preview_job);
 
     }
@@ -272,12 +268,6 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-        companyDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_companyDetailsFragment);
-            }
-        });
 
         generateResume.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -286,13 +276,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        addJobButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_addJobFragment);
-
-            }
-        });
         jobPreviewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

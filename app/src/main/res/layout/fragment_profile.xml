@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="50dp"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/btn"
@@ -62,14 +62,6 @@
                 android:text="Project work" />
 
             <Button
-                android:id="@+id/company_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="15dp"
-                android:text="company details" />
-
-            <Button
                 android:id="@+id/gen_resume"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,13 +69,6 @@
                 android:layout_marginTop="15dp"
                 android:text="Generate resume" />
 
-            <Button
-                android:id="@+id/add_job_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="15dp"
-                android:text="Add Job" />
 
             <Button
                 android:id="@+id/preview_job"
