@@ -64,14 +64,24 @@ String role;
         }
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        final AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.homeFragment,
-                R.id.searchFragment,
-                R.id.savedJobFragment,
-                R.id.notificationFragment,
-                R.id.profileFragment
-        )
-                .build();
+        final AppBarConfiguration appBarConfiguration;
+        if (preferences.getString("role", "").equals("HR")) {
+             appBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.homeFragment,
+                    R.id.searchFragment,
+                    R.id.savedJobFragment,
+                    R.id.notificationFragment,
+                    R.id.HRProfileFragment
+            ).build();
+        } else {
+           appBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.homeFragment,
+                    R.id.searchFragment,
+                    R.id.savedJobFragment,
+                    R.id.notificationFragment,
+                    R.id.profileFragment
+            ).build();
+        }
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navigation, navController);
