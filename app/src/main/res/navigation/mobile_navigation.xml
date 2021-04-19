@@ -49,9 +49,9 @@
 
     <fragment
         android:id="@+id/savedJobFragment"
-        android:name="com.almightymm.job4u.fragment.SavedJobFragment"
+        android:name="com.almightymm.job4u.fragment.SavedAppliedPreviewFragment"
         android:label="Saved / Applied Job"
-        tools:layout="@layout/fragment_saved_job" />
+        tools:layout="@layout/fragment_saved_applied_preview" />
     <fragment
         android:id="@+id/personalDetailsFragment"
         android:name="com.almightymm.job4u.fragment.PersonalDetailsFragment"
