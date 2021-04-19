@@ -11,8 +11,7 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_jobPreviewFragment"
-            app:destination="@id/jobPreviewFragment"
-            />
+            app:destination="@id/jobPreviewFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -28,7 +27,7 @@
         android:id="@+id/profileFragment"
         android:name="com.almightymm.job4u.fragment.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profileFragment_to_personalDetailsFragment"
             app:destination="@id/personalDetailsFragment" />
@@ -45,10 +44,6 @@
             android:id="@+id/action_profileFragment_to_projectWorkFragment"
             app:destination="@id/projectWorkFragment" />
 
-        <action
-            android:id="@+id/action_profileFragment_to_jobPreviewFragment"
-            app:destination="@id/jobPreviewFragment" />
-
     </fragment>
 
 
@@ -61,12 +56,7 @@
         android:id="@+id/personalDetailsFragment"
         android:name="com.almightymm.job4u.fragment.PersonalDetailsFragment"
         android:label="Personal Details"
-        tools:layout="@layout/fragment_personal_details" >
-        <action
-            android:id="@+id/action_personalDetailsFragment_pop_including_profileFragment"
-            app:popUpTo="@id/profileFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+        tools:layout="@layout/fragment_personal_details" />
     <fragment
         android:id="@+id/educationDetailsFragment"
         android:name="com.almightymm.job4u.fragment.AddEducationDetailsFragment"
@@ -76,46 +66,20 @@
         android:id="@+id/addSkillFragment"
         android:name="com.almightymm.job4u.fragment.AddSkillFragment"
         android:label="Add Skill"
-        tools:layout="@layout/fragment_add_skill"/>
+        tools:layout="@layout/fragment_add_skill" />
     <fragment
         android:id="@+id/workExperienceFragment"
         android:name="com.almightymm.job4u.fragment.WorkExperienceFragment"
         android:label="Work Experience"
-        tools:layout="@layout/fragment_work_experience"/>
+        tools:layout="@layout/fragment_work_experience" />
     <fragment
         android:id="@+id/projectWorkFragment"
         android:name="com.almightymm.job4u.fragment.ProjectWorkFragment"
         android:label="Project Work"
         tools:layout="@layout/fragment_project_work" />
     <fragment
-        android:id="@+id/companyDetailsFragment"
-        android:name="com.almightymm.job4u.fragment.AddCompanyDetailsFragment"
-        android:label="Company Details"
-        tools:layout="@layout/fragment_add_company_details" />
-    <fragment
-        android:id="@+id/addJobFragment"
-        android:name="com.almightymm.job4u.fragment.AddJobFragment"
-        android:label="Add Job"
-        tools:layout="@layout/fragment_add_job" />
-    <fragment
         android:id="@+id/jobPreviewFragment"
         android:name="com.almightymm.job4u.fragment.JobPreviewFragment"
         android:label="Job Preview"
-        tools:layout="@layout/fragment_job_preview">
-    </fragment>
-    <fragment
-        android:id="@+id/HRProfileFragment"
-        android:name="com.almightymm.job4u.fragment.HRProfileFragment"
-        android:label="Profile"
-        tools:layout="@layout/fragment_h_r_profile" >
-        <action
-            android:id="@+id/action_HRProfileFragment_to_addJobFragment"
-            app:destination="@id/addJobFragment" />
-        <action
-            android:id="@+id/action_HRProfileFragment_to_companyDetailsFragment"
-            app:destination="@id/companyDetailsFragment" />
-        <action
-            android:id="@+id/action_HRProfileFragment_to_personalDetailsFragment"
-            app:destination="@id/personalDetailsFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_job_preview" />
 </navigation>

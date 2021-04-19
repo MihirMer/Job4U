@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.almightymm.job4u.model.CompanyDetails;
 import com.almightymm.job4u.model.PersonalDetails;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -20,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
@@ -28,27 +30,25 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.shobhitpuri.custombuttons.GoogleSignInButton;
 
 public class SignInActivity extends AppCompatActivity {
+    //    google sign in
+    private static final String TAG = "SignInActivity";
+    private static final int RC_SIGN_IN = 9001;
+    //    shared prefs
+    SharedPreferences preferences;
+    SharedPreferences.Editor preferenceEditor;
     //    views
     private TextView create_account, forgot_password;
     private Button signInButton;
     private TextInputEditText signInEmailId, signInPassword;
-
-    //    shared prefs
-    SharedPreferences preferences;
-    SharedPreferences.Editor preferenceEditor;
-
     //    firebase auth
     private FirebaseAuth mAuth;
     private FirebaseUser firebaseUser;
     private String userId;
-
-    //    google sign in
-    private static final String TAG = "SignInActivity";
-    private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInButton googleSignInButton;
 
@@ -285,6 +285,24 @@ public class SignInActivity extends AppCompatActivity {
         preferenceEditor.putBoolean("experienceAdded", user.isExperienceAdded());
         preferenceEditor.putBoolean("companyDetailsAdded", user.isCompanyDetailsAdded());
         preferenceEditor.apply();
+        preferenceEditor.commit();
+        if (user.isCompanyDetailsAdded()) {
+            DatabaseReference db_addcompany_details = FirebaseDatabase.getInstance().getReference().child("HR").child("COMPANY_DETAILS").child(userId);
+            db_addcompany_details.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                @Override
+                public void onSuccess(DataSnapshot dataSnapshot) {
+                    CompanyDetails addcompanyDetails = dataSnapshot.getValue(CompanyDetails.class);
+                    Log.e(TAG, "setPreferences: im here"+addcompanyDetails.getCompanyName());
+                    preferenceEditor.putString("companyName", addcompanyDetails.getCompanyName());
+                    preferenceEditor.putString("about", addcompanyDetails.getAbout());
+                    preferenceEditor.putString("companyLocation", addcompanyDetails.getLocation());
+                    preferenceEditor.putString("companyPhone", addcompanyDetails.getPhone());
+                    preferenceEditor.putString("companyWebsite", addcompanyDetails.getWebsite());
+                    preferenceEditor.apply();
+                    preferenceEditor.commit();
+                }
+            });
+        }
     }
 
 }

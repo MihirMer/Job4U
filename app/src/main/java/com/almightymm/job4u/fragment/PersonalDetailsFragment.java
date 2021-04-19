@@ -40,6 +40,7 @@ public class PersonalDetailsFragment extends Fragment {
     DatabaseReference db_add_personal_detail;
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
+    PersonalDetails personalDetails1;
 
     public PersonalDetailsFragment() {
         // Required empty public constructor
@@ -66,6 +67,7 @@ public class PersonalDetailsFragment extends Fragment {
         firstname = view.findViewById(R.id.txt_firstname);
         lastname = view.findViewById(R.id.txt_lastname);
         email = view.findViewById(R.id.txt_email);
+        email.setEnabled(false);
         phone = view.findViewById(R.id.txt_phone);
         dob = view.findViewById(R.id.txt_dob);
         gendertxt = view.findViewById(R.id.gender_layout);
@@ -180,13 +182,13 @@ public class PersonalDetailsFragment extends Fragment {
                     gender,
                     preferences.getString("role", ""),
                     preferences.getBoolean("roleAssigned", false),
-                    false,
+                    personalDetails1.isAreaOfInterestSelected(),
                     true,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false
+                    personalDetails1.isKeySkillAdded(),
+                    personalDetails1.isEducationAdded(),
+                    personalDetails1.isProjectWorkAdded(),
+                    personalDetails1.isExperienceAdded(),
+                    personalDetails1.isCompanyDetailsAdded()
             );
             db_add_personal_detail.setValue(personalDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
@@ -221,22 +223,22 @@ public class PersonalDetailsFragment extends Fragment {
         db_add_personal_detail.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
-                PersonalDetails personalDetails = dataSnapshot.getValue(PersonalDetails.class);
-                if (personalDetails != null) {
+                personalDetails1 = dataSnapshot.getValue(PersonalDetails.class);
+                if (personalDetails1 != null) {
 
                     firstname.setText(fname);
                     lastname.setText(lname);
                     email.setText(emailid);
-                    phone.setText(personalDetails.getPhone());
-                    dob.setText(personalDetails.getDOB());
-                    if (personalDetails.getGender() != null) {
-                        if (personalDetails.getGender().equals("Male")) {
+                    phone.setText(personalDetails1.getPhone());
+                    dob.setText(personalDetails1.getDOB());
+                    if (personalDetails1.getGender() != null) {
+                        if (personalDetails1.getGender().equals("Male")) {
                             gendertxt.setSelection(1);
                         } else {
                             gendertxt.setSelection(2);
                         }
                     }
-                    address.setText(personalDetails.getAddress());
+                    address.setText(personalDetails1.getAddress());
                 }
 
             }

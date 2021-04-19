@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/h_r_mobile_navigation"
+    app:startDestination="@id/HRHomeFragment">
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.almightymm.job4u.fragment.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_jobPreviewFragment"
+            app:destination="@id/jobPreviewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.almightymm.job4u.fragment.NotificationFragment"
+        android:label="Notification"
+        tools:layout="@layout/fragment_notification" />
+
+    <fragment
+        android:id="@+id/personalDetailsFragment"
+        android:name="com.almightymm.job4u.fragment.PersonalDetailsFragment"
+        android:label="Personal Details"
+        tools:layout="@layout/fragment_personal_details" />
+    <fragment
+        android:id="@+id/companyDetailsFragment"
+        android:name="com.almightymm.job4u.fragment.AddCompanyDetailsFragment"
+        android:label="Company Details"
+        tools:layout="@layout/fragment_add_company_details" />
+    <fragment
+        android:id="@+id/addJobFragment"
+        android:name="com.almightymm.job4u.fragment.AddJobFragment"
+        android:label="Add Job"
+        tools:layout="@layout/fragment_add_job" />
+    <fragment
+        android:id="@+id/jobPreviewFragment"
+        android:name="com.almightymm.job4u.fragment.JobPreviewFragment"
+        android:label="Job Preview"
+        tools:layout="@layout/fragment_job_preview" />
+    <fragment
+        android:id="@+id/HRProfileFragment"
+        android:name="com.almightymm.job4u.fragment.HRProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_h_r_profile">
+        <action
+            android:id="@+id/action_HRProfileFragment_to_personalDetailsFragment2"
+            app:destination="@id/personalDetailsFragment" />
+        <action
+            android:id="@+id/action_HRProfileFragment_to_companyDetailsFragment2"
+            app:destination="@id/companyDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/HRHomeFragment"
+        android:name="com.almightymm.job4u.fragment.HRHomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_h_r_home">
+        <action
+            android:id="@+id/action_HRHomeFragment_to_jobPreviewFragment"
+            app:destination="@id/jobPreviewFragment" />
+    </fragment>
+</navigation>

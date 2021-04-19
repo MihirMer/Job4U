@@ -1,8 +1,6 @@
 package com.almightymm.job4u.Adapter;
 
 import android.content.Context;
-import android.media.Image;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +17,10 @@ import com.almightymm.job4u.model.EducationDetails;
 import java.util.ArrayList;
 
 public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.EducationViewHolder> {
-    private final Context context;
-    private ArrayList<EducationDetails> educationDetails;
     private static final String TAG = "EducationAdapter";
+    private final Context context;
+    private final ArrayList<EducationDetails> educationDetails;
+
     public EducationAdapter(Context context, ArrayList<EducationDetails> educationDetails) {
         this.context = context;
         this.educationDetails = educationDetails;
@@ -41,10 +40,10 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.Educ
 
         holder.college.setText(details.getCollegeName());
 //        holder.streem.setText();
-        holder.degree.setText(details.getDegreeName() + " in "+details.getStream());
-        holder.gyear.setText("Graduation" + " : " +details.getAdmissionYear()+" - "+ details.getYear());
+        holder.degree.setText(details.getDegreeName() + " in " + details.getStream());
+        holder.gyear.setText("Graduation" + " : " + details.getAdmissionYear() + " - " + details.getYear());
         holder.cgpa.setText("CGPA" + " : " + details.getGpa());
-        if (position == getItemCount()-1){
+        if (position == getItemCount() - 1) {
             holder.sep.setVisibility(View.GONE);
         }
         holder.edit.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +76,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.Educ
             cgpa = view.findViewById(R.id.txt_my_cgpa);
             achievements = view.findViewById(R.id.txt_my_achievements);
             sep = view.findViewById(R.id.sep);
-            edit =view.findViewById(R.id.icon2);
+            edit = view.findViewById(R.id.icon2);
         }
     }
 

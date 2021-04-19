@@ -34,7 +34,9 @@
                 android:layout_marginHorizontal="10dp"
                 android:gravity="end"
                 android:text="View all"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:drawablePadding="3dp"
+                app:drawableRightCompat="@drawable/ic_baseline_arrow_forward_24" />
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -43,7 +45,7 @@
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:orientation="horizontal"
-            android:paddingLeft="10dp"
+            android:paddingLeft="12dp"
             android:paddingTop="10dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/category_list_item"
@@ -72,7 +74,9 @@
                 android:layout_marginTop="10dp"
                 android:gravity="end"
                 android:text="View all"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:drawablePadding="3dp"
+                app:drawableRightCompat="@drawable/ic_baseline_arrow_forward_24" />
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView

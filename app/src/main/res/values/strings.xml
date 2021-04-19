@@ -102,16 +102,6 @@
         <item>M.Sc</item>
     </string-array>
 
-    <string-array name="job_title">
-        <item>Select Job Title</item>
-        <item>Web Developer</item>
-        <item>Web Designer</item>
-        <item>Android Developer</item>
-        <item>UI/UX Designer</item>
-        <item>Graphics Designer</item>
-        <item>Backend Developer</item>
-        <item>Frontend Developer</item>
-    </string-array>
     <string name="title_activity_job_category">JobCategoryActivity</string>
     <!--
     This string is used for square devices and overridden by hello_world in

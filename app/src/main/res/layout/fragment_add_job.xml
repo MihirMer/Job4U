@@ -17,23 +17,33 @@
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/jobtitle"
             android:layout_width="315dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="18dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="15dp"
             android:autofillHints="Job Title"
-            app:startIconDrawable="@drawable/ic_job"
             android:layout_marginHorizontal="20dp"
             android:background="@drawable/add_job_input"
+            android:paddingLeft="0dp"
             android:textSize="14sp">
 
+<!--            <Spinner-->
+<!--                android:id="@+id/gender_layout"-->
+<!--                android:layout_width="315dp"-->
+<!--                android:layout_height="55dp"-->
+<!--                android:layout_marginHorizontal="20dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:background="@drawable/input"-->
+<!--                android:entries="@array/gender_name"-->
+<!--                android:paddingLeft="0dp"-->
+<!--                />-->
         </androidx.appcompat.widget.AppCompatSpinner>
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/jobQualification"
             android:layout_width="315dp"
-            android:layout_height="45dp"
+            android:layout_height="55dp"
             android:layout_marginTop="10dp"
             android:autofillHints="Job Title"
-            app:startIconDrawable="@drawable/ic_job"
             android:layout_marginHorizontal="20dp"
+            android:paddingLeft="-2dp"
             android:background="@drawable/add_job_input"
             android:textSize="14sp">
 

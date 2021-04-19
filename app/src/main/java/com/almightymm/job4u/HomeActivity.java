@@ -1,27 +1,20 @@
 package com.almightymm.job4u;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
@@ -30,9 +23,9 @@ public class HomeActivity extends AppCompatActivity {
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
     NavController navController;
+    String role;
     private BottomNavigationView navigation;
     private Toolbar toolbar;
-String role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +35,6 @@ String role;
         fragment = findViewById(R.id.nav_host_fragment);
 
         initPreferences();
-        Log.d(TAG, "onCreate: " + preferences.getBoolean("roleAssigned", false));
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -56,6 +48,7 @@ String role;
         role = preferences.getString("role", "");
 
         if (role.equals("HR")) {
+            Log.e(TAG, "onCreate: hr1");
             navigation.getMenu().clear();
             navigation.inflateMenu(R.menu.hr_bottom_nav_menu);
         } else {
@@ -64,17 +57,25 @@ String role;
         }
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        if (role.equals("HR")) {
+            Log.e(TAG, "onCreate: hr2");
+            navController.setGraph(R.navigation.h_r_mobile_navigation);
+        } else {
+            navController.setGraph(R.navigation.mobile_navigation);
+        }
         final AppBarConfiguration appBarConfiguration;
-        if (preferences.getString("role", "").equals("HR")) {
-             appBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.homeFragment,
+        if (role.equals("HR")) {
+            Log.e(TAG, "onCreate: hr3");
+            appBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.HRHomeFragment,
                     R.id.searchFragment,
-                    R.id.savedJobFragment,
+                    R.id.addJobFragment,
                     R.id.notificationFragment,
                     R.id.HRProfileFragment
             ).build();
         } else {
-           appBarConfiguration = new AppBarConfiguration.Builder(
+            appBarConfiguration = new AppBarConfiguration.Builder(
                     R.id.homeFragment,
                     R.id.searchFragment,
                     R.id.savedJobFragment,
@@ -82,7 +83,7 @@ String role;
                     R.id.profileFragment
             ).build();
         }
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navigation, navController);
         navigation.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
@@ -93,7 +94,6 @@ String role;
         });
 
     }
-
 
 
     private void initPreferences() {

@@ -43,7 +43,13 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
         final Job job = jobArrayList.get(position);
+        if (preferences.getString("role", "").equals("HR")) {
+            holder.jobApplyNowButton.setVisibility(View.GONE);
+        } else {
+            holder.jobApplyNowButton.setVisibility(View.VISIBLE);
+        }
         holder.jobTitleTextView.setText(job.getName());
+        holder.jobCompanyTextView.setText(job.getCompanyName());
         holder.jobLocationTextView.setText(job.getCity());
         holder.salaryTextView.setText(job.getSalary());
         holder.descriptionTextView.setText(job.getDescription());
@@ -59,7 +65,11 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
                 preferenceEditor.putString("jobId", job.getId());
                 preferenceEditor.apply();
                 preferenceEditor.commit();
-                Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_jobPreviewFragment);
+                if (preferences.getString("role", "").equals("HR")) {
+                    Navigation.findNavController(v).navigate(R.id.action_HRHomeFragment_to_jobPreviewFragment);
+                }else{
+                    Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_jobPreviewFragment);
+                }
             }
         });
         holder.jobApplyNowButton.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +92,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
     }
 
     public static class JobViewHolder extends RecyclerView.ViewHolder {
-        TextView jobTitleTextView;
+        TextView jobTitleTextView, jobCompanyTextView;
         TextView jobLocationTextView, salaryTextView, descriptionTextView;
         CardView jobCardView;
         Button jobApplyNowButton;
@@ -90,6 +100,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
         public JobViewHolder(@NonNull View itemView) {
             super(itemView);
             jobTitleTextView = itemView.findViewById(R.id.job_title);
+            jobCompanyTextView = itemView.findViewById(R.id.txt_company_name);
             jobApplyNowButton = itemView.findViewById(R.id.job_apply_now);
             jobLocationTextView = itemView.findViewById(R.id.txt_location);
             salaryTextView = itemView.findViewById(R.id.txt_salary);

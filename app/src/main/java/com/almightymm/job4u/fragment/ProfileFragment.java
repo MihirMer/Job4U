@@ -117,7 +117,6 @@ public class ProfileFragment extends Fragment {
     SharedPreferences.Editor preferenceEditor;
     String userId;
     //    generate resume
-    Button generateResume;
     String Name;
     String outputPath;
     String imagesPath;
@@ -125,7 +124,6 @@ public class ProfileFragment extends Fragment {
     LatexCompiler latexCompiler;
     StringBuilder texFilecontent;
     //    addjob
-    private Button button, educationButton, addSkillButton, workExp, projectWork,jobPreviewButton;
     private Permissions currentPermission;
     private Document document;
 
@@ -216,18 +214,8 @@ public class ProfileFragment extends Fragment {
         exp_rec.setLayoutManager(expLinearLayoutManager);
 
 //      forms
-        button = view.findViewById(R.id.btn);
-        educationButton = view.findViewById(R.id.educational_details);
-        addSkillButton = view.findViewById(R.id.addskill);
-        workExp = view.findViewById(R.id.worl_experience);
-        projectWork = view.findViewById(R.id.project_work);
-
 //        generate resume
-        generateResume = view.findViewById(R.id.gen_resume);
         latexCompiler = new LatexCompiler(getContext());
-
-        jobPreviewButton = view.findViewById(R.id.preview_job);
-
     }
 
     private void setListeners(final View view) {
@@ -266,20 +254,6 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_projectWorkFragment);
 
-            }
-        });
-
-        generateResume.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                generateResume();
-            }
-        });
-
-        jobPreviewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_jobPreviewFragment);
             }
         });
     }
@@ -861,7 +835,7 @@ public class ProfileFragment extends Fragment {
                 "\\cvlistitem {To be a successful professional in a globally respected company and to continuously upgrade my knowledge and skill as well.}\n" +
                 "\\section{Education}\n");
         for (EducationDetails edu : edu_list) {
-            texFilecontent.append("\\cventry{"+edu.getAdmissionYear()+"--" + edu.getYear() + "}{" + edu.getDegreeName() + " in " + edu.getStream() + "}{}{GPA: " + edu.getGpa() + ", " + edu.getCollegeName() + "}{}{}{}\n");
+            texFilecontent.append("\\cventry{" + edu.getAdmissionYear() + "--" + edu.getYear() + "}{" + edu.getDegreeName() + " in " + edu.getStream() + "}{}{GPA: " + edu.getGpa() + ", " + edu.getCollegeName() + "}{}{}{}\n");
 //                    "\\cvlistitem {\\textbf{Ph.D. Thesis:} \"\\textit{Title of Ph.D. Thesis},\" under supervision of \\textbf{Prof. SupervisorName} }\n");
         }
         texFilecontent.append(

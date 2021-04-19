@@ -1,5 +1,7 @@
 package com.almightymm.job4u.fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -11,17 +13,23 @@ import android.preference.PreferenceManager;
 import android.service.autofill.Sanitizer;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.almightymm.job4u.R;
+import com.almightymm.job4u.SignInActivity;
 import com.almightymm.job4u.latex.Document;
 import com.almightymm.job4u.latex.PreferenceHelper;
 import com.almightymm.job4u.model.CompanyDetails;
 import com.almightymm.job4u.utils.FilesUtils;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -57,8 +65,6 @@ public class HRProfileFragment extends Fragment {
     //Company deatils
     TextView companyInfo ,companyName, about, companyCity, companyPhone, companyWebsite;
     ImageView companyEditImageView;
-
-    Button addJobButton;
     private Button companyDetails;
     //private HRProfileFragment.Permissions currentPermission;
     //private Document document;
@@ -76,9 +82,10 @@ public class HRProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        setHasOptionsMenu(true);
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -110,7 +117,6 @@ public class HRProfileFragment extends Fragment {
         companyWebsite = view.findViewById(R.id.txt_my_company_website);
         companyCity = view.findViewById(R.id.txt_my_company_city);
         companyDetails= view.findViewById(R.id.btn_company);
-        addJobButton= view.findViewById(R.id.add_job_button);
         companyEditImageView= view.findViewById(R.id.icon2);
         companyInfo = view.findViewById(R.id.txt_1);
     }
@@ -122,28 +128,20 @@ public class HRProfileFragment extends Fragment {
         personalEditImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_HRProfileFragment_to_personalDetailsFragment);
+                Navigation.findNavController(view).navigate(R.id.action_HRProfileFragment_to_personalDetailsFragment2);
             }
         });
         companyEditImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_HRProfileFragment_to_companyDetailsFragment);
+                Navigation.findNavController(view).navigate(R.id.action_HRProfileFragment_to_companyDetailsFragment2);
             }
         });
 
         companyDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_HRProfileFragment_to_companyDetailsFragment);
-            }
-        });
-
-        addJobButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_HRProfileFragment_to_addJobFragment);
-
+                Navigation.findNavController(view).navigate(R.id.action_HRProfileFragment_to_companyDetailsFragment2);
             }
         });
     }
@@ -197,11 +195,12 @@ public class HRProfileFragment extends Fragment {
 //            }
 //        });
         if (preferences.getBoolean("companyDetailsAdded", false)){
+            Log.e(TAG, "setValues: "+preferences.getString("companyName", ""));
             companyName.setText(preferences.getString("companyName",""));
             about.setText(preferences.getString("about",""));
-            companyPhone.setText(preferences.getString("companyLocation",""));
-            companyWebsite.setText(preferences.getString("companyPhone",""));
-            companyCity.setText(preferences.getString("companyWebsite",""));
+            companyCity.setText(preferences.getString("companyLocation",""));
+            companyPhone.setText(preferences.getString("companyPhone",""));
+            companyWebsite.setText(preferences.getString("companyWebsite",""));
             companyDetails.setVisibility(View.GONE);
             companyInfo.setVisibility(View.GONE);
             companyEditImageView.setVisibility(View.VISIBLE);
@@ -212,7 +211,27 @@ public class HRProfileFragment extends Fragment {
             companyCity.setVisibility(View.VISIBLE);
 
         }
+    }
 
-
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.hr_profile_menu, menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.hr_app_bar_logout:
+                SharedPreferences pref = getActivity().getSharedPreferences("User_Details", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.clear();
+                editor.apply();
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getActivity(), SignInActivity.class);
+                startActivity(intent);
+                getActivity().finishAfterTransition();
+                return true;
+            default:
+                return false;
+        }
     }
 }

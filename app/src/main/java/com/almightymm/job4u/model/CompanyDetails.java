@@ -1,7 +1,7 @@
 package com.almightymm.job4u.model;
 
 public class CompanyDetails {
-    private String id, companyName, about, location, phone, website;
+    private String id, companyName, about, location, phone, website, city;
 
     public CompanyDetails() {
 

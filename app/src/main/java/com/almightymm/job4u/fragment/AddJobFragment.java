@@ -3,6 +3,7 @@ package com.almightymm.job4u.fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,7 @@ public class AddJobFragment extends Fragment {
 
         initViews(view);
         initPreferences();
+        setValues();
         addListeners(view);
 
         userId = preferences.getString("userId", "");
@@ -56,19 +58,26 @@ public class AddJobFragment extends Fragment {
         return view;
     }
 
+    private void setValues() {
+//        companyname, city, website,
+        if (preferences.getBoolean("companyDetailsAdded", false)) {
+            companyname.setText(preferences.getString("companyName", ""));
+            city.setText(preferences.getString("companyLocation",""));
+            website.setText(preferences.getString("companyWebsite", ""));
+        }
+    }
+
     private void initViews(View view) {
         jobtype = view.findViewById(R.id.jobtitle);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.job_title,
-                android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        String[] jobTitleArray = {"Job Title", "Web Developer", "Web Designer", "Android Developer", "UI/UX Designer", "Graphics Designer", "Backend Developer", "Frontend Developer"};
+        ArrayAdapter<String> jobTitleAdapter = new ArrayAdapter<String>(getContext(), R.layout.job_spinner_row, R.id.item, jobTitleArray);
         jobtype.setPrompt("Select Job");
-        jobtype.setAdapter(adapter);
-
+        jobtype.setAdapter(jobTitleAdapter);
         jobQualification = view.findViewById(R.id.jobQualification);
-        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(getContext(), R.array.job_qualification,
-                android.R.layout.simple_spinner_item);
+        String[] jobQualificationArray = {"Qualification", "B.E.", "M.E.", "Diploma in IT", "12th", "Graduate", "Post Graduate", "B.tech", "M.Sc"};
+        ArrayAdapter<String> jobQualificationAdapter = new ArrayAdapter<String>(getContext(), R.layout.job_spinner_row, R.id.item, jobQualificationArray);
         jobQualification.setPrompt("Select Qualification");
-        jobQualification.setAdapter(adapter1);
+        jobQualification.setAdapter(jobQualificationAdapter);
 
         desigation = view.findViewById(R.id.edit_desig);
         description = view.findViewById(R.id.edit_desc);
@@ -81,11 +90,10 @@ public class AddJobFragment extends Fragment {
         CharSequence s = DateFormat.format("MMMM d,yyyy", date.getTime());
         pod.setText(s);
         pod.setEnabled(false);
-
+        companyname.setEnabled(false);
+        website.setEnabled(false);
         vacancy = view.findViewById(R.id.edit_vacancy);
-
         add_job = view.findViewById(R.id.btn_addjob);
-
     }
 
     private void addListeners(View view) {
@@ -109,10 +117,10 @@ public class AddJobFragment extends Fragment {
         String post_date = pod.getText().toString().trim();
         String vacan = vacancy.getText().toString().trim();
 
-        if (title.equals("")) {
+        if (title.equals("Job Title")) {
             jobtype.requestFocus();
             Toast.makeText(getContext(), "Title is required !", Toast.LENGTH_SHORT).show();
-        } else if (quali.equals("")) {
+        } else if (quali.equals("Qualification")) {
             jobQualification.requestFocus();
             Toast.makeText(getContext(), "Qualification is required !", Toast.LENGTH_SHORT).show();
         } else if (desi.isEmpty()) {

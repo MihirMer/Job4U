@@ -18,15 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".JobCategoryActivity"></activity>
-
-        <!--
-               Set to true if your app is Standalone, that is, it does not require the handheld
-               app to run.
-        -->
-        <meta-data
-            android:name="com.google.android.wearable.standalone"
-            android:value="true" />
+        <activity android:name=".JobCategoryActivity" android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -39,7 +31,7 @@
         </provider>
 
         <activity android:name=".ForgotPassword" />
-        <activity android:name=".RoleSelectionActivity" />
+        <activity android:name=".RoleSelectionActivity" android:screenOrientation="portrait" />
         <activity
             android:name=".HomeActivity"
             android:windowSoftInputMode="adjustPan" />
