@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.almightymm.job4u.fragment.CompanyDetailsFragment;
@@ -12,8 +11,8 @@ import com.almightymm.job4u.fragment.JobDetailsFragment;
 import com.almightymm.job4u.fragment.appliedJobFragment;
 import com.almightymm.job4u.fragment.savedJobFragment;
 
-public class JobFragmentPagerAdapter extends FragmentStatePagerAdapter {
-    public JobFragmentPagerAdapter(@NonNull FragmentManager fm) {
+public class SavedJobFragmentPagerAdapter extends FragmentStatePagerAdapter {
+    public SavedJobFragmentPagerAdapter(@NonNull FragmentManager fm) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
     }
 
@@ -22,9 +21,9 @@ public class JobFragmentPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new JobDetailsFragment();
+                return new savedJobFragment();
             case 1:
-                return new CompanyDetailsFragment();
+                return new appliedJobFragment();
             default:
                 return null;
         }
@@ -39,9 +38,9 @@ public class JobFragmentPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         if (position == 0)
-            return "Job Details";
+            return "Saved Jobs";
         else if (position == 1)
-            return "Company Details";
+            return "Applied Jobs";
         else
             return super.getPageTitle(position);
     }
