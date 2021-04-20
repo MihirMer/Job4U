@@ -1,25 +1,33 @@
 package com.almightymm.job4u.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.almightymm.job4u.R;
+import com.almightymm.job4u.latex.PreferenceHelper;
 import com.almightymm.job4u.model.Candidate;
-import com.almightymm.job4u.model.Job;
+import com.almightymm.job4u.utils.FilesUtils;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class HRResponsesAdapter extends RecyclerView.Adapter<HRResponsesAdapter.CandidateViewHolder> {
@@ -53,15 +61,67 @@ public class HRResponsesAdapter extends RecyclerView.Adapter<HRResponsesAdapter.
     public void onBindViewHolder(@NonNull CandidateViewHolder holder, int position) {
         final Candidate candidate = candidateArrayList.get(position);
         holder.candidateName.setText(candidate.getName());
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(candidate.getId());
-        databaseReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+        holder.candidateCardView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSuccess(DataSnapshot dataSnapshot) {
-
+            public void onClick(View v) {
+                downloadResume(candidate.getId(), candidate.getName());
             }
         });
 
 
+    }
+
+    private void downloadResume(final String id, final String candidateName) {
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("Resumes").child(id);
+        File localFile = null;
+        try {
+            localFile = File.createTempFile("resumes", "pdf");
+            localFile.deleteOnExit();
+            final File finalLocalFile = localFile;
+            storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // Local temp file has been create
+                    openResultingFile(finalLocalFile, candidateName);
+                    finalLocalFile.deleteOnExit();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void openResultingFile(File file, String candidateName) {
+        final String outputFolderPath = PreferenceHelper.getOutputFolder(context);
+        byte[] bytes = FilesUtils.readBinaryFile(file);
+        candidateName = "Resume of " + candidateName;
+        candidateName = candidateName.replaceAll(" ", "_");
+        File pdf = new File(outputFolderPath, candidateName + ".pdf");
+        FilesUtils.writeBinaryFile(pdf, bytes);
+        Intent pdfIntent = new Intent();
+        pdfIntent.setAction(Intent.ACTION_VIEW);
+
+        pdfIntent.setDataAndType(Uri.fromFile(pdf), "application/pdf");
+
+        Uri apkURI = FileProvider.getUriForFile(
+                context,
+                context.getPackageName() + ".provider", pdf);
+        pdfIntent.setDataAndType(apkURI, "application/pdf");
+        pdfIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        if (pdfIntent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(pdfIntent);
+        } else {
+            Toast.makeText(context, "You don't have any pdf reader!",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

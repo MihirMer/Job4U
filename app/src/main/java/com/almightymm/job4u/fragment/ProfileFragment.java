@@ -158,7 +158,7 @@ StorageReference storageRef ;
         setListeners(view);
         initPreferences();
         userId = preferences.getString("userId", "");
-        storageRef = FirebaseStorage.getInstance().getReference().child("Resumes");
+
 
         setValues(view);
         return view;
@@ -629,6 +629,7 @@ StorageReference storageRef ;
                         InputStream stream = null;
                         try {
                             stream = new FileInputStream(file);
+                            storageRef = FirebaseStorage.getInstance().getReference().child("Resumes").child(userId);
                             UploadTask uploadTask = storageRef.putStream(stream);
                             uploadTask.addOnFailureListener(new OnFailureListener() {
                                 @Override
