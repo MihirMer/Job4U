@@ -48,15 +48,23 @@ import com.almightymm.job4u.model.ProjectWork;
 import com.almightymm.job4u.model.Skills;
 import com.almightymm.job4u.model.WorkExperience;
 import com.almightymm.job4u.utils.FilesUtils;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -112,6 +120,9 @@ public class ProfileFragment extends Fragment {
     TextView skillinfo;
     //    database
     DatabaseReference databaseReference;
+//    storage
+StorageReference storageRef ;
+
     //    preferences
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
@@ -147,6 +158,8 @@ public class ProfileFragment extends Fragment {
         setListeners(view);
         initPreferences();
         userId = preferences.getString("userId", "");
+        storageRef = FirebaseStorage.getInstance().getReference().child("Resumes");
+
         setValues(view);
         return view;
     }
@@ -611,6 +624,26 @@ public class ProfileFragment extends Fragment {
                                 break;
                             }
                         }
+//                        code to upload file here
+
+                        InputStream stream = null;
+                        try {
+                            stream = new FileInputStream(file);
+                            UploadTask uploadTask = storageRef.putStream(stream);
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    Toast.makeText(getContext(), "Resume upload failed", Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    Toast.makeText(getContext(), "Resume upload successful", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
                         openResultingFile(header, file);
                     }
                 });
@@ -688,6 +721,7 @@ public class ProfileFragment extends Fragment {
                 } else {
                     generateString();
                     generateResume();
+
                 }
                 return true;
             case R.id.app_bar_logout:

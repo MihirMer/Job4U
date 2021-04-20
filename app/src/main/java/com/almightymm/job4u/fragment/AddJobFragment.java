@@ -48,16 +48,16 @@ public class AddJobFragment extends Fragment {
 
         initViews(view);
         initPreferences();
-        if (preferences.getBoolean("companyDetailsAdded", false)){
-            Toast.makeText(getContext(), "Please add Company details first !", Toast.LENGTH_SHORT).show();
-        }
+
         setValues();
         addListeners(view);
 
         userId = preferences.getString("userId", "");
         db_add_job = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB");
 
-
+        if (!preferences.getBoolean("companyDetailsAdded", false)){
+            Toast.makeText(getContext(), "Please add Company details first !", Toast.LENGTH_SHORT).show();
+        }
         return view;
     }
 
@@ -119,8 +119,7 @@ public class AddJobFragment extends Fragment {
         String quali = jobQualification.getSelectedItem().toString().trim();
         String post_date = pod.getText().toString().trim();
         String vacan = vacancy.getText().toString().trim();
-
-        if (preferences.getBoolean("companyDetailsAdded", false)){
+        if (!preferences.getBoolean("companyDetailsAdded", false)){
             Toast.makeText(getContext(), "Please add Company details first !", Toast.LENGTH_SHORT).show();
         }
         else if (title.equals("Job Title")) {
