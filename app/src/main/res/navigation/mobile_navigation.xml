@@ -17,7 +17,11 @@
         android:id="@+id/searchFragment"
         android:name="com.almightymm.job4u.fragment.SearchFragment"
         android:label="Search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_jobPreviewFragment2"
+            app:destination="@id/jobPreviewFragment" />
+    </fragment>
     <fragment
         android:id="@+id/notificationFragment"
         android:name="com.almightymm.job4u.fragment.NotificationFragment"
@@ -51,7 +55,11 @@
         android:id="@+id/savedJobFragment"
         android:name="com.almightymm.job4u.fragment.SavedAppliedPreviewFragment"
         android:label="Saved / Applied Job"
-        tools:layout="@layout/fragment_saved_applied_preview" />
+        tools:layout="@layout/fragment_saved_applied_preview" >
+        <action
+            android:id="@+id/action_savedJobFragment_to_jobPreviewFragment"
+            app:destination="@id/jobPreviewFragment" />
+    </fragment>
     <fragment
         android:id="@+id/personalDetailsFragment"
         android:name="com.almightymm.job4u.fragment.PersonalDetailsFragment"

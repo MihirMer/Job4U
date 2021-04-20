@@ -44,7 +44,7 @@ public class WorkExperienceFragment extends Fragment {
         initPreferences();
         String userId = preferences.getString("userId", "");
         db_add_workExperience = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("WORK_EXPERIENCE");
-        personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("experienceAdded");
+        personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS").child("experienceAdded");
         setListeners(view);
         return view;
     }

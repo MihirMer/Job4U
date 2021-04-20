@@ -13,11 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.almightymm.job4u.Adapter.CategoryAdapter;
 import com.almightymm.job4u.Adapter.HRJobAdapter;
-import com.almightymm.job4u.Adapter.JobAdapter;
+import com.almightymm.job4u.Adapter.HRResponsesAdapter;
 import com.almightymm.job4u.R;
-import com.almightymm.job4u.model.Category;
+import com.almightymm.job4u.model.Candidate;
 import com.almightymm.job4u.model.Job;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,10 +28,10 @@ import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class HRHomeFragment extends Fragment {
+public class HrViewResponsesFragment extends Fragment {
     RecyclerView jobRecyclerView;
-    ArrayList<Job> jobArrayList;
-    HRJobAdapter hrJobAdapter;
+    ArrayList<Candidate> candidateArrayList;
+    HRResponsesAdapter hrJobAdapter;
     LinearLayoutManager jobLinearLayoutManager;
 
     DatabaseReference firebaseDatabase;
@@ -41,27 +40,23 @@ public class HRHomeFragment extends Fragment {
     SharedPreferences.Editor preferenceEditor;
 
     String userId;
-    public HRHomeFragment() {
+    String jobId;
+    public HrViewResponsesFragment() {
         // Required empty public constructor
     }
-
-
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
-
-
     @Nullable
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_h_r_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_hr_view_responses, container, false);
 
         initPreferences();
 
@@ -70,21 +65,21 @@ public class HRHomeFragment extends Fragment {
         jobLinearLayoutManager = new LinearLayoutManager(getContext());
         jobLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         jobRecyclerView.setLayoutManager(jobLinearLayoutManager);
-        jobArrayList = new ArrayList<>();
-
-        firebaseDatabase = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB");
-        firebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+         candidateArrayList= new ArrayList<>();
+        jobId = preferences.getString("jobId", "");
+        firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("HR").child("ADDJOB").child(jobId).child("CANDIDATES");
+        firebaseDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        Job job = dataSnapshot.getValue(Job.class);
-                        jobArrayList.add(job);
-
-
+                        Candidate candidate = dataSnapshot.getValue(Candidate.class);
+                        candidateArrayList.add(candidate);
                     }
-                    hrJobAdapter = new HRJobAdapter(getContext(), filter(),preferences,preferenceEditor);
+
+                    hrJobAdapter = new HRResponsesAdapter(getContext(), candidateArrayList,preferences,preferenceEditor);
                     jobRecyclerView.setAdapter(hrJobAdapter);
+
 
                 }
             }
@@ -97,17 +92,6 @@ public class HRHomeFragment extends Fragment {
         return view;
 
     }
-
-    private ArrayList<Job> filter() {
-        ArrayList<Job> filterList = new ArrayList<>();
-        for (Job job : jobArrayList) {
-                //Log.e("errr", "filter: "+job.getJob_Name()+" "+category.getC_Job_name() );
-                        filterList.add(job);
-        }
-        return filterList;
-
-    }
-
 
     private void initPreferences() {
         preferences = getActivity().getSharedPreferences("User_Details", MODE_PRIVATE);

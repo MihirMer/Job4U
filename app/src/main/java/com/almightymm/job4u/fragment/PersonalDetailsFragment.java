@@ -74,7 +74,7 @@ public class PersonalDetailsFragment extends Fragment {
 
         String userId = preferences.getString("userId", "");
         Log.d(TAG, "onCreateView: " + userId);
-        db_add_personal_detail = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+        db_add_personal_detail = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS");
 
         getValues();
 
@@ -193,6 +193,7 @@ public class PersonalDetailsFragment extends Fragment {
             db_add_personal_detail.setValue(personalDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
+                    preferenceEditor.putBoolean("personalDetailsAdded",true);
                     preferenceEditor.putString("phone", phoneno);
                     preferenceEditor.putString("DOB", dateofbirth);
                     preferenceEditor.putString("address", adre);

@@ -42,7 +42,7 @@ public class AddCompanyDetailsFragment extends Fragment {
         initPreferences();
         setValue(view);
         userId = preferences.getString("userId", "");
-        personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("companyDetailsAdded");
+        personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS").child("companyDetailsAdded");
         db_addcompany_details = FirebaseDatabase.getInstance().getReference().child("HR").child("COMPANY_DETAILS").child(userId);
         setListeners(view);
         return view;

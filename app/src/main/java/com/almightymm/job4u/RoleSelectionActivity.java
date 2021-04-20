@@ -47,8 +47,8 @@ public class RoleSelectionActivity extends AppCompatActivity {
             hrButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("roleAssigned").setValue(true);
-                    FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("role").setValue("HR");
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS").child("roleAssigned").setValue(true);
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS").child("role").setValue("HR");
                     preferenceEditor = preferences.edit();
                     preferenceEditor.putBoolean("roleAssigned", true);
                     preferenceEditor.putString("role", "HR");
@@ -61,8 +61,8 @@ public class RoleSelectionActivity extends AppCompatActivity {
             jobseekerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("roleAssigned").setValue(true);
-                    FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("role").setValue("Job Seeker");
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS").child("roleAssigned").setValue(true);
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS").child("role").setValue("Job Seeker");
                     preferenceEditor = preferences.edit();
                     preferenceEditor.putBoolean("roleAssigned", true);
                     preferenceEditor.putString("role", "Job Seeker");

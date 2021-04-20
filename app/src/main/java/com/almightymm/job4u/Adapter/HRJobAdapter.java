@@ -15,19 +15,21 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.almightymm.job4u.R;
+import com.almightymm.job4u.model.Candidate;
 import com.almightymm.job4u.model.Job;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class SavedJobAdapter extends RecyclerView.Adapter<SavedJobAdapter.JobViewHolder> {
+public class HRJobAdapter extends RecyclerView.Adapter<HRJobAdapter.JobViewHolder> {
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
     private Context context;
     private ArrayList<Job> jobArrayList;
 
-    public SavedJobAdapter(Context context, ArrayList<Job> jobArrayList, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor) {
+    public HRJobAdapter(Context context, ArrayList<Job> jobArrayList, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor) {
         this.context = context;
         this.jobArrayList = jobArrayList;
         this.preferences = preferences;
@@ -38,18 +40,13 @@ public class SavedJobAdapter extends RecyclerView.Adapter<SavedJobAdapter.JobVie
     @Override
     public JobViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.saved_job_list_item, parent, false);
+        View view = inflater.inflate(R.layout.hr_job_list_item, parent, false);
         return new JobViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull JobViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
         final Job job = jobArrayList.get(position);
-        if (preferences.getString("role", "").equals("HR")) {
-            holder.jobApplyNowButton.setVisibility(View.GONE);
-        } else {
-            holder.jobApplyNowButton.setVisibility(View.VISIBLE);
-        }
         holder.jobTitleTextView.setText(job.getName());
         holder.jobCompanyTextView.setText(job.getCompanyName());
         holder.jobLocationTextView.setText(job.getCity());
@@ -67,22 +64,17 @@ public class SavedJobAdapter extends RecyclerView.Adapter<SavedJobAdapter.JobVie
                 preferenceEditor.putString("jobId", job.getId());
                 preferenceEditor.apply();
                 preferenceEditor.commit();
-                if (preferences.getString("role", "").equals("HR")) {
-                    Navigation.findNavController(v).navigate(R.id.action_HRHomeFragment_to_jobPreviewFragment);
-                }else{
-                    Navigation.findNavController(v).navigate(R.id.action_savedJobFragment_to_jobPreviewFragment);
-                }
+                Navigation.findNavController(v).navigate(R.id.action_HRHomeFragment_to_addJobFragment);
             }
         });
-        final String userId = preferences.getString("userId", "");
         holder.jobApplyNowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseReference saved_job_ref = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("SAVED_JOB").child(job.getId());
-                saved_job_ref.removeValue();
-                jobArrayList.remove(position);
-                getItemCount();
-                notifyDataSetChanged();
+//                Toast.makeText(context, "Position " + positionPlusOne, Toast.LENGTH_SHORT).show();
+                preferenceEditor.putString("jobId", job.getId());
+                preferenceEditor.apply();
+                preferenceEditor.commit();
+                Navigation.findNavController(v).navigate(R.id.action_HRHomeFragment_to_hrViewResponsesFragment);
             }
         });
     }
@@ -108,11 +100,10 @@ public class SavedJobAdapter extends RecyclerView.Adapter<SavedJobAdapter.JobVie
             super(itemView);
             jobTitleTextView = itemView.findViewById(R.id.job_title);
             jobCompanyTextView = itemView.findViewById(R.id.txt_company_name);
-            jobApplyNowButton = itemView.findViewById(R.id.btn_remove_saved);
+            jobApplyNowButton = itemView.findViewById(R.id.job_apply_now);
             jobLocationTextView = itemView.findViewById(R.id.txt_location);
             salaryTextView = itemView.findViewById(R.id.txt_salary);
             descriptionTextView = itemView.findViewById(R.id.txt_description);
-
             jobCardView = itemView.findViewById(R.id.job_card);
         }
     }

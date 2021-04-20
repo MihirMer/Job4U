@@ -15,21 +15,27 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.almightymm.job4u.R;
+import com.almightymm.job4u.model.Candidate;
 import com.almightymm.job4u.model.Job;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
+    int navigation;
     private Context context;
     private ArrayList<Job> jobArrayList;
 
-    public JobAdapter(Context context, ArrayList<Job> jobArrayList, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor) {
-        this.context = context;
-        this.jobArrayList = jobArrayList;
+    public JobAdapter(Context context, ArrayList<Job> jobArrayList, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor, int navigation) {
         this.preferences = preferences;
         this.preferenceEditor = preferenceEditor;
+        this.context = context;
+        this.jobArrayList = jobArrayList;
+        this.navigation = navigation;
     }
 
     @NonNull
@@ -43,11 +49,6 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
         final Job job = jobArrayList.get(position);
-        if (preferences.getString("role", "").equals("HR")) {
-            holder.jobApplyNowButton.setVisibility(View.GONE);
-        } else {
-            holder.jobApplyNowButton.setVisibility(View.VISIBLE);
-        }
         holder.jobTitleTextView.setText(job.getName());
         holder.jobCompanyTextView.setText(job.getCompanyName());
         holder.jobLocationTextView.setText(job.getCity());
@@ -65,17 +66,29 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
                 preferenceEditor.putString("jobId", job.getId());
                 preferenceEditor.apply();
                 preferenceEditor.commit();
-                if (preferences.getString("role", "").equals("HR")) {
-                    Navigation.findNavController(v).navigate(R.id.action_HRHomeFragment_to_jobPreviewFragment);
-                }else{
-                    Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_jobPreviewFragment);
-                }
+                Navigation.findNavController(v).navigate(navigation);
             }
         });
         holder.jobApplyNowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Position " + positionPlusOne, Toast.LENGTH_SHORT).show();
+                if (preferences.getBoolean("areaOfInterestSelected", false) && preferences.getBoolean("personalDetailsAdded", false) && preferences.getBoolean("keySkillAdded", false) && preferences.getBoolean("educationAdded", false) && preferences.getBoolean("projectWorkAdded", false)) {
+//                Toast.makeText(context, "Position " + positionPlusOne, Toast.LENGTH_SHORT).show();
+                    String userId = preferences.getString("userId", "");
+                    String userName = preferences.getString("firstName", "") + " " + preferences.getString("lastName", "");
+
+                    Candidate candidate = new Candidate(userId, userName, "Applied");
+                    DatabaseReference applyNowDbRef = FirebaseDatabase.getInstance().getReference().child("HR").child("ADDJOB").child(job.getId()).child("CANDIDATES");
+                    applyNowDbRef.child(userId).setValue(candidate).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(context, "Resume sent", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                else{
+                    Toast.makeText(context, "Please complete your profile details first !", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

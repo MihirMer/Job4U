@@ -86,12 +86,12 @@ public class HomeActivity extends AppCompatActivity {
 
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navigation, navController);
-        navigation.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
-            @Override
-            public void onNavigationItemReselected(@NonNull MenuItem item) {
-
-            }
-        });
+//        navigation.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+//            @Override
+//            public void onNavigationItemReselected(@NonNull MenuItem item) {
+//
+//            }
+//        });
 
     }
 

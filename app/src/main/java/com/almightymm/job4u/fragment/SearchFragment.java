@@ -1,5 +1,6 @@
 package com.almightymm.job4u.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,8 +20,15 @@ import com.almightymm.job4u.Adapter.JobAdapter;
 import com.almightymm.job4u.R;
 import com.almightymm.job4u.model.Category;
 import com.almightymm.job4u.model.Job;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class SearchFragment extends Fragment {
     EditText editText;
@@ -36,6 +45,9 @@ public class SearchFragment extends Fragment {
 
     RelativeLayout lay1, lay2, lay3;
 
+    SharedPreferences preferences;
+    SharedPreferences.Editor preferenceEditor;
+
     public SearchFragment() {
         // Required empty public constructor
     }
@@ -45,7 +57,7 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-
+        initPreferences();
         lay1 = view.findViewById(R.id.lay1);
         lay2 = view.findViewById(R.id.lay2);
         lay3 = view.findViewById(R.id.lay3);
@@ -56,7 +68,7 @@ public class SearchFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         categoryArrayList = new ArrayList<>();
-
+        categoryArrayList = getJobCategory();
         categoryAdapter = new CategoryAdapter(getContext(), categoryArrayList);
         recyclerView.setAdapter(categoryAdapter);
 
@@ -67,8 +79,28 @@ public class SearchFragment extends Fragment {
         jobRecyclerView.setLayoutManager(jobLinearLayoutManager);
 
         jobArrayList = new ArrayList<>();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Job job = dataSnapshot.getValue(Job.class);
+                        jobArrayList.add(job);
 
-        jobRecyclerView.setAdapter(jobAdapter);
+
+                    }
+                    jobAdapter = new JobAdapter(getContext(), jobArrayList,preferences,preferenceEditor, R.id.action_searchFragment_to_jobPreviewFragment2);
+                    jobRecyclerView.setAdapter(jobAdapter);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         editText = view.findViewById(R.id.search);
         editText.addTextChangedListener(new TextWatcher() {
@@ -88,6 +120,29 @@ public class SearchFragment extends Fragment {
             }
         });
         return view;
+    }
+    private ArrayList<Category> getJobCategory() {
+        ArrayList<Category> jobCategories = new ArrayList<>();
+        Category jc = new Category(R.drawable.ic_frontend_developer, "Web Developer");
+        jobCategories.add(jc);
+
+        jc = new Category(R.drawable.ic_mobile_app_developer, "Android Developer");
+
+        jobCategories.add(jc);
+
+        jc = new Category(R.drawable.ic_web_designer, "Web Designer");
+        jobCategories.add(jc);
+
+        jc = new Category(R.drawable.ic_ux_interface, "UI/UX Designer");
+        jobCategories.add(jc);
+
+        jc = new Category(R.drawable.ic_graphic_designer, "Graphics Designer");
+        jobCategories.add(jc);
+
+        jc = new Category(R.drawable.ic_backend, "Backend Developer");
+
+        jobCategories.add(jc);
+        return jobCategories;
     }
 
     private void filter(String text) {
@@ -126,5 +181,9 @@ public class SearchFragment extends Fragment {
             lay3.setVisibility(View.VISIBLE);
 
         }
+    }
+    private void initPreferences() {
+        preferences = getActivity().getSharedPreferences("User_Details", MODE_PRIVATE);
+        preferenceEditor = preferences.edit();
     }
 }

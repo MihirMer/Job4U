@@ -55,7 +55,7 @@ public class JobCategoryActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(JobCategoryActivity.this, "Data added successfully", Toast.LENGTH_SHORT).show();
                         preferenceEditor.putBoolean("areaOfInterestSelected", true);
-                        FirebaseDatabase.getInstance().getReference("Users").child(userId).child("areaOfInterestSelected").setValue(true);
+                        FirebaseDatabase.getInstance().getReference("Users").child(userId).child("PERSONAL_DETAILS").child("areaOfInterestSelected").setValue(true);
                         preferenceEditor.apply();
                         preferenceEditor.commit();
 
@@ -85,7 +85,7 @@ public class JobCategoryActivity extends AppCompatActivity {
         jobCategories.add(jc);
 
         jc = new Category(R.drawable.ic_mobile_app_developer, "Android Developer");
-//        aaya to barabr aave che icon
+
         jobCategories.add(jc);
 
         jc = new Category(R.drawable.ic_web_designer, "Web Designer");
@@ -99,7 +99,6 @@ public class JobCategoryActivity extends AppCompatActivity {
 
         jc = new Category(R.drawable.ic_backend, "Backend Developer");
 
-//        kyu rakhu?
         jobCategories.add(jc);
         return jobCategories;
     }

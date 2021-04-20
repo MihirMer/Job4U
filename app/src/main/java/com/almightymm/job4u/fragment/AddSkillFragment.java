@@ -53,7 +53,7 @@ public class AddSkillFragment extends Fragment {
         initPreferences();
         String userId = preferences.getString("userId", "");
         db_add_skill = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("ADDSKILLS");
-        personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("keySkillAdded");
+        personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS").child("keySkillAdded");
         setValues(view);
         setListeners(view);
 

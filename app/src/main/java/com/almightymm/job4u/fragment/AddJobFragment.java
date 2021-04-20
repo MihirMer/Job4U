@@ -48,6 +48,9 @@ public class AddJobFragment extends Fragment {
 
         initViews(view);
         initPreferences();
+        if (preferences.getBoolean("companyDetailsAdded", false)){
+            Toast.makeText(getContext(), "Please add Company details first !", Toast.LENGTH_SHORT).show();
+        }
         setValues();
         addListeners(view);
 
@@ -117,7 +120,10 @@ public class AddJobFragment extends Fragment {
         String post_date = pod.getText().toString().trim();
         String vacan = vacancy.getText().toString().trim();
 
-        if (title.equals("Job Title")) {
+        if (preferences.getBoolean("companyDetailsAdded", false)){
+            Toast.makeText(getContext(), "Please add Company details first !", Toast.LENGTH_SHORT).show();
+        }
+        else if (title.equals("Job Title")) {
             jobtype.requestFocus();
             Toast.makeText(getContext(), "Title is required !", Toast.LENGTH_SHORT).show();
         } else if (quali.equals("Qualification")) {

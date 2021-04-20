@@ -55,7 +55,7 @@ public class CompanyDetailsFragment extends Fragment {
 
         companyId = preferences.getString("companyId", "");
         databaseReference = FirebaseDatabase.getInstance().getReference("HR").child("COMPANY_DETAILS").child(companyId);
-//        databaseReference= FirebaseDatabase.getInstance().getReference().child("Users").child("COMPANY_DETAILS").child("-MXmw4NhrRjWcUvGO8tY");
+
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -2,6 +2,10 @@ package com.almightymm.job4u.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,14 +13,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.almightymm.job4u.Adapter.JobAdapter;
 import com.almightymm.job4u.Adapter.SavedJobAdapter;
 import com.almightymm.job4u.R;
 import com.almightymm.job4u.model.Job;
+import com.almightymm.job4u.model.SavedJob;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,16 +28,16 @@ import java.util.ArrayList;
 import static android.content.Context.MODE_PRIVATE;
 
 public class savedJobFragment extends Fragment {
+    private static final String TAG = "savedJobFragment";
     RecyclerView jobRecyclerView;
     ArrayList<Job> jobArrayList;
+    ArrayList<SavedJob> savedJobArrayList;
     SavedJobAdapter savedJobAdapter;
     LinearLayoutManager jobLinearLayoutManager;
-
-    DatabaseReference firebaseDatabase;
-
+    DatabaseReference saved_job_ref;
+    DatabaseReference job_ref;
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
-
     String userId;
 
     public savedJobFragment() {
@@ -56,7 +56,7 @@ public class savedJobFragment extends Fragment {
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_saved_job2, container, false);
+        View view = inflater.inflate(R.layout.fragment_saved_job, container, false);
 
         initPreferences();
 
@@ -66,21 +66,41 @@ public class savedJobFragment extends Fragment {
         jobLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         jobRecyclerView.setLayoutManager(jobLinearLayoutManager);
         jobArrayList = new ArrayList<>();
+        savedJobArrayList = new ArrayList<>();
+        userId = preferences.getString("userId", "");
+        saved_job_ref = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("SAVED_JOB");
+        job_ref = FirebaseDatabase.getInstance().getReference().child("HR").child("ADDJOB");
+        saved_job_ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        SavedJob savedJob = dataSnapshot.getValue(SavedJob.class);
+                        savedJobArrayList.add(savedJob);
+                    }
+                }
+            }
 
-        firebaseDatabase = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB");
-        firebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        job_ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         Job job = dataSnapshot.getValue(Job.class);
-                        jobArrayList.add(job);
-
-
+                        for (SavedJob savedJob: savedJobArrayList){
+                            if (job.getId().equals(savedJob.getId())) {
+                                jobArrayList.add(job);
+                        Log.e(TAG, "onDataChange: "+job.getId() );
+                            }
+                        }
                     }
-                    savedJobAdapter = new SavedJobAdapter(getContext(), filter(), preferences, preferenceEditor);
+                    savedJobAdapter = new SavedJobAdapter(getContext(), jobArrayList, preferences, preferenceEditor);
                     jobRecyclerView.setAdapter(savedJobAdapter);
-
                 }
             }
 
@@ -93,15 +113,6 @@ public class savedJobFragment extends Fragment {
 
     }
 
-    private ArrayList<Job> filter() {
-        ArrayList<Job> filterList = new ArrayList<>();
-        for (Job job : jobArrayList) {
-            //Log.e("errr", "filter: "+job.getJob_Name()+" "+category.getC_Job_name() );
-            filterList.add(job);
-        }
-        return filterList;
-
-    }
     private void initPreferences() {
         preferences = getActivity().getSharedPreferences("User_Details", MODE_PRIVATE);
         preferenceEditor = preferences.edit();

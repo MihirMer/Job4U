@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/job_detail_layout"
+            android:layout_marginTop="10dp"
             android:background="@color/white"
             app:tabBackground="@drawable/tab_background"
             app:tabIndicatorColor="@color/green"

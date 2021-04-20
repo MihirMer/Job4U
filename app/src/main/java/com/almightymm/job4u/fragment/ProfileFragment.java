@@ -317,37 +317,6 @@ public class ProfileFragment extends Fragment {
             gender.setVisibility(View.GONE);
         }
 
-
-//        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
-//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                PersonalDetails personaldetails = dataSnapshot.getValue(PersonalDetails.class);
-//                name.setText(personaldetails.getFirstName() + " " + personaldetails.getLastName());
-//                gmail.setText(personaldetails.getEmailAddress());
-//                if(personaldetails.getPhone()!=null && personaldetails.getAddress()!=null && personaldetails.getDOB()!=null && personaldetails.getGender()!=null){
-//                    phone.setText(personaldetails.getPhone());
-//                    city.setText(personaldetails.getAddress());
-//                    dob.setText(personaldetails.getDOB());
-//                    gender.setText(personaldetails.getGender());
-//                    phone.setVisibility(View.VISIBLE);
-//                    city.setVisibility(View.VISIBLE);
-//                    dob.setVisibility(View.VISIBLE);
-//                    gender.setVisibility(View.VISIBLE);
-//                }
-//                else {
-//                    phone.setVisibility(View.GONE);
-//                    city.setVisibility(View.GONE);
-//                    dob.setVisibility(View.GONE);
-//                    gender.setVisibility(View.GONE);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//            }
-//        });
-
 //        education details
 
         edu_list = new ArrayList<>();
@@ -512,35 +481,7 @@ public class ProfileFragment extends Fragment {
                 add_exp.setVisibility(View.GONE);
             }
         });
-//
-//        add_exp.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("WORK_EXPERIENCE").child("-MXrk11ijXzpmt53Ed-0");
-//                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                        WorkExperience workexperience = dataSnapshot.getValue(WorkExperience.class);
-//                        Exprience.setText("I have " + workexperience.getYearsOfExperience() + " year experience as a " + workexperience.getDesignation() + " in " +
-//                                workexperience.getCompanyName() + " which is located in " + workexperience.getCity());
-//                        duration.setText("Duration : " + workexperience.getFromYear() + " to " + workexperience.getToYear());
-//
-//                        info3.setVisibility(View.GONE);
-//                        Exprience.setVisibility(View.VISIBLE);
-//                        duration.setVisibility(View.VISIBLE);
-//                        add_exp.setVisibility(View.GONE);
-//                        rg1.setVisibility(View.GONE);
-//
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                    }
-//                });
-//            }
-//        });
+
     }
 
     public void generateResume() {

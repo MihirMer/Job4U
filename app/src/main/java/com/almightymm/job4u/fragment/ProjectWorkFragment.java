@@ -46,7 +46,7 @@ public class ProjectWorkFragment extends Fragment {
         initViews(view);
         initPreferences();
         String userId = preferences.getString("userId", "");
-        personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("projectWorkAdded");
+        personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS").child("projectWorkAdded");
         db_add_projectWork = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("PROJECT_WORK");
         addListeners(view);
 

@@ -207,7 +207,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void initUserInDatabase(final String method) {
-        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
 
@@ -238,7 +238,7 @@ public class SignInActivity extends AppCompatActivity {
                                 false
                         );
 
-                        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS").setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 setPreferences(userId, user);

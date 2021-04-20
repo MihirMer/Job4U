@@ -131,7 +131,7 @@ public class HomeFragment extends Fragment {
 
 
                     }
-                    jobAdapter = new JobAdapter(getContext(), filter(),preferences,preferenceEditor);
+                    jobAdapter = new JobAdapter(getContext(), filter(),preferences,preferenceEditor,R.id.action_homeFragment_to_jobPreviewFragment);
                     jobRecyclerView.setAdapter(jobAdapter);
 
                 }

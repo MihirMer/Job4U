@@ -48,7 +48,7 @@ public class AddEducationDetailsFragment extends Fragment {
         initPreferences();
         String userId = preferences.getString("userId", "");
         db_add_education_details = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("EDUCATION_DETAILS");
-        personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("educationAdded");
+        personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS").child("educationAdded");
         initViews(view);
         setValues(view);
         setListeners(view);

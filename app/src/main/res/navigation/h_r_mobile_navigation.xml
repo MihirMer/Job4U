@@ -59,5 +59,16 @@
         <action
             android:id="@+id/action_HRHomeFragment_to_jobPreviewFragment"
             app:destination="@id/jobPreviewFragment" />
+        <action
+            android:id="@+id/action_HRHomeFragment_to_addJobFragment"
+            app:destination="@id/addJobFragment" />
+        <action
+            android:id="@+id/action_HRHomeFragment_to_hrViewResponsesFragment"
+            app:destination="@id/hrViewResponsesFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/hrViewResponsesFragment"
+        android:name="com.almightymm.job4u.fragment.HrViewResponsesFragment"
+        android:label="Responses"
+        tools:layout="@layout/fragment_hr_view_responses"/>
 </navigation>
