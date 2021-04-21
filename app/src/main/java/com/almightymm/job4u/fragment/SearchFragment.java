@@ -69,7 +69,7 @@ public class SearchFragment extends Fragment {
 
         categoryArrayList = new ArrayList<>();
         categoryArrayList = getJobCategory();
-        categoryAdapter = new CategoryAdapter(getContext(), categoryArrayList);
+        categoryAdapter = new CategoryAdapter(getContext(), categoryArrayList,preferences,preferenceEditor,R.id.action_searchFragment_to_jobListFragment);
         recyclerView.setAdapter(categoryAdapter);
 
         //        for job recycler view

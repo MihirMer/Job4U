@@ -81,6 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="23dp"
             android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:text="Job Description"
             android:textSize="15dp" />
 
@@ -89,7 +90,6 @@
             android:id="@+id/btn_remove_saved"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_marginTop="5dp"
             android:text="Remove"
             android:textSize="10dp"
             android:background="@drawable/button"

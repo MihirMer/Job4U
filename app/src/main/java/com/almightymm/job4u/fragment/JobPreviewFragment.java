@@ -17,6 +17,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.almightymm.job4u.Adapter.JobFragmentPagerAdapter;
 import com.almightymm.job4u.R;
+import com.almightymm.job4u.model.Candidate;
 import com.almightymm.job4u.model.Job;
 import com.almightymm.job4u.model.SavedJob;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,9 +34,11 @@ public class JobPreviewFragment extends Fragment {
     TextView job_name, company, dop, salary, designation, website, city;
     DatabaseReference databaseReference;
     DatabaseReference save_job_ref;
+    DatabaseReference applied_job_ref;
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
     Button savedJob;
+    Button appliedJob;
     String jobId;
     String userId;
 
@@ -64,14 +67,16 @@ public class JobPreviewFragment extends Fragment {
         salary = view.findViewById(R.id.txt_job_salary);
         city = view.findViewById(R.id.txt_job_city);
         savedJob = view.findViewById(R.id.job_saved);
+        appliedJob= view.findViewById(R.id.job_apply_now);
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager);
 
         userId = preferences.getString("userId", "");
         jobId = preferences.getString("jobId", "");
         save_job_ref = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("SAVED_JOB").child(jobId);
-
         setListeners(view);
+        //applied_job_ref = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("APPLIED_JOB").child(jobId);
+        setListeners1(view);
 
 
         databaseReference = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB").child(jobId);
@@ -122,7 +127,7 @@ public class JobPreviewFragment extends Fragment {
             }
         });
     }
-
+//saved job
     private void setListeners(View view) {
         savedJob.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +142,39 @@ public class JobPreviewFragment extends Fragment {
             }
         });
     }
+    //applied job
+    private void setListeners1(View view)
+    {
+        appliedJob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (preferences.getBoolean("areaOfInterestSelected", false) && preferences.getBoolean("personalDetailsAdded", false) && preferences.getBoolean("keySkillAdded", false) && preferences.getBoolean("educationAdded", false) && preferences.getBoolean("projectWorkAdded", false)) {
+//                Toast.makeText(context, "Position " + positionPlusOne, Toast.LENGTH_SHORT).show();
+                    final String userId = preferences.getString("userId", "");
+                    String userName = preferences.getString("firstName", "") + " " + preferences.getString("lastName", "");
 
+                    Candidate candidate = new Candidate(userId, userName, "Applied");
+                    DatabaseReference applyNowDbRef = FirebaseDatabase.getInstance().getReference().child("HR").child("RESPONSES").child(jobId);
+                    applyNowDbRef.child(userId).setValue(candidate).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            SavedJob savedJob = new SavedJob(jobId);
+                            FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("APPLIED_JOB").child(jobId).setValue(savedJob).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+                                    Toast.makeText(getContext(), "Resume sent", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    });
+                }
+                else{
+                    Toast.makeText(getContext(), "Please complete your profile details first !", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
     private void initPreferences() {
         preferences = getActivity().getSharedPreferences("User_Details", MODE_PRIVATE);
         preferenceEditor = preferences.edit();

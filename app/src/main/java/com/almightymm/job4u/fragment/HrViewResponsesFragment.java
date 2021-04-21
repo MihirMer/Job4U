@@ -67,7 +67,7 @@ public class HrViewResponsesFragment extends Fragment {
         jobRecyclerView.setLayoutManager(jobLinearLayoutManager);
          candidateArrayList= new ArrayList<>();
         jobId = preferences.getString("jobId", "");
-        firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("HR").child("ADDJOB").child(jobId).child("CANDIDATES");
+        firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("HR").child("RESPONSES").child(jobId);
         firebaseDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

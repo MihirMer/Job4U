@@ -94,7 +94,7 @@ public class HomeFragment extends Fragment {
                         Category category = dataSnapshot.getValue(Category.class);
                         categoryArrayList.add(category);
                     }
-                    categoryAdapter = new CategoryAdapter(getContext(), categoryArrayList);
+                    categoryAdapter = new CategoryAdapter(getContext(), categoryArrayList,preferences,preferenceEditor,R.id.action_homeFragment_to_jobListFragment);
                     recyclerView.setAdapter(categoryAdapter);
                 }
             }
