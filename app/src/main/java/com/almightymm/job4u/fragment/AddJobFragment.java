@@ -3,7 +3,6 @@ package com.almightymm.job4u.fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.almightymm.job4u.R;
 import com.almightymm.job4u.model.Job;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -30,6 +30,10 @@ public class AddJobFragment extends Fragment {
     EditText desigation, description, salary, companyname, city, website, vacancy, pod;
     Spinner jobtype, jobQualification;
 
+    String[] jobTitleArray;
+    String[] jobQualificationArray;
+    ArrayAdapter<String> jobTitleAdapter;
+    ArrayAdapter<String> jobQualificationAdapter;
     Button add_job;
     DatabaseReference db_add_job;
     SharedPreferences preferences;
@@ -55,7 +59,7 @@ public class AddJobFragment extends Fragment {
         userId = preferences.getString("userId", "");
         db_add_job = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB");
 
-        if (!preferences.getBoolean("companyDetailsAdded", false)){
+        if (!preferences.getBoolean("companyDetailsAdded", false)) {
             Toast.makeText(getContext(), "Please add Company details first !", Toast.LENGTH_SHORT).show();
         }
         return view;
@@ -63,22 +67,45 @@ public class AddJobFragment extends Fragment {
 
     private void setValues() {
 //        companyname, city, website,
+        final String jobId = preferences.getString("jobId", "");
+        if (!jobId.equals("")) {
+
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB").child(jobId);
+            databaseReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                @Override
+                public void onSuccess(DataSnapshot dataSnapshot) {
+                    Job job = dataSnapshot.getValue(Job.class);
+//                    mare string compare karavi ne id set krvi cheok
+                    jobtype.setSelection(jobTitleAdapter.getPosition(job.getName()));
+                    jobQualification.setSelection(jobQualificationAdapter.getPosition(job.getQualification()));
+                    desigation.setText(job.getQualification());
+                    description.setText(job.getDescription());
+                    salary.setText(job.getSalary());
+                    companyname.setText(job.getCompanyName());
+                    city.setText(job.getCity());
+                    website.setText(job.getWebsite());
+                    vacancy.setText(job.getVacancy());
+                    pod.setText(job.getPost_date());
+                }
+            });
+
+        }
         if (preferences.getBoolean("companyDetailsAdded", false)) {
             companyname.setText(preferences.getString("companyName", ""));
-            city.setText(preferences.getString("companyLocation",""));
+            city.setText(preferences.getString("companyLocation", ""));
             website.setText(preferences.getString("companyWebsite", ""));
         }
     }
 
     private void initViews(View view) {
         jobtype = view.findViewById(R.id.jobtitle);
-        String[] jobTitleArray = {"Job Title", "Web Developer", "Web Designer", "Android Developer", "UI/UX Designer", "Graphics Designer", "Backend Developer", "Frontend Developer"};
-        ArrayAdapter<String> jobTitleAdapter = new ArrayAdapter<String>(getContext(), R.layout.job_spinner_row, R.id.item, jobTitleArray);
+        jobTitleArray =new String[] {"Job Title", "Web Developer", "Web Designer", "Android Developer", "UI/UX Designer", "Graphics Designer", "Backend Developer", "Frontend Developer"};
+        jobTitleAdapter = new ArrayAdapter<String>(getContext(), R.layout.job_spinner_row, R.id.item, jobTitleArray);
         jobtype.setPrompt("Select Job");
         jobtype.setAdapter(jobTitleAdapter);
         jobQualification = view.findViewById(R.id.jobQualification);
-        String[] jobQualificationArray = {"Qualification", "B.E.", "M.E.", "Diploma in IT", "12th", "Graduate", "Post Graduate", "B.tech", "M.Sc"};
-        ArrayAdapter<String> jobQualificationAdapter = new ArrayAdapter<String>(getContext(), R.layout.job_spinner_row, R.id.item, jobQualificationArray);
+        jobQualificationArray =new String[] {"Qualification", "B.E.", "M.E.", "Diploma in IT", "12th", "Graduate", "Post Graduate", "B.tech", "M.Sc"};
+        jobQualificationAdapter = new ArrayAdapter<String>(getContext(), R.layout.job_spinner_row, R.id.item, jobQualificationArray);
         jobQualification.setPrompt("Select Qualification");
         jobQualification.setAdapter(jobQualificationAdapter);
 
@@ -119,10 +146,9 @@ public class AddJobFragment extends Fragment {
         String quali = jobQualification.getSelectedItem().toString().trim();
         String post_date = pod.getText().toString().trim();
         String vacan = vacancy.getText().toString().trim();
-        if (!preferences.getBoolean("companyDetailsAdded", false)){
+        if (!preferences.getBoolean("companyDetailsAdded", false)) {
             Toast.makeText(getContext(), "Please add Company details first !", Toast.LENGTH_SHORT).show();
-        }
-        else if (title.equals("Job Title")) {
+        } else if (title.equals("Job Title")) {
             jobtype.requestFocus();
             Toast.makeText(getContext(), "Title is required !", Toast.LENGTH_SHORT).show();
         } else if (quali.equals("Qualification")) {

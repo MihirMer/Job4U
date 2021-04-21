@@ -12,6 +12,12 @@
         <action
             android:id="@+id/action_searchFragment_to_jobPreviewFragment"
             app:destination="@id/jobPreviewFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_jobListFragment22"
+            app:destination="@id/jobListFragment2" />
+        <action
+            android:id="@+id/action_searchFragment_to_hrViewResponsesFragment"
+            app:destination="@id/hrViewResponsesFragment" />
     </fragment>
     <fragment
         android:id="@+id/notificationFragment"
@@ -71,4 +77,13 @@
         android:name="com.almightymm.job4u.fragment.HrViewResponsesFragment"
         android:label="Responses"
         tools:layout="@layout/fragment_hr_view_responses"/>
+    <fragment
+        android:id="@+id/jobListFragment2"
+        android:name="com.almightymm.job4u.fragment.JobListFragment"
+        android:label="Jobs"
+        tools:layout="@layout/fragment_job_list">
+        <action
+            android:id="@+id/action_jobListFragment2_to_jobPreviewFragment"
+            app:destination="@id/jobPreviewFragment" />
+    </fragment>
 </navigation>

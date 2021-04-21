@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.almightymm.job4u.Adapter.CategoryAdapter;
+import com.almightymm.job4u.Adapter.HRJobAdapter;
 import com.almightymm.job4u.Adapter.JobAdapter;
 import com.almightymm.job4u.R;
 import com.almightymm.job4u.model.Category;
@@ -32,7 +34,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class SearchFragment extends Fragment {
     EditText editText;
-
+    private static final String TAG = "SearchFragment";
     RecyclerView recyclerView;
     CategoryAdapter categoryAdapter;
     ArrayList<Category> categoryArrayList;
@@ -41,6 +43,7 @@ public class SearchFragment extends Fragment {
     RecyclerView jobRecyclerView;
     ArrayList<Job> jobArrayList;
     JobAdapter jobAdapter;
+    HRJobAdapter hrJobAdapter;
     LinearLayoutManager jobLinearLayoutManager;
 
     RelativeLayout lay1, lay2, lay3;
@@ -69,7 +72,15 @@ public class SearchFragment extends Fragment {
 
         categoryArrayList = new ArrayList<>();
         categoryArrayList = getJobCategory();
+
+        if (preferences.getString("role","").equals("HR")){
+
+        categoryAdapter = new CategoryAdapter(getContext(), categoryArrayList,preferences,preferenceEditor,R.id.action_searchFragment_to_jobListFragment22);
+        }else{
+
         categoryAdapter = new CategoryAdapter(getContext(), categoryArrayList,preferences,preferenceEditor,R.id.action_searchFragment_to_jobListFragment);
+        }
+
         recyclerView.setAdapter(categoryAdapter);
 
         //        for job recycler view
@@ -79,19 +90,26 @@ public class SearchFragment extends Fragment {
         jobRecyclerView.setLayoutManager(jobLinearLayoutManager);
 
         jobArrayList = new ArrayList<>();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB");
+        firebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         Job job = dataSnapshot.getValue(Job.class);
                         jobArrayList.add(job);
-
+                        Log.e(TAG, "onDataChange: "+job.getName());
 
                     }
-                    jobAdapter = new JobAdapter(getContext(), jobArrayList,preferences,preferenceEditor, R.id.action_searchFragment_to_jobPreviewFragment2);
-                    jobRecyclerView.setAdapter(jobAdapter);
+
+                    if (preferences.getString("role", "").equals("HR")) {
+                        hrJobAdapter = new HRJobAdapter(getContext(), jobArrayList, preferences, preferenceEditor,"search");
+                        jobRecyclerView.setAdapter(hrJobAdapter);
+                    } else {
+
+                        jobAdapter = new JobAdapter(getContext(), jobArrayList, preferences, preferenceEditor, R.id.action_jobListFragment_to_jobPreviewFragment);
+                        jobRecyclerView.setAdapter(jobAdapter);
+                    }
 
                 }
             }
@@ -161,8 +179,12 @@ public class SearchFragment extends Fragment {
         }
 
         categoryAdapter.filterList(filteredList);
+        if (preferences.getString("role", "").equals("HR")) {
+        hrJobAdapter.filterList(filteredList2);
+        } else {
         jobAdapter.filterList(filteredList2);
 
+        }
         if (filteredList.isEmpty()){
             lay1.setVisibility(View.GONE);
         } else {

@@ -27,16 +27,6 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginHorizontal="10dp"
-                android:gravity="end"
-                android:text="View all"
-                android:textSize="20sp"
-                android:drawablePadding="3dp"
-                app:drawableRightCompat="@drawable/ic_baseline_arrow_forward_24" />
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -66,17 +56,6 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="end"
-                android:text="View all"
-                android:textSize="20sp"
-                android:drawablePadding="3dp"
-                app:drawableRightCompat="@drawable/ic_baseline_arrow_forward_24" />
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView

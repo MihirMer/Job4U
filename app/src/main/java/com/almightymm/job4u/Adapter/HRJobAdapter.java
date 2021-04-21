@@ -28,12 +28,14 @@ public class HRJobAdapter extends RecyclerView.Adapter<HRJobAdapter.JobViewHolde
     SharedPreferences.Editor preferenceEditor;
     private Context context;
     private ArrayList<Job> jobArrayList;
+    String currentPlace;
 
-    public HRJobAdapter(Context context, ArrayList<Job> jobArrayList, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor) {
+    public HRJobAdapter(Context context, ArrayList<Job> jobArrayList, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor, String currentPlace ) {
         this.context = context;
         this.jobArrayList = jobArrayList;
         this.preferences = preferences;
         this.preferenceEditor = preferenceEditor;
+        this.currentPlace = currentPlace;
     }
 
     @NonNull
@@ -64,7 +66,12 @@ public class HRJobAdapter extends RecyclerView.Adapter<HRJobAdapter.JobViewHolde
                 preferenceEditor.putString("jobId", job.getId());
                 preferenceEditor.apply();
                 preferenceEditor.commit();
+                if(currentPlace.equals("home")){
                 Navigation.findNavController(v).navigate(R.id.action_HRHomeFragment_to_addJobFragment);
+                } else {
+
+                Navigation.findNavController(v).navigate(R.id.action_searchFragment_to_jobPreviewFragment);
+                }
             }
         });
         holder.jobApplyNowButton.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +81,14 @@ public class HRJobAdapter extends RecyclerView.Adapter<HRJobAdapter.JobViewHolde
                 preferenceEditor.putString("jobId", job.getId());
                 preferenceEditor.apply();
                 preferenceEditor.commit();
+                if(currentPlace.equals("home")){
                 Navigation.findNavController(v).navigate(R.id.action_HRHomeFragment_to_hrViewResponsesFragment);
+
+                } else {
+
+                Navigation.findNavController(v).navigate(R.id.action_searchFragment_to_hrViewResponsesFragment);
+
+                }
             }
         });
     }

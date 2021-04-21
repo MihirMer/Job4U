@@ -83,7 +83,7 @@ public class HRHomeFragment extends Fragment {
 
 
                     }
-                    hrJobAdapter = new HRJobAdapter(getContext(), filter(),preferences,preferenceEditor);
+                    hrJobAdapter = new HRJobAdapter(getContext(), filter(),preferences,preferenceEditor,"home");
                     jobRecyclerView.setAdapter(hrJobAdapter);
 
                 }
@@ -95,7 +95,6 @@ public class HRHomeFragment extends Fragment {
             }
         });
         return view;
-
     }
 
     private ArrayList<Job> filter() {

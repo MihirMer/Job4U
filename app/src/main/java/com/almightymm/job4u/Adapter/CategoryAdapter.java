@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -18,16 +17,15 @@ import com.almightymm.job4u.R;
 import com.almightymm.job4u.model.Category;
 
 import java.util.ArrayList;
-import java.util.prefs.Preferences;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
+    private final int navigation;
     private Context context;
     private ArrayList<Category> categoryArrayList;
     private SharedPreferences preferences;
     private SharedPreferences.Editor preferenceEditor;
-    private int navigation;
 
-    public CategoryAdapter(Context context, ArrayList<Category> categoryArrayList,SharedPreferences preferences, SharedPreferences.Editor preferenceEditor,int navigation) {
+    public CategoryAdapter(Context context, ArrayList<Category> categoryArrayList, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor, int navigation) {
         this.context = context;
         this.categoryArrayList = categoryArrayList;
         this.preferences = preferences;
@@ -39,7 +37,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.category_list_item, parent,false);
+        View view = inflater.inflate(R.layout.category_list_item, parent, false);
         return new CategoryViewHolder(view);
     }
 
@@ -58,9 +56,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 preferenceEditor.putString("categoryName", category.getC_Job_name());
                 preferenceEditor.apply();
                 preferenceEditor.commit();
-                if(navigation == R.id.action_searchFragment_to_jobListFragment){
-                Navigation.findNavController(v).navigate(R.id.action_searchFragment_to_jobListFragment);
-                }else if (navigation == R.o)
+                if (navigation == R.id.action_searchFragment_to_jobListFragment) {
+                    Navigation.findNavController(v).navigate(R.id.action_searchFragment_to_jobListFragment);
+                } else if (navigation == R.id.action_searchFragment_to_jobListFragment22) {
+                    Navigation.findNavController(v).navigate(R.id.action_searchFragment_to_jobListFragment22);
+                }
+
 
             }
         });
@@ -71,10 +72,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return categoryArrayList.size();
     }
 
-    public static class CategoryViewHolder extends RecyclerView.ViewHolder{
+    public void filterList(ArrayList<Category> filteredList) {
+        categoryArrayList = filteredList;
+        getItemCount();
+        notifyDataSetChanged();
+    }
+
+    public static class CategoryViewHolder extends RecyclerView.ViewHolder {
         TextView categoryTitleTextView;
         ImageView categoryImageView;
         CardView categoryCardView;
+
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
             categoryCardView = itemView.findViewById(R.id.category_card);
@@ -82,13 +90,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             categoryTitleTextView = itemView.findViewById(R.id.category_title);
         }
     }
-
-    public void filterList(ArrayList<Category> filteredList) {
-        categoryArrayList = filteredList;
-        getItemCount();
-        notifyDataSetChanged();
-    }
-
 
 
 }

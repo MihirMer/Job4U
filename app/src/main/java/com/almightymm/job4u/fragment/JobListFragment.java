@@ -2,16 +2,15 @@ package com.almightymm.job4u.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.almightymm.job4u.Adapter.HRJobAdapter;
 import com.almightymm.job4u.Adapter.JobAdapter;
@@ -31,19 +30,19 @@ public class JobListFragment extends Fragment {
     RecyclerView jobRecyclerView;
     ArrayList<Job> jobArrayList;
     JobAdapter jobAdapter;
+    HRJobAdapter hrJobAdapter;
     LinearLayoutManager jobLinearLayoutManager;
 
     DatabaseReference firebaseDatabase;
 
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
-String categoryName;
+    String categoryName;
     String userId;
+
     public JobListFragment() {
         // Required empty public constructor
     }
-
-
 
 
     @Override
@@ -70,7 +69,7 @@ String categoryName;
         jobRecyclerView.setLayoutManager(jobLinearLayoutManager);
         jobArrayList = new ArrayList<>();
 
-        categoryName =preferences.getString("categoryName", "");
+        categoryName = preferences.getString("categoryName", "");
         firebaseDatabase = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB");
         firebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -82,8 +81,14 @@ String categoryName;
 
 
                     }
-                    jobAdapter = new JobAdapter(getContext(), filter(),preferences,preferenceEditor,R.id.action_jobListFragment_to_jobPreviewFragment);
-                    jobRecyclerView.setAdapter(jobAdapter);
+                    if (preferences.getString("role", "").equals("HR")) {
+                        hrJobAdapter = new HRJobAdapter(getContext(), filter(), preferences, preferenceEditor,"joblist");
+                        jobRecyclerView.setAdapter(hrJobAdapter);
+                    } else {
+
+                        jobAdapter = new JobAdapter(getContext(), filter(), preferences, preferenceEditor, R.id.action_jobListFragment_to_jobPreviewFragment);
+                        jobRecyclerView.setAdapter(jobAdapter);
+                    }
 
                 }
             }
@@ -100,9 +105,9 @@ String categoryName;
     private ArrayList<Job> filter() {
         ArrayList<Job> filterList = new ArrayList<>();
         for (Job job : jobArrayList) {
-            if (job.getName().equals(categoryName)){
+            if (job.getName().equals(categoryName)) {
 
-            filterList.add(job);
+                filterList.add(job);
             }
         }
         return filterList;
