@@ -135,7 +135,7 @@ StorageReference storageRef ;
     LatexCompiler latexCompiler;
     StringBuilder texFilecontent;
     //    addjob
-    private Permissions currentPermission;
+    public Permissions currentPermission;
     private Document document;
 
 
@@ -961,7 +961,7 @@ StorageReference storageRef ;
 
     }
 
-    private enum Permissions {
+    public enum Permissions {
         SAVE, OPEN
     }
 }
