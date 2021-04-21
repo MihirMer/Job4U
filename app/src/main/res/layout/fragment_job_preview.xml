@@ -144,7 +144,7 @@
                     android:layout_marginTop="15dp"
                     android:background="@drawable/button"
                     android:paddingHorizontal="20dp"
-                    android:text="APPLY NOW"
+                    android:text="Send Resume"
                     android:textColor="@color/white"
                     android:textSize="10dp" />
 
