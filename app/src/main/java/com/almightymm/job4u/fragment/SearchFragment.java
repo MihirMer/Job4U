@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,7 +47,7 @@ public class SearchFragment extends Fragment {
     HRJobAdapter hrJobAdapter;
     LinearLayoutManager jobLinearLayoutManager;
 
-    RelativeLayout lay1, lay2, lay3;
+    RelativeLayout lay1, lay2, lay3, noData;
 
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
@@ -56,6 +57,11 @@ public class SearchFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -64,7 +70,7 @@ public class SearchFragment extends Fragment {
         lay1 = view.findViewById(R.id.lay1);
         lay2 = view.findViewById(R.id.lay2);
         lay3 = view.findViewById(R.id.lay3);
-
+noData = view.findViewById(R.id.lay4);
         recyclerView = view.findViewById(R.id.category_filtered);
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -91,17 +97,20 @@ public class SearchFragment extends Fragment {
 
         jobArrayList = new ArrayList<>();
         DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB");
+    final String cn = preferences.getString("companyName","");
         firebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         Job job = dataSnapshot.getValue(Job.class);
+                        Log.e(TAG, "onDataChange: "+cn );
                         jobArrayList.add(job);
+
                         Log.e(TAG, "onDataChange: "+job.getName());
 
                     }
-
+                    jobArrayList = filter1();
                     if (preferences.getString("role", "").equals("HR")) {
                         hrJobAdapter = new HRJobAdapter(getContext(), jobArrayList, preferences, preferenceEditor,"search");
                         jobRecyclerView.setAdapter(hrJobAdapter);
@@ -139,6 +148,22 @@ public class SearchFragment extends Fragment {
         });
         return view;
     }
+    private ArrayList<Job> filter1() {
+        ArrayList<Job> filterList = new ArrayList<>();
+        String cn = preferences.getString("companyName", "");
+        for (Job job : jobArrayList) {
+            if (job.getCompanyName().equals(cn))
+                filterList.add(job);
+        }
+        if (!filterList.isEmpty()){
+            noData.setVisibility(View.GONE);
+            lay2.setVisibility(View.VISIBLE);
+        } else{
+            noData.setVisibility(View.VISIBLE);
+            lay2.setVisibility(View.GONE);
+        }
+        return filterList;
+    }
     private ArrayList<Category> getJobCategory() {
         ArrayList<Category> jobCategories = new ArrayList<>();
         Category jc = new Category(R.drawable.ic_frontend_developer, "Web Developer");
@@ -172,8 +197,9 @@ public class SearchFragment extends Fragment {
                 filteredList.add(item);
             }
         }
+
         for (Job item : jobArrayList) {
-            if (item.getName().toLowerCase().contains(text.toLowerCase())) {
+            if (item.getName().toLowerCase().contains(text.toLowerCase()) ) {
                 filteredList2.add(item);
             }
         }

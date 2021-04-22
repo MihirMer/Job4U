@@ -11,7 +11,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="50dp">
+        <RelativeLayout
+            android:id="@+id/lay4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="10dp"
+            android:visibility="visible">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="200dp"
+                android:text="No Jobs Added"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:textColor="@color/medium_grey_normal"
+                android:textStyle="bold" />
+        </RelativeLayout>
         <TextView
             android:id="@+id/hr_job_title"
             android:layout_width="wrap_content"
@@ -23,17 +41,6 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:drawablePadding="3dp"
-            android:gravity="end"
-            android:text="View all"
-            android:textSize="20sp"
-            app:drawableRightCompat="@drawable/ic_baseline_arrow_forward_24" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/job"

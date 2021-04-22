@@ -30,7 +30,7 @@ public class HRJobAdapter extends RecyclerView.Adapter<HRJobAdapter.JobViewHolde
     private ArrayList<Job> jobArrayList;
     String currentPlace;
 
-    public HRJobAdapter(Context context, ArrayList<Job> jobArrayList, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor, String currentPlace ) {
+    public HRJobAdapter(Context context, ArrayList<Job> jobArrayList, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor, String currentPlace) {
         this.context = context;
         this.jobArrayList = jobArrayList;
         this.preferences = preferences;
@@ -49,11 +49,15 @@ public class HRJobAdapter extends RecyclerView.Adapter<HRJobAdapter.JobViewHolde
     @Override
     public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
         final Job job = jobArrayList.get(position);
+
         holder.jobTitleTextView.setText(job.getName());
         holder.jobCompanyTextView.setText(job.getCompanyName());
         holder.jobLocationTextView.setText(job.getCity());
         holder.salaryTextView.setText(job.getSalary());
         holder.descriptionTextView.setText(job.getDescription());
+        if (!currentPlace.equals("home")) {
+            holder.jobApplyNowButton.setVisibility(View.GONE);
+        }
         final String positionPlusOne = Integer.toString(position + 1);
         holder.jobCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,12 +70,14 @@ public class HRJobAdapter extends RecyclerView.Adapter<HRJobAdapter.JobViewHolde
                 preferenceEditor.putString("jobId", job.getId());
                 preferenceEditor.apply();
                 preferenceEditor.commit();
-                if(currentPlace.equals("home")){
-                Navigation.findNavController(v).navigate(R.id.action_HRHomeFragment_to_addJobFragment);
+                if (currentPlace.equals("home")) {
+                    Navigation.findNavController(v).navigate(R.id.action_HRHomeFragment_to_addJobFragment);
+                } else if (currentPlace.equals("search")) {
+                    Navigation.findNavController(v).navigate(R.id.action_searchFragment_to_addJobFragment);
                 } else {
-
-                Navigation.findNavController(v).navigate(R.id.action_searchFragment_to_jobPreviewFragment);
+                    Navigation.findNavController(v).navigate(R.id.action_jobListFragment2_to_addJobFragment);
                 }
+
             }
         });
         holder.jobApplyNowButton.setOnClickListener(new View.OnClickListener() {
@@ -81,12 +87,12 @@ public class HRJobAdapter extends RecyclerView.Adapter<HRJobAdapter.JobViewHolde
                 preferenceEditor.putString("jobId", job.getId());
                 preferenceEditor.apply();
                 preferenceEditor.commit();
-                if(currentPlace.equals("home")){
-                Navigation.findNavController(v).navigate(R.id.action_HRHomeFragment_to_hrViewResponsesFragment);
+                if (currentPlace.equals("home")) {
+                    Navigation.findNavController(v).navigate(R.id.action_HRHomeFragment_to_hrViewResponsesFragment);
 
                 } else {
 
-                Navigation.findNavController(v).navigate(R.id.action_searchFragment_to_hrViewResponsesFragment);
+                    Navigation.findNavController(v).navigate(R.id.action_searchFragment_to_hrViewResponsesFragment);
 
                 }
             }

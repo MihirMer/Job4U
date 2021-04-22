@@ -80,13 +80,15 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
                     final String userId = preferences.getString("userId", "");
                     String userName = preferences.getString("firstName", "") + " " + preferences.getString("lastName", "");
 
-                    Candidate candidate = new Candidate(userId, userName, "Applied");
+                   final Candidate candidate = new Candidate(userId, userName, "Applied");
                     DatabaseReference applyNowDbRef = FirebaseDatabase.getInstance().getReference().child("HR").child("RESPONSES").child(job.getId());
+                    final Candidate candidate1 = new Candidate(job.getId(), userName, "Applied");
                     applyNowDbRef.child(userId).setValue(candidate).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            SavedJob savedJob = new SavedJob(job.getId());
-                            FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("APPLIED_JOB").child(job.getId()).setValue(savedJob).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                            FirebaseDatabase.getInstance().getReference().child("Users").child(userId).
+                                    child("APPLIED_JOB").child(job.getId()).setValue(candidate1).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
 

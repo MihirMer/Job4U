@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,7 @@ public class savedJobFragment extends Fragment {
     ArrayList<SavedJob> savedJobArrayList;
     SavedJobAdapter savedJobAdapter;
     LinearLayoutManager jobLinearLayoutManager;
+    RelativeLayout noData;
     DatabaseReference saved_job_ref;
     DatabaseReference job_ref;
     SharedPreferences preferences;
@@ -59,7 +61,7 @@ public class savedJobFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_saved_job, container, false);
 
         initPreferences();
-
+        noData= view.findViewById(R.id.lay3);
         //        for job recycler view
         jobRecyclerView = view.findViewById(R.id.saved_job);
         jobLinearLayoutManager = new LinearLayoutManager(getContext());
@@ -99,7 +101,12 @@ public class savedJobFragment extends Fragment {
                             }
                         }
                     }
-                    savedJobAdapter = new SavedJobAdapter(getContext(), jobArrayList, preferences, preferenceEditor,false);
+                    if (jobArrayList.isEmpty()){
+                        noData.setVisibility(View.VISIBLE);
+                    } else{
+                        noData.setVisibility(View.GONE);
+                    }
+                    savedJobAdapter = new SavedJobAdapter(getContext(), jobArrayList, preferences, preferenceEditor,"savedJob");
                     jobRecyclerView.setAdapter(savedJobAdapter);
                 }
             }

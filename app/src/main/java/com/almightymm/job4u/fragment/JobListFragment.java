@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,7 +34,7 @@ public class JobListFragment extends Fragment {
     JobAdapter jobAdapter;
     HRJobAdapter hrJobAdapter;
     LinearLayoutManager jobLinearLayoutManager;
-
+RelativeLayout noData;
     DatabaseReference firebaseDatabase;
 
     SharedPreferences preferences;
@@ -40,6 +42,7 @@ public class JobListFragment extends Fragment {
     String categoryName;
     String userId;
 
+    TextView lay2;
     public JobListFragment() {
         // Required empty public constructor
     }
@@ -61,7 +64,8 @@ public class JobListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_job_list, container, false);
 
         initPreferences();
-
+    lay2 = view.findViewById(R.id.hr_job_title);
+    noData = view.findViewById(R.id.lay4);
         //        for job recycler view
         jobRecyclerView = view.findViewById(R.id.job);
         jobLinearLayoutManager = new LinearLayoutManager(getContext());
@@ -81,6 +85,7 @@ public class JobListFragment extends Fragment {
 
 
                     }
+                    jobArrayList = filter1();
                     if (preferences.getString("role", "").equals("HR")) {
                         hrJobAdapter = new HRJobAdapter(getContext(), filter(), preferences, preferenceEditor,"joblist");
                         jobRecyclerView.setAdapter(hrJobAdapter);
@@ -102,6 +107,22 @@ public class JobListFragment extends Fragment {
 
     }
 
+    private ArrayList<Job> filter1() {
+        ArrayList<Job> filterList = new ArrayList<>();
+        String cn = preferences.getString("companyName", "");
+        for (Job job : jobArrayList) {
+            if (job.getCompanyName().equals(cn))
+                filterList.add(job);
+        }
+        if (!filterList.isEmpty()){
+            noData.setVisibility(View.GONE);
+            lay2.setVisibility(View.VISIBLE);
+        } else{
+            noData.setVisibility(View.VISIBLE);
+            lay2.setVisibility(View.GONE);
+        }
+        return filterList;
+    }
     private ArrayList<Job> filter() {
         ArrayList<Job> filterList = new ArrayList<>();
         for (Job job : jobArrayList) {

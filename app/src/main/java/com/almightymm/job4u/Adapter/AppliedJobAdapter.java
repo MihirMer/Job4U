@@ -2,6 +2,7 @@ package com.almightymm.job4u.Adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,10 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.almightymm.job4u.R;
+import com.almightymm.job4u.model.Candidate;
 import com.almightymm.job4u.model.Job;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -42,13 +46,32 @@ public class AppliedJobAdapter extends RecyclerView.Adapter<AppliedJobAdapter.Jo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull JobViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final JobViewHolder holder, final int position) {
         final Job job = jobArrayList.get(position);
        /* if (preferences.getString("role", "").equals("HR")) {
             holder.jobApplyNowButton.setVisibility(View.GONE);
         } else {
-            holder.jobApplyNowButton.setVisibility(View.VISIBLE);
+            holder.jobApplyNowButton.setVisi
+            bility(View.VISIBLE);
         }*/
+        final String userId = preferences.getString("userId", "");
+        DatabaseReference staus = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("APPLIED_JOB").child(job.getId());
+        staus.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                Candidate candidate = dataSnapshot.getValue(Candidate.class);
+                if (candidate.getStatus().equals("Selected")){
+                    holder.status.setText("Congratulations, You are selected!");
+                    holder.status.setVisibility(View.VISIBLE);
+                } else if (candidate.getStatus().equals("Rejected")){
+                    holder.status.setText("Sorry, Better luck next time!");
+                    holder.status.setVisibility(View.VISIBLE);
+                } else{
+                    holder.status.setText("Status: Pending");
+                    holder.status.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         holder.jobTitleTextView.setText(job.getName());
         holder.jobCompanyTextView.setText(job.getCompanyName());
         holder.jobLocationTextView.setText(job.getCity());
@@ -73,7 +96,6 @@ public class AppliedJobAdapter extends RecyclerView.Adapter<AppliedJobAdapter.Jo
                 }
             }
         });
-        final String userId = preferences.getString("userId", "");
        /* holder.jobApplyNowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +120,7 @@ public class AppliedJobAdapter extends RecyclerView.Adapter<AppliedJobAdapter.Jo
     }
 
     public static class JobViewHolder extends RecyclerView.ViewHolder {
-        TextView jobTitleTextView, jobCompanyTextView;
+        TextView jobTitleTextView, jobCompanyTextView, status;
         TextView jobLocationTextView, salaryTextView, descriptionTextView;
         CardView jobCardView;
         //Button jobApplyNowButton;
@@ -107,12 +129,13 @@ public class AppliedJobAdapter extends RecyclerView.Adapter<AppliedJobAdapter.Jo
             super(itemView);
             jobTitleTextView = itemView.findViewById(R.id.job_title);
             jobCompanyTextView = itemView.findViewById(R.id.txt_company_name);
-            //jobApplyNowButton = itemView.findViewById(R.id.btn_remove_saved);
+            status = itemView.findViewById(R.id.status);
             jobLocationTextView = itemView.findViewById(R.id.txt_location);
             salaryTextView = itemView.findViewById(R.id.txt_salary);
             descriptionTextView = itemView.findViewById(R.id.txt_description);
 
             jobCardView = itemView.findViewById(R.id.job_card);
+
         }
     }
 }
