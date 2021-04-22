@@ -26,14 +26,14 @@ public class SavedJobAdapter extends RecyclerView.Adapter<SavedJobAdapter.JobVie
     SharedPreferences.Editor preferenceEditor;
     private Context context;
     private ArrayList<Job> jobArrayList;
-    private boolean hideButton;
+    String curruntPosition;
 
-    public SavedJobAdapter(Context context, ArrayList<Job> jobArrayList, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor, boolean hideButton) {
+    public SavedJobAdapter(Context context, ArrayList<Job> jobArrayList, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor, String curruntPosition) {
         this.context = context;
         this.jobArrayList = jobArrayList;
         this.preferences = preferences;
         this.preferenceEditor = preferenceEditor;
-        this.hideButton =  hideButton;
+        this.curruntPosition = curruntPosition;
     }
 
     @NonNull
@@ -52,7 +52,7 @@ public class SavedJobAdapter extends RecyclerView.Adapter<SavedJobAdapter.JobVie
         } else {
             holder.jobApplyNowButton.setVisibility(View.VISIBLE);
         }
-        if (hideButton){
+        if (!curruntPosition.equals("savedJob")){
             holder.jobApplyNowButton.setVisibility(View.GONE);
         }
         holder.jobTitleTextView.setText(job.getName());

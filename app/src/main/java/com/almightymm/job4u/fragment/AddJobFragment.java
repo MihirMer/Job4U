@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.almightymm.job4u.R;
@@ -39,11 +40,17 @@ public class AddJobFragment extends Fragment {
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
     String userId;
+     String jobId;
 
     public AddJobFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,7 +74,7 @@ public class AddJobFragment extends Fragment {
 
     private void setValues() {
 //        companyname, city, website,
-        final String jobId = preferences.getString("jobId", "");
+         jobId = preferences.getString("jobId", "");
         if (!jobId.equals("")) {
 
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB").child(jobId);
@@ -130,6 +137,7 @@ public class AddJobFragment extends Fragment {
         add_job.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 addjob();
             }
         });
@@ -176,14 +184,18 @@ public class AddJobFragment extends Fragment {
             vacancy.requestFocus();
             Toast.makeText(getContext(), "No. of Vacancy is required !", Toast.LENGTH_SHORT).show();
         } else {
-            String id = db_add_job.push().getKey();
+            if (jobId.equals("")) {
+                jobId = db_add_job.push().getKey();
+            }
 
-            Job job = new Job(id, title, desi, desc, sala, company, cit, web, vacan, post_date, quali, userId);
-            db_add_job.child(id).setValue(job).addOnSuccessListener(new OnSuccessListener<Void>() {
+            Job job = new Job(jobId, title, desi, desc, sala, company, cit, web, vacan, post_date, quali, userId);
+            db_add_job.child(jobId).setValue(job).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
 
-                    Toast.makeText(getContext(), "Job added", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Task Successful", Toast.LENGTH_LONG).show();
+                        jobId = db_add_job.push().getKey();
+
                     clear();
                 }
             });
@@ -202,6 +214,9 @@ public class AddJobFragment extends Fragment {
 //        vacancy.setText("");
 //        pod.setText("");
 
+        preferenceEditor.putString("jobId","");
+        preferenceEditor.apply();
+        preferenceEditor.commit();
         getActivity().onBackPressed();
 
     }

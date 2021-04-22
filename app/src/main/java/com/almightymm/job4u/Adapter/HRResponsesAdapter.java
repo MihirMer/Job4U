@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,9 @@ import com.almightymm.job4u.model.Candidate;
 import com.almightymm.job4u.utils.FilesUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -45,7 +50,8 @@ public class HRResponsesAdapter extends RecyclerView.Adapter<HRResponsesAdapter.
     private Context context;
     private ArrayList<Candidate> candidateArrayList;
     Activity activity;
-
+    String userId, jobId;
+    private static final String TAG = "HRResponsesAdapter";
     public HRResponsesAdapter(Context context, Activity activity, ArrayList<Candidate> candidateArrayList, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor) {
         this.preferences = preferences;
         this.preferenceEditor = preferenceEditor;
@@ -69,7 +75,7 @@ public class HRResponsesAdapter extends RecyclerView.Adapter<HRResponsesAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CandidateViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CandidateViewHolder holder, final int position) {
         final Candidate candidate = candidateArrayList.get(position);
         holder.candidateName.setText(candidate.getName());
         holder.candidateCardView.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +84,74 @@ public class HRResponsesAdapter extends RecyclerView.Adapter<HRResponsesAdapter.
                 if (checkStoragePermissions(ProfileFragment.Permissions.SAVE)) {
                     downloadResume(candidate.getId(), candidate.getName());
                 }
+            }
+        });
+        userId = preferences.getString("userId", "");
+        jobId = preferences.getString("jobId","");
+        if (!candidate.getStatus().equals("Applied")){
+            holder.status.setText("Candidate "+candidate.getStatus());
+            if (candidate.getStatus().equals("Rejected")){
+                holder.status.setTextColor(Color.RED);
+            }
+            holder.status.setVisibility(View.VISIBLE);
+            holder.rejectCandidate.setVisibility(View.GONE);
+            holder.acceptCandidate.setVisibility(View.GONE);
+        }
+        holder.rejectCandidate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final DatabaseReference candidate_ref = FirebaseDatabase.getInstance().getReference().child("HR").child("RESPONSES").child(jobId).child(candidate.getId());
+               candidate_ref.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                   @Override
+                   public void onSuccess(DataSnapshot dataSnapshot) {
+                        Candidate candidate2 = dataSnapshot.getValue(Candidate.class);
+                        if (candidate2 !=null){
+                        candidate2.setStatus("Rejected");
+                        candidate_ref.setValue(candidate2);
+                        }
+                   }
+               });
+                final DatabaseReference candidate_ref_j = FirebaseDatabase.getInstance().getReference().child("Users").child(candidate.getId()).child("APPLIED_JOB").child(jobId);
+                candidate_ref.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    @Override
+                    public void onSuccess(DataSnapshot dataSnapshot) {
+                        Candidate candidate2 = dataSnapshot.getValue(Candidate.class);
+                        if (candidate2 !=null){
+                            candidate2.setStatus("Rejected");
+                            candidate2.setId(jobId);
+                            candidate_ref_j.setValue(candidate2);
+                        }
+                    }
+                });
+            }
+        });
+        holder.acceptCandidate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final DatabaseReference candidate_ref = FirebaseDatabase.getInstance().getReference().child("HR").child("RESPONSES").child(jobId).child(candidate.getId());
+                candidate_ref.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    @Override
+                    public void onSuccess(DataSnapshot dataSnapshot) {
+                        Candidate candidate2 = dataSnapshot.getValue(Candidate.class);
+                        if (candidate2 !=null){
+
+                            candidate2.setStatus("Selected");
+                            candidate_ref.setValue(candidate2);
+                        }
+                    }
+                });
+                final DatabaseReference candidate_ref_j = FirebaseDatabase.getInstance().getReference().child("Users").child(candidate.getId()).child("APPLIED_JOB").child(jobId);
+                candidate_ref.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    @Override
+                    public void onSuccess(DataSnapshot dataSnapshot) {
+                        Candidate candidate2 = dataSnapshot.getValue(Candidate.class);
+                        if (candidate2 !=null){
+                            candidate2.setStatus("Selected");
+                            candidate2.setId(jobId);
+                            candidate_ref_j.setValue(candidate2);
+                        }
+                    }
+                });
             }
         });
 
@@ -152,7 +226,7 @@ public class HRResponsesAdapter extends RecyclerView.Adapter<HRResponsesAdapter.
     }
 
     public static class CandidateViewHolder extends RecyclerView.ViewHolder {
-        TextView candidateName;
+        TextView candidateName,status;
         Button acceptCandidate, rejectCandidate;
         CardView candidateCardView;
 
@@ -162,6 +236,7 @@ public class HRResponsesAdapter extends RecyclerView.Adapter<HRResponsesAdapter.
             candidateCardView = itemView.findViewById(R.id.candidate_card);
             acceptCandidate = itemView.findViewById(R.id.btn_candidate_accept);
             rejectCandidate = itemView.findViewById(R.id.btn_candidate_reject);
+            status = itemView.findViewById(R.id.status);
         }
     }
 }

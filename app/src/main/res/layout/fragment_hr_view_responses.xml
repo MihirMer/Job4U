@@ -11,7 +11,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="50dp">
+        <RelativeLayout
+            android:id="@+id/lay3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="10dp"
+            android:visibility="visible">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="200dp"
+                android:text="No Responses Till Now"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:textColor="@color/medium_grey_normal"
+                android:textStyle="bold" />
+        </RelativeLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/job"
             android:layout_width="match_parent"
@@ -20,6 +38,7 @@
             android:orientation="vertical"
             android:overScrollMode="never"
             android:paddingHorizontal="10dp"
+            android:layout_below="@id/lay3"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="10"
             tools:listitem="@layout/candidate_list_item" />

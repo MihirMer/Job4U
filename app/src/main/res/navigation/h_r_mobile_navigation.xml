@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_searchFragment_to_hrViewResponsesFragment"
             app:destination="@id/hrViewResponsesFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_addJobFragment"
+            app:destination="@id/addJobFragment" />
     </fragment>
     <fragment
         android:id="@+id/notificationFragment"
@@ -38,7 +41,7 @@
     <fragment
         android:id="@+id/addJobFragment"
         android:name="com.almightymm.job4u.fragment.AddJobFragment"
-        android:label="Add Job"
+        android:label="Job"
         tools:layout="@layout/fragment_add_job" />
     <fragment
         android:id="@+id/jobPreviewFragment"
@@ -85,5 +88,8 @@
         <action
             android:id="@+id/action_jobListFragment2_to_jobPreviewFragment"
             app:destination="@id/jobPreviewFragment" />
+        <action
+            android:id="@+id/action_jobListFragment2_to_addJobFragment"
+            app:destination="@id/addJobFragment" />
     </fragment>
 </navigation>

@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.almightymm.job4u.Adapter.CategoryAdapter;
 import com.almightymm.job4u.Adapter.HRJobAdapter;
@@ -19,6 +22,7 @@ import com.almightymm.job4u.Adapter.JobAdapter;
 import com.almightymm.job4u.R;
 import com.almightymm.job4u.model.Category;
 import com.almightymm.job4u.model.Job;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,11 +38,12 @@ public class HRHomeFragment extends Fragment {
     ArrayList<Job> jobArrayList;
     HRJobAdapter hrJobAdapter;
     LinearLayoutManager jobLinearLayoutManager;
-
+    RelativeLayout noData;
     DatabaseReference firebaseDatabase;
 
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
+    TextView  layjob;
 
     String userId;
     public HRHomeFragment() {
@@ -64,7 +69,11 @@ public class HRHomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_h_r_home, container, false);
 
         initPreferences();
-
+        noData = view.findViewById(R.id.lay3);
+        layjob = view.findViewById(R.id.hr_job_title);
+        preferenceEditor.putString("jobId","");
+        preferenceEditor.apply();
+        preferenceEditor.commit();
         //        for job recycler view
         jobRecyclerView = view.findViewById(R.id.job);
         jobLinearLayoutManager = new LinearLayoutManager(getContext());
@@ -73,16 +82,44 @@ public class HRHomeFragment extends Fragment {
         jobArrayList = new ArrayList<>();
 
         firebaseDatabase = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB");
-        firebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        firebaseDatabase.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onSuccess(DataSnapshot snapshot) {
+                jobArrayList.clear();
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         Job job = dataSnapshot.getValue(Job.class);
                         jobArrayList.add(job);
 
 
+
                     }
+                    if (jobArrayList.get(0)==null){
+                        noData.setVisibility(View.GONE);
+                        layjob.setVisibility(View.GONE);
+                    } else{
+                        noData.setVisibility(View.VISIBLE);
+                        layjob.setVisibility(View.VISIBLE);
+                    }
+                    hrJobAdapter = new HRJobAdapter(getContext(), filter(),preferences,preferenceEditor,"home");
+                    jobRecyclerView.setAdapter(hrJobAdapter);
+
+                }
+            }
+        });
+        firebaseDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                jobArrayList.clear();
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Job job = dataSnapshot.getValue(Job.class);
+                        jobArrayList.add(job);
+
+
+
+                    }
+
                     hrJobAdapter = new HRJobAdapter(getContext(), filter(),preferences,preferenceEditor,"home");
                     jobRecyclerView.setAdapter(hrJobAdapter);
 
@@ -94,14 +131,23 @@ public class HRHomeFragment extends Fragment {
 
             }
         });
+
         return view;
     }
 
     private ArrayList<Job> filter() {
         ArrayList<Job> filterList = new ArrayList<>();
+            String cn = preferences.getString("companyName","");
         for (Job job : jobArrayList) {
-                //Log.e("errr", "filter: "+job.getJob_Name()+" "+category.getC_Job_name() );
+                if (job.getCompanyName().equals(cn))
                         filterList.add(job);
+        }
+        if (!filterList.isEmpty()){
+            noData.setVisibility(View.GONE);
+            layjob.setVisibility(View.VISIBLE);
+        } else{
+            noData.setVisibility(View.VISIBLE);
+            layjob.setVisibility(View.GONE);
         }
         return filterList;
 

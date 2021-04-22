@@ -8,6 +8,7 @@
 
     <!--  Color for buttons both -->
     <color name="green">#7bed8d</color>
+    <color name="red">#CCF44336</color>
 <!--    <color name="green">#52A6FF</color>-->
     <color name="white">#ffffff</color>
     <!--  Color for background light  -->

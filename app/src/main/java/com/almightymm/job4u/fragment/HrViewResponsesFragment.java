@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.almightymm.job4u.Adapter.HRJobAdapter;
 import com.almightymm.job4u.Adapter.HRResponsesAdapter;
@@ -22,6 +23,7 @@ import com.almightymm.job4u.latex.PreferenceHelper;
 import com.almightymm.job4u.model.Candidate;
 import com.almightymm.job4u.model.Job;
 import com.almightymm.job4u.utils.FilesUtils;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,6 +50,7 @@ public class HrViewResponsesFragment extends Fragment {
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
 
+    RelativeLayout noData;
     String userId;
     String jobId;
     private static final String TAG = "HrViewResponsesFragment";
@@ -69,7 +72,7 @@ public class HrViewResponsesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_hr_view_responses, container, false);
 
         initPreferences();
-
+        noData = view.findViewById(R.id.lay3);
         //        for job recycler view
         jobRecyclerView = view.findViewById(R.id.job);
         jobLinearLayoutManager = new LinearLayoutManager(getContext());
@@ -78,15 +81,42 @@ public class HrViewResponsesFragment extends Fragment {
          candidateArrayList= new ArrayList<>();
         jobId = preferences.getString("jobId", "");
         firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("HR").child("RESPONSES").child(jobId);
-        firebaseDatabase.addValueEventListener(new ValueEventListener() {
+        firebaseDatabase.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onSuccess(DataSnapshot snapshot) {
                 if (snapshot.exists()) {
+                    candidateArrayList.clear();
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         Candidate candidate = dataSnapshot.getValue(Candidate.class);
                         candidateArrayList.add(candidate);
                     }
+                    if (candidateArrayList.size()==0){
+                        noData.setVisibility(View.VISIBLE);
+                    } else{
+                        noData.setVisibility(View.GONE);
+                    }
+                    hrJobAdapter = new HRResponsesAdapter(getContext(),getActivity(), candidateArrayList,preferences,preferenceEditor);
+                    jobRecyclerView.setAdapter(hrJobAdapter);
 
+
+                }
+
+            }
+        });
+        firebaseDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    candidateArrayList.clear();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Candidate candidate = dataSnapshot.getValue(Candidate.class);
+                        candidateArrayList.add(candidate);
+                    }
+                    if (candidateArrayList.size()==0){
+                        noData.setVisibility(View.VISIBLE);
+                    } else{
+                        noData.setVisibility(View.GONE);
+                    }
                     hrJobAdapter = new HRResponsesAdapter(getContext(),getActivity(), candidateArrayList,preferences,preferenceEditor);
                     jobRecyclerView.setAdapter(hrJobAdapter);
 

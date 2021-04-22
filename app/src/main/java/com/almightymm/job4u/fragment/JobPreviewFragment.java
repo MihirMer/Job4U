@@ -47,6 +47,11 @@ public class JobPreviewFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -75,7 +80,7 @@ public class JobPreviewFragment extends Fragment {
         jobId = preferences.getString("jobId", "");
         save_job_ref = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("SAVED_JOB").child(jobId);
         setListeners(view);
-        //applied_job_ref = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("APPLIED_JOB").child(jobId);
+        applied_job_ref = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("APPLIED_JOB").child(jobId);
         setListeners1(view);
 
 
