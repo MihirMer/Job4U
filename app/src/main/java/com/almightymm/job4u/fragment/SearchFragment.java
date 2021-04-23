@@ -110,8 +110,8 @@ noData = view.findViewById(R.id.lay4);
                         Log.e(TAG, "onDataChange: "+job.getName());
 
                     }
-                    jobArrayList = filter1();
                     if (preferences.getString("role", "").equals("HR")) {
+                    jobArrayList = filter1();
                         hrJobAdapter = new HRJobAdapter(getContext(), jobArrayList, preferences, preferenceEditor,"search");
                         jobRecyclerView.setAdapter(hrJobAdapter);
                     } else {

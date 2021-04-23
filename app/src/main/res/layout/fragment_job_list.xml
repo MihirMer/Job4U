@@ -39,14 +39,14 @@
             android:layout_marginTop="10dp"
             android:text="Jobs"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/job"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:clipToPadding="false"
             android:orientation="vertical"
             android:overScrollMode="never"

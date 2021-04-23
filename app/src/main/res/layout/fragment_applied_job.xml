@@ -24,7 +24,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="200dp"
-                android:text="Please, Apply Now"
+                android:text="Apply to a job first to see it here."
                 android:gravity="center"
                 android:textSize="20sp"
                 android:textColor="@color/medium_grey_normal"

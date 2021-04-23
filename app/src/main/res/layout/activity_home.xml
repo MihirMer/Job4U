@@ -50,6 +50,8 @@
                 android:paddingTop="2dp"
                 android:paddingBottom="18dp"
                 android:paddingHorizontal="15dp"
+                app:titleMarginStart="10dp"
+                app:title="Home"
                 app:layout_scrollFlags="scroll|enterAlways|snap" />
         </com.google.android.material.appbar.AppBarLayout>
 
