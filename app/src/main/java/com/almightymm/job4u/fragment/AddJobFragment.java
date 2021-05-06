@@ -1,8 +1,10 @@
 package com.almightymm.job4u.fragment;
 
 import android.content.SharedPreferences;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +15,27 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.almightymm.job4u.R;
 import com.almightymm.job4u.model.Job;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Date;
 
@@ -41,6 +55,9 @@ public class AddJobFragment extends Fragment {
     SharedPreferences.Editor preferenceEditor;
     String userId;
      String jobId;
+    private RequestQueue mRequestQueue;
+    private StringRequest mStringRequest;
+    private static final String TAG = "AddJobFragment";
 
     public AddJobFragment() {
         // Required empty public constructor
@@ -139,12 +156,14 @@ public class AddJobFragment extends Fragment {
             public void onClick(View v) {
 
                 addjob();
+
+
             }
         });
     }
 
     private void addjob() {
-        String title = jobtype.getSelectedItem().toString().trim();
+        final String title = jobtype.getSelectedItem().toString().trim();
         String desi = desigation.getText().toString().trim();
         String desc = description.getText().toString().trim();
         String sala = salary.getText().toString().trim();
@@ -195,11 +214,37 @@ public class AddJobFragment extends Fragment {
 
                     Toast.makeText(getContext(), "Task Successful", Toast.LENGTH_LONG).show();
                         jobId = db_add_job.push().getKey();
-
-                    clear();
+sendNotification(title.replaceAll(" ","_"),"New job posted","Go and apply now!!!");
+                            clear();
                 }
             });
         }
+    }
+
+    private void sendNotification(String subTopic, String title, String body) {
+
+
+        //RequestQueue initialized
+        String url = "http://192.168.43.240:3000/job_notification?topic="+subTopic+"&title="+title+"&body="+body;
+        mRequestQueue = Volley.newRequestQueue(getContext());
+
+        //String Request initialized
+        mStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Toast.makeText(getContext(),"Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG,"Error :" + error.toString());
+            }
+        });
+
+        mRequestQueue.add(mStringRequest);
     }
 
     private void clear() {

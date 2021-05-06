@@ -3,6 +3,7 @@ package com.almightymm.job4u.fragment;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +21,16 @@ import com.almightymm.job4u.R;
 import com.almightymm.job4u.model.Candidate;
 import com.almightymm.job4u.model.Job;
 import com.almightymm.job4u.model.SavedJob;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -41,6 +45,7 @@ public class JobPreviewFragment extends Fragment {
     Button appliedJob;
     String jobId;
     String userId;
+    private static final String TAG = "JobPreviewFragment";
 
     public JobPreviewFragment() {
         // Required empty public constructor
@@ -167,7 +172,19 @@ public class JobPreviewFragment extends Fragment {
                             FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("APPLIED_JOB").child(jobId).setValue(savedJob).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-
+//                                    here to subscribe
+                                    Log.e(TAG, "onSuccess:  "+jobId+" "+userId  );
+                                    FirebaseMessaging.getInstance().subscribeToTopic(jobId+userId)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Log.e(TAG, "onComplete: Subscribed to topic " +jobId+ " "+userId);
+                                                    } else {
+                                                        Log.e(TAG, "onComplete: Subscribed to topic failed ");
+                                                    }
+                                                }
+                                            });
                                     Toast.makeText(getContext(), "Resume sent", Toast.LENGTH_SHORT).show();
                                 }
                             });

@@ -2,6 +2,7 @@ package com.almightymm.job4u.Adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,12 @@ import com.almightymm.job4u.R;
 import com.almightymm.job4u.model.Candidate;
 import com.almightymm.job4u.model.Job;
 import com.almightymm.job4u.model.SavedJob;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 
@@ -30,6 +34,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
     int navigation;
     private Context context;
     private ArrayList<Job> jobArrayList;
+    private static final String TAG = "JobAdapter";
 
 
     public JobAdapter(Context context, ArrayList<Job> jobArrayList, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor, int navigation) {
@@ -93,6 +98,20 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
                                 public void onSuccess(Void aVoid) {
 
                             Toast.makeText(context, "Resume sent", Toast.LENGTH_SHORT).show();
+
+//                            here to subscribe jobid+candidateid
+                                    Log.e(TAG, "onSuccess: "+job.getId()+" "+userId  );
+                                    FirebaseMessaging.getInstance().subscribeToTopic(job.getId()+userId)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Log.e(TAG, "onComplete: Subscribed to topic " + job.getId()+" "+userId);
+                                                    } else {
+                                                        Log.e(TAG, "onComplete: Subscribed to topic failed ");
+                                                    }
+                                                }
+                                            });
                                 }
                             });
                         }

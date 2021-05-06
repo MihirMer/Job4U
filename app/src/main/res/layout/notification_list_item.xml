@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView android:id="@+id/job_card"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/background"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:orientation="vertical"
+        android:paddingBottom="5dp">
+
+
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="23dp"
+            android:layout_marginTop="5dp"
+            android:text="NotificationTitle"
+            android:textStyle="bold"
+            android:textSize="17dp" />
+        <TextView
+            android:id="@+id/txt_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="23dp"
+            android:layout_marginTop="5dp"
+            android:text="Notification body"
+            android:textSize="15dp" />
+
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
