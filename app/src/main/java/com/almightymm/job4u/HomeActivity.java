@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +15,10 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
@@ -27,12 +31,18 @@ public class HomeActivity extends AppCompatActivity {
     private BottomNavigationView navigation;
     private Toolbar toolbar;
 
-    @Override
+
+
+@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
         fragment = findViewById(R.id.nav_host_fragment);
+
+//    firebase messaging subscribe
+
 
         initPreferences();
         toolbar = findViewById(R.id.toolbar);
@@ -94,6 +104,8 @@ public class HomeActivity extends AppCompatActivity {
 //        });
 
     }
+
+
 
 
     private void initPreferences() {

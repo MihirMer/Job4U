@@ -28,7 +28,15 @@ import com.almightymm.job4u.R;
 import com.almightymm.job4u.fragment.ProfileFragment;
 import com.almightymm.job4u.latex.PreferenceHelper;
 import com.almightymm.job4u.model.Candidate;
+import com.almightymm.job4u.model.EducationDetails;
+import com.almightymm.job4u.model.Notification;
 import com.almightymm.job4u.utils.FilesUtils;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -51,6 +59,9 @@ public class HRResponsesAdapter extends RecyclerView.Adapter<HRResponsesAdapter.
     private ArrayList<Candidate> candidateArrayList;
     Activity activity;
     String userId, jobId;
+
+    private RequestQueue mRequestQueue;
+    private StringRequest mStringRequest;
     private static final String TAG = "HRResponsesAdapter";
     public HRResponsesAdapter(Context context, Activity activity, ArrayList<Candidate> candidateArrayList, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor) {
         this.preferences = preferences;
@@ -123,6 +134,27 @@ public class HRResponsesAdapter extends RecyclerView.Adapter<HRResponsesAdapter.
                         }
                     }
                 });
+
+                    String title = "Sorry!  Your application is rejected";
+                    String body = "Better luck next time!!!";
+                sendNotification(jobId+candidate.getId(),title, body);
+
+//                database entry for notification
+
+               DatabaseReference db_notif = FirebaseDatabase.getInstance().getReference("Users").child(candidate.getId()).child("NOTIFICATIONS");
+                String id = db_notif.push().getKey();
+
+                Notification notif_object = new Notification(title, body, candidate.getId(), jobId);
+
+                db_notif.child(id).setValue(notif_object).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+
+                        Toast.makeText(context, "Details Save", Toast.LENGTH_LONG).show();
+
+                    }
+                });
             }
         });
         holder.acceptCandidate.setOnClickListener(new View.OnClickListener() {
@@ -152,10 +184,61 @@ public class HRResponsesAdapter extends RecyclerView.Adapter<HRResponsesAdapter.
                         }
                     }
                 });
+
+//                here to send notification of selection
+                String title = "Congratulations! You are selected!!!";
+                String body ="Your job application is accepted by the company. ";
+                sendNotification(jobId+candidate.getId(),title,body);
+//                lakhi nakh aama
+                DatabaseReference db_notif = FirebaseDatabase.getInstance().getReference("Users").child(candidate.getId()).child("NOTIFICATIONS");
+                String id = db_notif.push().getKey();
+
+                Notification notif_object = new Notification(title, body, candidate.getId(), jobId);
+
+                db_notif.child(id).setValue(notif_object).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+
+                        Toast.makeText(context, "Details Save", Toast.LENGTH_LONG).show();
+
+                    }
+                });
             }
         });
 
 
+
+    }
+
+
+
+//    jarur nthi message alg rakh bs   pn method to call krvi pdse n? ha
+
+    private void sendNotification(String subTopic, String title, String body) {
+
+
+        //RequestQueue initialized
+        String url = "http://192.168.43.240:3000/job_notification?topic="+subTopic+"&title="+title+"&body="+body;
+        mRequestQueue = Volley.newRequestQueue(context);
+
+        //String Request initialized
+        mStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Toast.makeText(context,"Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i(TAG,"Error :" + error.toString());
+            }
+        });
+
+        mRequestQueue.add(mStringRequest);
     }
     private boolean checkStoragePermissions(ProfileFragment.Permissions type) {
         if (ContextCompat.checkSelfPermission(context,
@@ -239,4 +322,6 @@ public class HRResponsesAdapter extends RecyclerView.Adapter<HRResponsesAdapter.
             status = itemView.findViewById(R.id.status);
         }
     }
+
+
 }
