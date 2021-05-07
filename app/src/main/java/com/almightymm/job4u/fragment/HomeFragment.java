@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,12 +27,15 @@ import com.almightymm.job4u.R;
 import com.almightymm.job4u.SignInActivity;
 import com.almightymm.job4u.model.Category;
 import com.almightymm.job4u.model.Job;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 
@@ -58,6 +62,8 @@ public class HomeFragment extends Fragment {
 
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
+
+    private static final String TAG = "HomeFragment";
 
     String userId;
     public HomeFragment() {
@@ -98,8 +104,25 @@ public class HomeFragment extends Fragment {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                         Category category = dataSnapshot.getValue(Category.class);
-                        categoryArrayList.add(category);
-                    }
+                        Log.e(TAG, "onDataChange: " + category.getC_Job_name());
+
+
+
+//                        FirebaseMessaging.getInstance().subscribeToTopic(category.getC_Job_name().replaceAll(" ", "_"))
+//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<Void> task) {
+//                                        String msg = "Done";
+//                                        if (!task.isSuccessful()) {
+//                                            msg = "Not done";
+//                                        }
+//                                        Log.d(TAG, msg);
+//
+//                                    }
+//                                });
+
+                    categoryArrayList.add(category);
+                }
                     categoryAdapter = new CategoryAdapter(getContext(), categoryArrayList,preferences,preferenceEditor,R.id.action_homeFragment_to_jobListFragment);
                     recyclerView.setAdapter(categoryAdapter);
                 }
