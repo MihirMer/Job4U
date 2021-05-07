@@ -507,7 +507,7 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bgcolor"
                     android:orientation="vertical"
-                    android:paddingTop="10dp">
+                    android:paddingTop="5dp">
 
                     <RadioGroup
                         android:id="@+id/lyl1_23"
@@ -515,21 +515,25 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="23dp"
                         android:background="@drawable/bgcolor"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="5dp">
 
                         <RadioButton
                             android:id="@+id/rbtn_freshers"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Freshers"
+                            android:text="Fresher"
                             android:textSize="15dp"
+                            android:layout_weight="1"
                             android:checked="true"/>
 
                         <RadioButton
                             android:id="@+id/rbtn_experience"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Experience"
+                            android:layout_weight="1"
+
+                            android:text="Experienced"
                             android:textSize="15dp" />
                     </RadioGroup>
 
@@ -540,7 +544,6 @@
                         android:layout_below="@+id/lyl1_23"
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="15dp"
-                        android:layout_marginTop="4dp"
                         android:text="Give your experience details."
                         android:textSize="15dp"
                         android:visibility="gone" />
