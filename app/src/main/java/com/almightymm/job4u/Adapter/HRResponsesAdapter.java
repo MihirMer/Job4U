@@ -219,7 +219,7 @@ public class HRResponsesAdapter extends RecyclerView.Adapter<HRResponsesAdapter.
 
 
         //RequestQueue initialized
-        String url = "http://192.168.43.240:3000/job_notification?topic="+subTopic+"&title="+title+"&body="+body;
+        String url = "https://fcm-notif.herokuapp.com/job_notification?topic="+subTopic+"&title="+title+"&body="+body;
         mRequestQueue = Volley.newRequestQueue(context);
 
         //String Request initialized

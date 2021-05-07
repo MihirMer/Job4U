@@ -225,7 +225,7 @@ sendNotification(title.replaceAll(" ","_"),"New job posted","Go and apply now!!!
 
 
         //RequestQueue initialized
-        String url = "http://192.168.43.240:3000/job_notification?topic="+subTopic+"&title="+title+"&body="+body;
+        String url = "https://fcm-notif.herokuapp.com/job_notification?topic="+subTopic+"&title="+title+"&body="+body;
         mRequestQueue = Volley.newRequestQueue(getContext());
 
         //String Request initialized
