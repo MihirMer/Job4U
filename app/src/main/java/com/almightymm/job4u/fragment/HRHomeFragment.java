@@ -2,6 +2,11 @@ package com.almightymm.job4u.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,18 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.almightymm.job4u.Adapter.CategoryAdapter;
 import com.almightymm.job4u.Adapter.HRJobAdapter;
-import com.almightymm.job4u.Adapter.JobAdapter;
 import com.almightymm.job4u.R;
-import com.almightymm.job4u.model.Category;
 import com.almightymm.job4u.model.Job;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -43,14 +38,13 @@ public class HRHomeFragment extends Fragment {
 
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
-    TextView  layjob;
+    TextView layjob;
 
     String userId;
+
     public HRHomeFragment() {
         // Required empty public constructor
     }
-
-
 
 
     @Override
@@ -71,7 +65,7 @@ public class HRHomeFragment extends Fragment {
         initPreferences();
         noData = view.findViewById(R.id.lay3);
         layjob = view.findViewById(R.id.hr_job_title);
-        preferenceEditor.putString("jobId","");
+        preferenceEditor.putString("jobId", "");
         preferenceEditor.apply();
         preferenceEditor.commit();
         //        for job recycler view
@@ -80,7 +74,8 @@ public class HRHomeFragment extends Fragment {
         jobLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         jobRecyclerView.setLayoutManager(jobLinearLayoutManager);
         jobArrayList = new ArrayList<>();
-
+        hrJobAdapter = new HRJobAdapter(getContext(), filter(), preferences, preferenceEditor, "home");
+        jobRecyclerView.setAdapter(hrJobAdapter);
         firebaseDatabase = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB");
         firebaseDatabase.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
@@ -92,18 +87,16 @@ public class HRHomeFragment extends Fragment {
                         jobArrayList.add(job);
 
 
-
                     }
-                    if (jobArrayList.get(0)==null){
+                    if (jobArrayList.get(0) == null) {
                         noData.setVisibility(View.GONE);
                         layjob.setVisibility(View.GONE);
-                    } else{
+                    } else {
                         noData.setVisibility(View.VISIBLE);
                         layjob.setVisibility(View.VISIBLE);
                     }
-                    hrJobAdapter = new HRJobAdapter(getContext(), filter(),preferences,preferenceEditor,"home");
-                    jobRecyclerView.setAdapter(hrJobAdapter);
 
+                    hrJobAdapter.filterList(filter());
                 }
             }
         });
@@ -117,11 +110,8 @@ public class HRHomeFragment extends Fragment {
                         jobArrayList.add(job);
 
 
-
                     }
-
-                    hrJobAdapter = new HRJobAdapter(getContext(), filter(),preferences,preferenceEditor,"home");
-                    jobRecyclerView.setAdapter(hrJobAdapter);
+                    hrJobAdapter.filterList(filter());
 
                 }
             }
@@ -137,15 +127,15 @@ public class HRHomeFragment extends Fragment {
 
     private ArrayList<Job> filter() {
         ArrayList<Job> filterList = new ArrayList<>();
-            String cn = preferences.getString("companyName","");
+        String cn = preferences.getString("companyName", "");
         for (Job job : jobArrayList) {
-                if (job.getCompanyName().equals(cn))
-                        filterList.add(job);
+            if (job.getCompanyName().equals(cn))
+                filterList.add(job);
         }
-        if (!filterList.isEmpty()){
+        if (!filterList.isEmpty()) {
             noData.setVisibility(View.GONE);
             layjob.setVisibility(View.VISIBLE);
-        } else{
+        } else {
             noData.setVisibility(View.VISIBLE);
             layjob.setVisibility(View.GONE);
         }

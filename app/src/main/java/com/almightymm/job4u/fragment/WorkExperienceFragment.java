@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.almightymm.job4u.R;
 import com.almightymm.job4u.model.WorkExperience;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.whiteelephant.monthpicker.MonthPickerDialog;
@@ -31,6 +32,7 @@ public class WorkExperienceFragment extends Fragment {
     DatabaseReference personalDetails;
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
+    String experienceId;
 
     public WorkExperienceFragment() {
         // Required empty public constructor
@@ -49,10 +51,29 @@ public class WorkExperienceFragment extends Fragment {
         initViews(view);
         initPreferences();
         String userId = preferences.getString("userId", "");
+        experienceId = preferences.getString("experienceId", "");
         db_add_workExperience = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("WORK_EXPERIENCE");
         personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS").child("experienceAdded");
+        setValues(view);
         setListeners(view);
         return view;
+    }
+
+    private void setValues(View view) {
+        db_add_workExperience.child(experienceId).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                WorkExperience workExperience = dataSnapshot.getValue(WorkExperience.class);
+                if (workExperience!=null){
+                    designation.setText(workExperience.getDesignation());
+                    yearOfExperience.setText(workExperience.getYearsOfExperience());
+                    from_year.setText(workExperience.getFromYear());
+                    to_year.setText(workExperience.getToYear());
+                    companName.setText(workExperience.getCompanyName());
+                    city.setText(workExperience.getCity());
+                }
+            }
+        });
     }
 
     private void setListeners(View view) {
@@ -160,6 +181,7 @@ public class WorkExperienceFragment extends Fragment {
                     public void onSuccess(Void aVoid) {
                         personalDetails.setValue(true);
                         preferenceEditor.putBoolean("experienceAdded", true);
+                        preferenceEditor.putString("experienceId", "");
                         preferenceEditor.apply();
                         preferenceEditor.commit();
                         Toast.makeText(getContext(), "Details Save", Toast.LENGTH_LONG).show();

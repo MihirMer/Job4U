@@ -1,7 +1,6 @@
 package com.almightymm.job4u.fragment;
 
 import android.content.SharedPreferences;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -15,8 +14,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -26,25 +23,21 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Date;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class AddJobFragment extends Fragment {
+    private static final String TAG = "AddJobFragment";
     EditText desigation, description, salary, companyname, city, website, vacancy, pod;
     Spinner jobtype, jobQualification;
-
     String[] jobTitleArray;
     String[] jobQualificationArray;
     ArrayAdapter<String> jobTitleAdapter;
@@ -54,10 +47,9 @@ public class AddJobFragment extends Fragment {
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
     String userId;
-     String jobId;
+    String jobId;
     private RequestQueue mRequestQueue;
     private StringRequest mStringRequest;
-    private static final String TAG = "AddJobFragment";
 
     public AddJobFragment() {
         // Required empty public constructor
@@ -68,6 +60,7 @@ public class AddJobFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -91,7 +84,7 @@ public class AddJobFragment extends Fragment {
 
     private void setValues() {
 //        companyname, city, website,
-         jobId = preferences.getString("jobId", "");
+        jobId = preferences.getString("jobId", "");
         if (!jobId.equals("")) {
 
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB").child(jobId);
@@ -123,12 +116,12 @@ public class AddJobFragment extends Fragment {
 
     private void initViews(View view) {
         jobtype = view.findViewById(R.id.jobtitle);
-        jobTitleArray =new String[] {"Job Title", "Web Developer", "Web Designer", "Android Developer", "UI/UX Designer", "Graphics Designer", "Backend Developer", "Frontend Developer"};
+        jobTitleArray = new String[]{"Job Title", "Web Developer", "Web Designer", "Android Developer", "UI/UX Designer", "Graphics Designer", "Backend Developer", "Frontend Developer"};
         jobTitleAdapter = new ArrayAdapter<String>(getContext(), R.layout.job_spinner_row, R.id.item, jobTitleArray);
         jobtype.setPrompt("Select Job");
         jobtype.setAdapter(jobTitleAdapter);
         jobQualification = view.findViewById(R.id.jobQualification);
-        jobQualificationArray =new String[] {"Qualification", "B.E.", "M.E.", "Diploma in IT", "12th", "Graduate", "Post Graduate", "B.tech", "M.Sc"};
+        jobQualificationArray = new String[]{"Qualification", "B.E.", "M.E.", "Diploma in IT", "12th", "Graduate", "Post Graduate", "B.tech", "M.Sc"};
         jobQualificationAdapter = new ArrayAdapter<String>(getContext(), R.layout.job_spinner_row, R.id.item, jobQualificationArray);
         jobQualification.setPrompt("Select Qualification");
         jobQualification.setAdapter(jobQualificationAdapter);
@@ -213,9 +206,9 @@ public class AddJobFragment extends Fragment {
                 public void onSuccess(Void aVoid) {
 
                     Toast.makeText(getContext(), "Task Successful", Toast.LENGTH_LONG).show();
-                        jobId = db_add_job.push().getKey();
-sendNotification(title.replaceAll(" ","_"),"New job posted","Go and apply now!!!");
-                            clear();
+                    jobId = db_add_job.push().getKey();
+                    sendNotification(title.replaceAll(" ", "_"), "New job posted", "Go and apply now!!!");
+                    clear();
                 }
             });
         }
@@ -225,7 +218,7 @@ sendNotification(title.replaceAll(" ","_"),"New job posted","Go and apply now!!!
 
 
         //RequestQueue initialized
-        String url = "https://fcm-notif.herokuapp.com/job_notification?topic="+subTopic+"&title="+title+"&body="+body;
+        String url = "https://fcm-notif.herokuapp.com/job_notification?topic=" + subTopic + "&title=" + title + "&body=" + body;
         mRequestQueue = Volley.newRequestQueue(getContext());
 
         //String Request initialized
@@ -233,14 +226,14 @@ sendNotification(title.replaceAll(" ","_"),"New job posted","Go and apply now!!!
             @Override
             public void onResponse(String response) {
 
-                Toast.makeText(getContext(),"Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
+                Toast.makeText(getContext(), "Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Log.i(TAG,"Error :" + error.toString());
+                Log.i(TAG, "Error :" + error.toString());
             }
         });
 
@@ -259,7 +252,7 @@ sendNotification(title.replaceAll(" ","_"),"New job posted","Go and apply now!!!
 //        vacancy.setText("");
 //        pod.setText("");
 
-        preferenceEditor.putString("jobId","");
+        preferenceEditor.putString("jobId", "");
         preferenceEditor.apply();
         preferenceEditor.commit();
         getActivity().onBackPressed();

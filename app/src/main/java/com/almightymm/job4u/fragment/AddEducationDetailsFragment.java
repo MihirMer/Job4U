@@ -35,6 +35,7 @@ public class AddEducationDetailsFragment extends Fragment {
     DatabaseReference personalDetails;
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
+    String educationId;
     private static final String TAG = "EducationDetailsFragmen";
 
     public AddEducationDetailsFragment() {
@@ -53,6 +54,7 @@ public class AddEducationDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_education_details, container, false);
         initPreferences();
         String userId = preferences.getString("userId", "");
+        educationId = preferences.getString("educationId", "");
         db_add_education_details = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("EDUCATION_DETAILS");
         personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS").child("educationAdded");
         initViews(view);
@@ -62,7 +64,11 @@ public class AddEducationDetailsFragment extends Fragment {
     }
 
     private void setValues(View view) {
-        db_add_education_details.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+
+
+
+
+        db_add_education_details.child(educationId).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
                 EducationDetails educationDetails = dataSnapshot.getValue(EducationDetails.class);
@@ -155,9 +161,11 @@ public class AddEducationDetailsFragment extends Fragment {
         } else {
 
 //        do after validation
-            String id = db_add_education_details.push().getKey();
+            if (educationId.equals("")){
+                educationId = db_add_education_details.push().getKey();
+            }
             EducationDetails educationDetails = new EducationDetails(
-                    id,
+                    educationId,
                     dn,
                     cn,
                     stre,
@@ -166,11 +174,12 @@ public class AddEducationDetailsFragment extends Fragment {
                     CGPA
             );
 
-            db_add_education_details.child(id).setValue(educationDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
+            db_add_education_details.child(educationId).setValue(educationDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     personalDetails.setValue(true);
                     preferenceEditor.putBoolean("educationAdded", true);
+                    preferenceEditor.putString("educationId", "");
                     preferenceEditor.apply();
                     preferenceEditor.commit();
                     Toast.makeText(getContext(), "Details Save", Toast.LENGTH_LONG).show();

@@ -21,10 +21,15 @@ import java.util.ArrayList;
 public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder> {
     private final Context context;
     private ArrayList<ProjectWork> projectWorks;
+    SharedPreferences preferences;
+    SharedPreferences.Editor preferenceEditor;
 
-    public ProjectAdapter(Context context, ArrayList<ProjectWork> projectWorks) {
+
+    public ProjectAdapter(Context context, ArrayList<ProjectWork> projectWorks, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor) {
         this.context = context;
         this.projectWorks = projectWorks;
+        this.preferences = preferences;
+        this.preferenceEditor = preferenceEditor;
     }
 
     @NonNull
@@ -37,7 +42,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
 
     @Override
     public void onBindViewHolder(@NonNull ProjectViewHolder holder, int position) {
-        ProjectWork projectWork = projectWorks.get(position);
+        final ProjectWork projectWork = projectWorks.get(position);
         holder.project_name.setText(projectWork.getProjectName());
         holder.project_description.setText(projectWork.getDescription());
         holder.start_year.setText("Duration " + " : " + projectWork.getStartYear() + " " + "to" );
@@ -48,6 +53,10 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                preferenceEditor.putString("projectId", projectWork.getId());
+
+                preferenceEditor.apply();
+                preferenceEditor.commit();
                 Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_projectWorkFragment);
             }
         });

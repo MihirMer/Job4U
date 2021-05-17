@@ -59,16 +59,19 @@ public class AppliedJobAdapter extends RecyclerView.Adapter<AppliedJobAdapter.Jo
         staus.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
-                Candidate candidate = dataSnapshot.getValue(Candidate.class);
-                if (candidate.getStatus().equals("Selected")){
-                    holder.status.setText("Congratulations, You are selected!");
-                    holder.status.setVisibility(View.VISIBLE);
-                } else if (candidate.getStatus().equals("Rejected")){
-                    holder.status.setText("Sorry, Better luck next time!");
-                    holder.status.setVisibility(View.VISIBLE);
-                } else{
-                    holder.status.setText("Status: Pending");
-                    holder.status.setVisibility(View.VISIBLE);
+                if (dataSnapshot.exists()) {
+                    Candidate candidate = dataSnapshot.getValue(Candidate.class);
+
+                    if (candidate.getStatus().equals("Selected")) {
+                        holder.status.setText("Congratulations, You are selected!");
+                        holder.status.setVisibility(View.VISIBLE);
+                    } else if (candidate.getStatus().equals("Rejected")) {
+                        holder.status.setText("Sorry, Better luck next time!");
+                        holder.status.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.status.setText("Status: Pending");
+                        holder.status.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });

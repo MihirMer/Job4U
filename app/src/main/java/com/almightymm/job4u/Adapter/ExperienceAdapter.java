@@ -1,6 +1,7 @@
 package com.almightymm.job4u.Adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,14 @@ import java.util.ArrayList;
 public class ExperienceAdapter extends RecyclerView.Adapter<ExperienceAdapter.ExperienceViewHolder> {
     private final Context context;
     private ArrayList<WorkExperience> workExperiences;
+    SharedPreferences preferences;
+    SharedPreferences.Editor preferenceEditor;
 
-    public ExperienceAdapter(Context context, ArrayList<WorkExperience> workExperiences) {
+    public ExperienceAdapter(Context context, ArrayList<WorkExperience> workExperiences, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor) {
         this.context = context;
         this.workExperiences = workExperiences;
+        this.preferences = preferences;
+        this.preferenceEditor = preferenceEditor;
     }
 
     @NonNull
@@ -37,7 +42,7 @@ public class ExperienceAdapter extends RecyclerView.Adapter<ExperienceAdapter.Ex
 
     @Override
     public void onBindViewHolder(@NonNull ExperienceViewHolder holder, int position) {
-        WorkExperience workExperience = workExperiences.get(position);
+        final WorkExperience workExperience = workExperiences.get(position);
         holder.Experience.setText("I have " + workExperience.getYearsOfExperience() + " year experience as a " + workExperience.getDesignation() + " in " +workExperience.getCompanyName() + " which is located in " + workExperience.getCity());
         holder.duration.setText("Duration : " + workExperience.getFromYear() + " to " + workExperience.getToYear());
         if (position == getItemCount()-1){
@@ -46,6 +51,9 @@ public class ExperienceAdapter extends RecyclerView.Adapter<ExperienceAdapter.Ex
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                preferenceEditor.putString("experienceId", workExperience.getId());
+                preferenceEditor.apply();
+                preferenceEditor.commit();
                 Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_workExperienceFragment);
             }
         });

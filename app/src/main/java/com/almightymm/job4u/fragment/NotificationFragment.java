@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.almightymm.job4u.Adapter.EducationAdapter;
 import com.almightymm.job4u.Adapter.NotificationAdapter;
@@ -37,7 +38,7 @@ public class NotificationFragment extends Fragment {
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
     String userId;
-
+    RelativeLayout noData;
     RecyclerView edu_rec;
     ArrayList<Notification> notificationArrayList;
     NotificationAdapter notificationAdapter;
@@ -63,14 +64,17 @@ public class NotificationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
         initPreferences();
         notification = view.findViewById(R.id.notification);
+        noData = view.findViewById(R.id.lay4);
         notificationArrayList = new ArrayList<>();
         notificationLinearLayoutManager = new LinearLayoutManager(getContext());
         notificationLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         notification.setLayoutManager(notificationLinearLayoutManager);
             userId = preferences.getString("userId","");
-        Log.e(TAG, "onCreateView: "+userId );
+        notificationAdapter  =  new NotificationAdapter(getContext(), notificationArrayList, preferences, preferenceEditor);
+
+        notification.setAdapter(notificationAdapter);
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("NOTIFICATIONS");
-        Log.e(TAG, "onCreateView: ..." );
         databaseReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot snapshot) {
@@ -81,9 +85,36 @@ public class NotificationFragment extends Fragment {
                     Log.e(TAG, "onSuccess: hello"+notification.getTitle() );
                     notificationArrayList.add(notification);
                 }
-                notificationAdapter  =  new NotificationAdapter(getContext(), notificationArrayList, preferences, preferenceEditor);
+                if (notificationArrayList.isEmpty()){
+                    noData.setVisibility(View.VISIBLE);
+                } else{
+                    noData.setVisibility(View.GONE);
+                }
+                notificationAdapter.filterList(notificationArrayList);
 
-                notification.setAdapter(notificationAdapter);
+
+            }
+        });
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                notificationArrayList.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Notification notification = dataSnapshot.getValue(Notification.class);
+                    Log.e(TAG, "onSuccess: hello"+notification.getTitle() );
+                    notificationArrayList.add(notification);
+                }
+                if (notificationArrayList.isEmpty()){
+                    noData.setVisibility(View.VISIBLE);
+                } else{
+                    noData.setVisibility(View.GONE);
+                }
+                notificationAdapter.filterList(notificationArrayList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 

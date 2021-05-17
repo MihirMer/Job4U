@@ -342,7 +342,7 @@ StorageReference storageRef ;
                     EducationDetails details = dataSnapshot.getValue(EducationDetails.class);
                     Log.e(TAG, "onDataChange: " + details.getCollegeName());
                     edu_list.add(details);
-                    educationAdapter = new EducationAdapter(getContext(), edu_list);
+                    educationAdapter = new EducationAdapter(getContext(), edu_list,preferences, preferenceEditor);
                     edu_rec.setAdapter(educationAdapter);
                     info1.setVisibility(View.GONE);
                 }
@@ -414,7 +414,7 @@ StorageReference storageRef ;
                     ProjectWork projectWork1 = dataSnapshot.getValue(ProjectWork.class);
                     if (projectWork1 != null) {
                         proj_list.add(projectWork1);
-                        projectAdapter = new ProjectAdapter(getContext(), proj_list);
+                        projectAdapter = new ProjectAdapter(getContext(), proj_list, preferences, preferenceEditor);
                         proj_rec.setAdapter(projectAdapter);
                         info2.setVisibility(View.GONE);
                     }
@@ -460,7 +460,7 @@ StorageReference storageRef ;
                     WorkExperience workExperience = dataSnapshot.getValue(WorkExperience.class);
                     if (workExperience != null) {
                         exp_list.add(workExperience);
-                        experienceAdapter = new ExperienceAdapter(getContext(), exp_list);
+                        experienceAdapter = new ExperienceAdapter(getContext(), exp_list,preferences, preferenceEditor);
                         exp_rec.setAdapter(experienceAdapter);
                         add_exp.setVisibility(View.VISIBLE);
                         info3.setVisibility(View.GONE);

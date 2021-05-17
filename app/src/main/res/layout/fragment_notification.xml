@@ -3,27 +3,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:orientation="vertical">
-        <androidx.recyclerview.widget.RecyclerView
-
-            android:id="@+id/notification"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="50dp">
+        <RelativeLayout
+            android:id="@+id/lay4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
+            android:paddingHorizontal="10dp"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="200dp"
+                android:text="No notification arrived till now!"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:textColor="@color/medium_grey_normal"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:orientation="vertical"
+            android:overScrollMode="never"
             android:paddingHorizontal="10dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/job_list_item"
-            android:overScrollMode="never"/>
+            tools:itemCount="10"
+            tools:listitem="@layout/notification_list_item" />
+    </RelativeLayout>
 
-    </LinearLayout>
+
 </androidx.core.widget.NestedScrollView>

@@ -1,6 +1,7 @@
 package com.almightymm.job4u.Adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,14 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.Educ
     private static final String TAG = "EducationAdapter";
     private final Context context;
     private final ArrayList<EducationDetails> educationDetails;
+    SharedPreferences preferences;
+    SharedPreferences.Editor preferenceEditor;
 
-    public EducationAdapter(Context context, ArrayList<EducationDetails> educationDetails) {
+    public EducationAdapter(Context context, ArrayList<EducationDetails> educationDetails, SharedPreferences preferences, SharedPreferences.Editor preferenceEditor) {
         this.context = context;
         this.educationDetails = educationDetails;
+        this.preferences = preferences;
+        this.preferenceEditor = preferenceEditor;
     }
 
     @NonNull
@@ -36,7 +41,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.Educ
 
     @Override
     public void onBindViewHolder(@NonNull EducationViewHolder holder, int position) {
-        EducationDetails details = educationDetails.get(position);
+        final EducationDetails details = educationDetails.get(position);
 
         holder.college.setText(details.getCollegeName());
 //        holder.streem.setText();
@@ -49,6 +54,9 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.Educ
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                preferenceEditor.putString("educationId", details.getId());
+                preferenceEditor.apply();
+                preferenceEditor.commit();
                 Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_educationDetailsFragment);
 
             }
@@ -59,6 +67,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.Educ
     public int getItemCount() {
         return educationDetails.size();
     }
+
 
 
     public static class EducationViewHolder extends RecyclerView.ViewHolder {

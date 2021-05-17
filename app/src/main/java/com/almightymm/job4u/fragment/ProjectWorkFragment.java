@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.almightymm.job4u.R;
 import com.almightymm.job4u.model.ProjectWork;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.whiteelephant.monthpicker.MonthPickerDialog;
@@ -34,6 +35,7 @@ public class ProjectWorkFragment extends Fragment {
     DatabaseReference personalDetails;
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
+    String projectId;
 
     public ProjectWorkFragment() {
         // Required empty public constructor
@@ -52,11 +54,28 @@ public class ProjectWorkFragment extends Fragment {
         initViews(view);
         initPreferences();
         String userId = preferences.getString("userId", "");
+        projectId = preferences.getString("projectId", "");
         personalDetails = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("PERSONAL_DETAILS").child("projectWorkAdded");
         db_add_projectWork = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("PROJECT_WORK");
+        setValues(view);
         addListeners(view);
 
         return view;
+    }
+
+    private void setValues(View view) {
+        db_add_projectWork.child(projectId).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                ProjectWork projectWork = dataSnapshot.getValue(ProjectWork.class);
+                if (projectWork!=null){
+                    projectName.setText(projectWork.getProjectName());
+                    description.setText(projectWork.getDescription());
+                    start_year.setText(projectWork.getStartYear());
+                    end_year.setText(projectWork.getEndYear());
+                }
+            }
+        });
     }
 
     private void addListeners(View view) {
@@ -146,13 +165,17 @@ public class ProjectWorkFragment extends Fragment {
             Toast.makeText(getContext(), "End year is required !", Toast.LENGTH_SHORT).show();
         } else {
 
-            String id = db_add_projectWork.push().getKey();
-            ProjectWork projectwork = new ProjectWork(id, pn, desc, syear, eyear);
-            db_add_projectWork.child(id).setValue(projectwork).addOnSuccessListener(new OnSuccessListener<Void>() {
+            if (projectId.equals("")){
+
+            projectId = db_add_projectWork.push().getKey();
+            }
+            ProjectWork projectwork = new ProjectWork(projectId, pn, desc, syear, eyear);
+            db_add_projectWork.child(projectId).setValue(projectwork).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     personalDetails.setValue(true);
                     preferenceEditor.putBoolean("projectWorkAdded", true);
+                    preferenceEditor.putString("projectId", "");
                     preferenceEditor.apply();
                     preferenceEditor.commit();
                     Toast.makeText(getContext(), "Details Save", Toast.LENGTH_LONG).show();

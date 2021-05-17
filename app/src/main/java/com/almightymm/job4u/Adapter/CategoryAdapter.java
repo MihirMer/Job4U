@@ -60,6 +60,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                     Navigation.findNavController(v).navigate(R.id.action_searchFragment_to_jobListFragment);
                 } else if (navigation == R.id.action_searchFragment_to_jobListFragment22) {
                     Navigation.findNavController(v).navigate(R.id.action_searchFragment_to_jobListFragment22);
+                } else if(navigation == R.id.action_homeFragment_to_jobListFragment){
+                    Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_jobListFragment);
                 }
 
 

@@ -1,18 +1,11 @@
 package com.almightymm.job4u.fragment;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,20 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.almightymm.job4u.Adapter.CategoryAdapter;
 import com.almightymm.job4u.Adapter.JobAdapter;
-import com.almightymm.job4u.HomeActivity;
 import com.almightymm.job4u.R;
-import com.almightymm.job4u.SignInActivity;
 import com.almightymm.job4u.model.Category;
 import com.almightymm.job4u.model.Job;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 
@@ -47,25 +35,20 @@ public class HomeFragment extends Fragment {
 //  recycler
 
 
-
+    private static final String TAG = "HomeFragment";
     RecyclerView recyclerView;
     CategoryAdapter categoryAdapter;
     ArrayList<Category> categoryArrayList;
     LinearLayoutManager linearLayoutManager;
-
     RecyclerView jobRecyclerView;
     ArrayList<Job> jobArrayList;
     JobAdapter jobAdapter;
     LinearLayoutManager jobLinearLayoutManager;
-
     DatabaseReference firebaseDatabase;
-
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceEditor;
-
-    private static final String TAG = "HomeFragment";
-
     String userId;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -88,7 +71,6 @@ public class HomeFragment extends Fragment {
         initPreferences();
 
 
-
         recyclerView = view.findViewById(R.id.category);
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -107,7 +89,6 @@ public class HomeFragment extends Fragment {
                         Log.e(TAG, "onDataChange: " + category.getC_Job_name());
 
 
-
 //                        FirebaseMessaging.getInstance().subscribeToTopic(category.getC_Job_name().replaceAll(" ", "_"))
 //                                .addOnCompleteListener(new OnCompleteListener<Void>() {
 //                                    @Override
@@ -121,9 +102,9 @@ public class HomeFragment extends Fragment {
 //                                    }
 //                                });
 
-                    categoryArrayList.add(category);
-                }
-                    categoryAdapter = new CategoryAdapter(getContext(), categoryArrayList,preferences,preferenceEditor,R.id.action_homeFragment_to_jobListFragment);
+                        categoryArrayList.add(category);
+                    }
+                    categoryAdapter = new CategoryAdapter(getContext(), categoryArrayList, preferences, preferenceEditor, R.id.action_homeFragment_to_jobListFragment);
                     recyclerView.setAdapter(categoryAdapter);
                 }
             }
@@ -150,7 +131,25 @@ public class HomeFragment extends Fragment {
 //        jobArrayList.add(new Job("","Graphics Developer","","","","","","","","",""));
 
         firebaseDatabase = FirebaseDatabase.getInstance().getReference("HR").child("ADDJOB");
-        firebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        jobAdapter = new JobAdapter(getContext(), filter(), preferences, preferenceEditor, R.id.action_homeFragment_to_jobPreviewFragment);
+        jobRecyclerView.setAdapter(jobAdapter);
+
+        firebaseDatabase.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Job job = dataSnapshot.getValue(Job.class);
+                        jobArrayList.add(job);
+
+
+                    }
+                    jobAdapter.filterList(jobArrayList);
+
+                }
+            }
+        });
+        firebaseDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -160,8 +159,7 @@ public class HomeFragment extends Fragment {
 
 
                     }
-                    jobAdapter = new JobAdapter(getContext(), filter(),preferences,preferenceEditor,R.id.action_homeFragment_to_jobPreviewFragment);
-                    jobRecyclerView.setAdapter(jobAdapter);
+                    jobAdapter.filterList(jobArrayList);
 
                 }
             }

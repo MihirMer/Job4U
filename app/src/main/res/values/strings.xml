@@ -86,6 +86,8 @@
     </string-array>
     <string name="default_executable">pdflatex</string>
     <string name="default_server_address">http://192.168.43.15:1234/</string>
+<!--    <string name="default_server_address">https://latex-it.herokuapp.com/</string>-->
+
     <string name="executable">Executable</string>
     <string name="default_font_size">12</string>
     <string name="tab_size">Tab Size</string>
