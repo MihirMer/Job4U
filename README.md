@@ -1,4 +1,4 @@
-# **JOb4U - Walk in world** 
+# **Job4U - Walk in world** 
 
 Android application, which serves job seekers to find available job vacancies and employers to identify eligible job seekers with the prospect of selecting the most qualified candidates.
 
